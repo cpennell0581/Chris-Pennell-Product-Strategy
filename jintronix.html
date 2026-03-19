@@ -7,7 +7,154 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF9F6; --ink: #1A1916; --ink-muted: #6B6A66; --ink-faint: #C2C1BC;
+    --accent: #2D5BE3; --accent-soft: #EBF0FC; --border: rgba(26,25,22,0.1);
+    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif; --max: 860px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem; background: rgba(250,249,246,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+  .case-hero { padding-top: 9rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .case-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .meta-tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; }
+  .meta-divider { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint); }
+  .meta-detail { font-size: 0.8rem; color: var(--ink-faint); }
+  .case-title { font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .case-title em { font-style: italic; color: var(--accent); }
+  .case-subtitle { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 640px; margin-bottom: 3rem; }
+  .role-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-bottom: 3rem; }
+  .role-cell { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .role-cell:last-child { border-right: none; }
+  .role-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.35rem; }
+  .role-val { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
+  .role-sub { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .stat-cell { padding: 1.5rem 1.75rem; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .stat-val { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; margin-bottom: 0.2rem; }
+  .stat-desc { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; }
+  .case-body { padding: 5rem 0; }
+  .section-block { margin-bottom: 5rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .section-block:last-child { border-bottom: none; margin-bottom: 0; }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .section-heading { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 1rem; color: var(--ink-muted); line-height: 1.9; margin-bottom: 1.25rem; }
+  .body-text:last-child { margin-bottom: 0; }
+  .img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .img-block img { width: 100%; display: block; }
+  .img-caption { font-size: 0.78rem; color: var(--ink-faint); padding: 0.75rem 1rem; background: white; border-top: 1px solid var(--border); }
+  .pull-quote { margin: 2.5rem 0; padding: 1.75rem 2rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+  .pull-quote p { font-family: var(--serif); font-size: 1.15rem; line-height: 1.55; color: var(--ink); font-style: italic; }
+  .pull-quote cite { display: block; margin-top: 0.6rem; font-size: 0.78rem; color: var(--ink-muted); font-style: normal; }
+  .who-card { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 2rem; }
+  .who-col { padding: 1.75rem 2rem; }
+  .who-col:first-child { border-right: 1px solid var(--border); }
+  .who-col-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .who-col p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.85rem; }
+  .who-col p:last-child { margin-bottom: 0; }
+  .who-col p strong { font-weight: 500; color: var(--ink); }
+  .problem-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .problem-item { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; align-items: start; }
+  .problem-icon { width: 3.5rem; display: flex; align-items: flex-start; padding-top: 1px; flex-shrink: 0; }
+  .problem-icon svg { width: 32px; height: 32px; flex-shrink: 0; }
+  .problem-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .problem-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .insight-card { padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; }
+  .insight-card.accent-bg { background: var(--accent-soft); border-color: rgba(45,91,227,0.2); }
+  .insight-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+  .insight-text { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.65; }
+  .insight-text strong { font-weight: 500; color: var(--ink); }
+  .phase-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .phase-header { display: flex; align-items: baseline; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); flex-wrap: wrap; }
+  .phase-badge { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; flex-shrink: 0; }
+  .phase-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .phase-objective { font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.15rem; }
+  .phase-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .phase-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .phase-col:last-child { border-right: none; }
+  .phase-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .phase-items li { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; padding-left: 1rem; position: relative; }
+  .phase-items li::before { content: '-'; position: absolute; left: 0; color: var(--accent); }
+  .tradeoff-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .tradeoff-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .tradeoff-badge { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: white; background: var(--ink); padding: 4px 12px; border-radius: 100px; flex-shrink: 0; }
+  .tradeoff-title { font-size: 0.95rem; font-weight: 500; color: var(--ink); }
+  .tradeoff-body { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .tradeoff-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .tradeoff-col:last-child { border-right: none; }
+  .tradeoff-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.65rem; }
+  .tradeoff-col p { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .tradeoff-insight { padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: var(--accent-soft); font-size: 0.85rem; color: var(--ink); line-height: 1.55; }
+  .tradeoff-insight strong { font-weight: 500; }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .result-card { padding: 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; }
+  .result-card.dark { background: var(--ink); border-color: var(--ink); }
+  .result-num { font-family: var(--serif); font-size: 2.8rem; color: var(--ink); line-height: 1; margin-bottom: 0.4rem; }
+  .result-card.dark .result-num { color: var(--cream); }
+  .result-label { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
+  .result-card.dark .result-label { color: rgba(250,249,246,0.9); }
+  .result-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; }
+  .result-card.dark .result-desc { color: rgba(250,249,246,0.5); }
+  .timeline-track { display: flex; }
+  .timeline-phase { flex: 1; padding: 1.25rem 1rem; border: 1px solid var(--border); border-right: none; background: white; }
+  .timeline-phase:first-child { border-radius: 8px 0 0 8px; }
+  .timeline-phase:last-child { border-right: 1px solid var(--border); border-radius: 0 8px 8px 0; background: var(--ink); }
+  .timeline-phase:last-child .tl-title, .timeline-phase:last-child .tl-desc { color: rgba(250,249,246,0.6); }
+  .timeline-phase:last-child .tl-badge { color: rgba(250,249,246,0.4); }
+  .timeline-phase:nth-child(2) { background: var(--accent-soft); }
+  .tl-badge { font-size: 0.65rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .tl-title { font-size: 0.82rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; line-height: 1.35; }
+  .tl-desc { font-size: 0.75rem; color: var(--ink-muted); line-height: 1.5; }
+  .delivered-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+  .delivered-col-title { font-size: 0.78rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .feature-list li { font-size: 0.85rem; color: var(--ink-muted); padding-left: 1.25rem; position: relative; line-height: 1.5; }
+  .feature-list li::before { content: '✦'; position: absolute; left: 0; color: var(--accent); font-size: 0.6rem; top: 4px; }
+  .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 2rem; }
+  .reflection-col { padding: 2rem; }
+  .reflection-col.went-well { background: white; border-right: 1px solid var(--border); }
+  .reflection-col.differently { background: var(--cream); }
+  .reflection-col-title { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .went-well .reflection-col-title { color: var(--accent); }
+  .differently .reflection-col-title { color: var(--ink-faint); }
+  .reflection-items { display: flex; flex-direction: column; gap: 1rem; }
+  .reflection-item { padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; border: 1px solid var(--border); }
+  .went-well .reflection-item { background: white; }
+  .differently .reflection-item { background: var(--cream); }
+  .reflection-item strong { font-weight: 500; color: var(--ink); display: block; margin-bottom: 0.25rem; }
+  .case-nav { padding: 4rem 0 6rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .case-nav-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .case-nav-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; transition: color 0.2s; display: block; }
+  .case-nav-title:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; font-size: 0.8rem; color: var(--ink-faint); }
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+  @media (max-width: 680px) {
+    nav { padding: 1rem 1.25rem; } .container { padding: 0 1.25rem; } .case-hero { padding-top: 7rem; }
+    .stat-row, .role-strip, .who-card, .insight-grid, .phase-body, .tradeoff-body, .results-grid, .delivered-grid, .reflection-grid { grid-template-columns: 1fr; }
+    .who-col:first-child, .phase-col, .tradeoff-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-cell, .role-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child, .role-cell:last-child { border-bottom: none; }
+    .timeline-track { flex-direction: column; }
+    .timeline-phase { border-right: 1px solid var(--border) !important; border-bottom: none; border-radius: 0 !important; }
+    .timeline-phase:first-child { border-radius: 8px 8px 0 0 !important; }
+    .timeline-phase:last-child { border-radius: 0 0 8px 8px !important; }
+    .case-nav { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
 </head>
 <body>
 <div class="rainbow-line"></div>
@@ -19,26 +166,55 @@
 <div class="case-hero">
   <div class="container">
     <div class="case-meta fade-in">
-      <span class="meta-tag">PM &amp; UX Lead</span>
+      <span class="meta-tag">PM and UX Lead</span>
       <span class="meta-tag">HealthTech</span>
-      <span class="meta-tag">0 → Scale</span>
+      <span class="meta-tag">0 to Scale</span>
+      <span class="meta-tag">Agile Delivery</span>
       <span class="meta-divider"></span>
       <span class="meta-detail">Jintronix · 7 years</span>
     </div>
-    <h1 class="case-title fade-in" style="transition-delay:.08s">Making rehabilitation feel less like <em>work</em></h1>
-    <p class="case-subtitle fade-in" style="transition-delay:.14s">Patients weren't finishing their rehab programs — not because they didn't want to recover, but because the experience gave them no reason to stay. I led product from day one at Jintronix, turning that problem into a gamified therapy platform adopted by 500+ clinical clients across North America.</p>
-    <div class="role-strip fade-in" style="transition-delay:.18s">
-      <div class="role-cell"><div class="role-label">My Role</div><div class="role-val">Product Manager / UX Lead</div><div class="role-sub">Full product ownership, 0 → scale</div></div>
-      <div class="role-cell"><div class="role-label">Company</div><div class="role-val">Jintronix</div><div class="role-sub">Digital rehab platform, startup → 500+ clients</div></div>
-      <div class="role-cell"><div class="role-label">Duration</div><div class="role-val">7 years</div><div class="role-sub">Concept definition through market scale</div></div>
+    <h1 class="case-title fade-in" style="transition-delay:0.08s">
+      Building a rehab platform patients <em>actually finished</em>
+    </h1>
+    <p class="case-subtitle fade-in" style="transition-delay:0.14s">
+      Patients weren't completing their rehab programs. Not because they didn't want to recover, but because nothing on the market gave them a reason to keep going. I led product from day one at Jintronix: competitive analysis, usability research across clinical populations, and agile delivery across a cross-functional team. Seven years later the platform had 500+ clinical clients across North America.
+    </p>
+    <div class="role-strip fade-in" style="transition-delay:0.18s">
+      <div class="role-cell">
+        <div class="role-label">My Role</div>
+        <div class="role-val">Product Manager / UX Lead</div>
+        <div class="role-sub">Research · Roadmap · Agile delivery · Scale</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Company</div>
+        <div class="role-val">Jintronix</div>
+        <div class="role-sub">Digital rehab platform, startup to 500+ clients</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Duration</div>
+        <div class="role-val">7 years</div>
+        <div class="role-sub">Concept definition through market scale</div>
+      </div>
     </div>
-    <div class="img-block fade-in" style="transition-delay:.20s;margin-bottom:2rem;">
-      <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/5901455f5690d510b63340e0_jintronix_hero.png" alt="Jintronix platform" />
+    <div class="img-block fade-in" style="transition-delay:0.2s; margin-bottom: 2rem;">
+      <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/5901455f5690d510b63340e0_jintronix_hero.png" alt="Jintronix platform" />
     </div>
-    <div class="stat-row fade-in" style="transition-delay:.22s">
-      <div class="stat-cell"><div class="stat-label">Clinical clients at scale</div><div class="stat-val">500+</div><div class="stat-desc">Hospitals, outpatient centers &amp; senior care facilities, US &amp; Canada</div></div>
-      <div class="stat-cell"><div class="stat-label">Session time increase</div><div class="stat-val">15×</div><div class="stat-desc">From 1–2 min to 15–30 min per session at 2×/day average</div></div>
-      <div class="stat-cell"><div class="stat-label">Clinical outcome improvement</div><div class="stat-val">+25%</div><div class="stat-desc">vs. traditional therapy methods, measured across pilot cohorts</div></div>
+    <div class="stat-row fade-in" style="transition-delay:0.22s">
+      <div class="stat-cell">
+        <div class="stat-label">Clinical clients at scale</div>
+        <div class="stat-val">500+</div>
+        <div class="stat-desc">Hospitals, outpatient centers, and senior care facilities across US and Canada</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Session time increase</div>
+        <div class="stat-val">15x</div>
+        <div class="stat-desc">From 1 to 2 min up to 15 to 30 min per session at 2x per day average</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Clinical outcome improvement</div>
+        <div class="stat-val">+25%</div>
+        <div class="stat-desc">vs. traditional therapy methods, measured across pilot cohorts</div>
+      </div>
     </div>
   </div>
 </div>
@@ -47,174 +223,464 @@
   <div class="container">
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">00 · Context — Who I am &amp; where this sits</div>
-      <h2 class="section-heading">I'm a product leader who builds at the <em>intersection of behavior and technology</em></h2>
-      <p class="body-text">I'm Chris Pennell — a Product Manager and UX Lead with 10+ years building digital products across healthcare, wellness, and enterprise software. I'm currently completing my MBA at Rice University's Jones Graduate School of Business.</p>
-      <p class="body-text">My work sits at the intersection of customer insight and product execution. I own the full lifecycle — from discovery and research to roadmap, delivery, and scale. Jintronix was my deepest build: seven years as the founding PM, taking a product from a blank Miro board to clinical deployment across North America.</p>
+      <div class="section-eyebrow">00 · Background and Product Context</div>
+      <h2 class="section-heading">Seven years building at the <em>intersection of behavior, data, and delivery</em></h2>
+      <p class="body-text">
+        I'm Chris Pennell, a Product Manager and UX Lead with 10+ years delivering consumer-facing digital products across healthcare, wellness, and enterprise software. I'm completing my MBA at Rice University's Jones Graduate School of Business with a focus on product strategy and digital innovation.
+      </p>
+      <p class="body-text">
+        Jintronix was my deepest build: seven years as the founding PM, going from a blank Miro board to clinical deployment across North America. It required competitive analysis to define the market opportunity, continuous usability research to shape the product, and agile delivery leadership to scale it, all at the same time, with clinical outcomes as a hard constraint on every decision.
+      </p>
+
       <div class="who-card">
         <div class="who-col">
           <div class="who-col-label">My role at Jintronix</div>
-          <p><strong>I was the first and only PM</strong> for the first three years — owning research, roadmap, design direction, stakeholder communication, and delivery simultaneously.</p>
-          <p>I built the product team as the company scaled, eventually leading a cross-functional group of designers, engineers, and clinical advisors across multiple time zones.</p>
-          <p><strong>My north star:</strong> get a patient to finish their prescribed program. Everything else was a means to that end.</p>
+          <p><strong>I was the first and only PM for the first three years.</strong> That meant owning competitive analysis, usability research, roadmap, design direction, stakeholder communication, and delivery, with no PM infrastructure to inherit.</p>
+          <p>As the company scaled I built and led a cross-functional team of designers, engineers, and clinical advisors. I ran agile ceremonies and made sure research outputs moved into engineering work without delay every sprint.</p>
+          <p><strong>The north star:</strong> get a patient to finish their prescribed program. Every product decision was evaluated against that.</p>
         </div>
         <div class="who-col">
           <div class="who-col-label">The company context</div>
-          <p>Jintronix was built on a simple premise: <strong>motion-sensing technology + game mechanics = a rehab program patients actually complete.</strong></p>
-          <p>When I joined, we had a prototype and a hypothesis. When I left, we had 500+ clinical clients, peer-reviewed outcome data, and a product that therapists recommended by name.</p>
-          <p>No one had cracked engagement in digital rehab. We had to figure out both the product and the market simultaneously.</p>
+          <p>Jintronix was a HealthTech startup built on a hypothesis that competitive analysis confirmed: <strong>no digital rehab platform had solved patient engagement.</strong> The market was full of scheduling tools and exercise libraries. The engagement gap was the opening.</p>
+          <p>When I joined, there was a prototype and a hypothesis. When I left, there were 500+ clinical clients, peer-reviewed outcome data, and a product that therapists recommended by name.</p>
+          <p>We had to figure out both the product and the market simultaneously, with clinical credibility as the primary adoption gate at every stage.</p>
         </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">01 · The Story — Problem, vision &amp; what we set out to do</div>
-      <h2 class="section-heading">Patients were prescribed programs they <em>never finished</em> — and clinicians had no idea</h2>
-      <p class="body-text">Physical rehabilitation has a well-documented adherence crisis. Studies consistently show 50–65% of patients don't complete their home exercise programs. The reasons aren't complicated: the exercises are repetitive, there's no feedback, no progress visibility, and no consequence for quitting.</p>
-      <p class="body-text">For clinicians, this was invisible. Patients would say they'd done their exercises. Therapists had no way to verify it — and outcomes reflected that gap.</p>
-      <div class="img-block">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/66c2ad735ebc6be23e254616_method.png" alt="Research methodology" />
-        <div class="img-caption">Research methodology — mapping the behavioral and clinical gap between prescription and completion</div>
-      </div>
+      <div class="section-eyebrow">01 · Competitive Analysis and Problem Definition</div>
+      <h2 class="section-heading">A competitive analysis confirmed the market gap and <em>shaped the entire product thesis</em></h2>
+      <p class="body-text">
+        Before writing a user story, I ran a competitive analysis of the digital rehabilitation technology landscape, benchmarking platforms on patient engagement mechanics, clinical workflow integration, outcome measurement, and provider adoption models. The picture was consistent: the space was scheduling tools, exercise libraries, and telehealth extensions. Nobody had built the engagement layer.
+      </p>
+      <p class="body-text">
+        I presented those findings to Jintronix's leadership and clinical advisors with a clear recommendation: the opportunity was not another exercise library. It was building the engagement layer the entire category was missing, with enough clinical credibility to earn therapist prescription. That recommendation became the product thesis and shaped the roadmap for the next three years.
+      </p>
+
       <div class="problem-list">
-               <div class="problem-item"><div class="problem-icon"></div><div><div class="problem-title">Rehab was boring and patients tuned out</div><div class="problem-desc">Zero feedback, zero progress visibility, zero sense of accomplishment. Session times of 1–2 minutes were common. The experience offered no reason to continue.</div></div></div>
-        <div class="problem-item"><div class="problem-icon"></div><div><div class="problem-title">Therapists were flying blind on adherence</div><div class="problem-desc">No data between appointments. Treatment decisions based on patient self-report, which research shows is wildly inaccurate.</div></div></div>
-        <div class="problem-item"><div class="problem-icon"></div><div><div class="problem-title">The market had no scalable engagement solution</div><div class="problem-desc">The rehab tech space was full of scheduling tools and exercise libraries. Nobody had solved engagement. That was the Blue Ocean — and our thesis from day one.</div></div></div>
-      <div class="pull-quote"><p>The problem wasn't that patients didn't want to get better. The problem was that the experience we gave them made quitting feel completely rational.</p><cite>— Core insight from early ethnographic research</cite></div>
-    </div>
-
-    <div class="section-block fade-in">
-      <div class="section-eyebrow">02 · Customer &amp; Data Insights — What drove every product decision</div>
-      <h2 class="section-heading">What ethnographic research inside rehab centers taught us about <em>behavior change</em></h2>
-      <p class="body-text">Before writing a single user story, I spent weeks inside rehabilitation centers — watching, listening, and asking questions. Not running formal interviews with clipboards. Actually sitting in sessions, observing how patients interacted with their programs and where the system broke down.</p>
-      <p class="body-text">What I found reframed the entire product problem. Patients didn't quit because they were lazy. They quit because the experience was designed for compliance, not motivation.</p>
-      <div class="insight-grid">
-        <div class="insight-card accent-bg"><div class="insight-label">Key insight #1</div><div class="insight-text"><strong>Real-time feedback was the missing variable.</strong> Patients who received any form of immediate feedback stayed engaged significantly longer. It didn't need to be complex — it needed to be immediate.</div></div>
-        <div class="insight-card accent-bg"><div class="insight-label">Key insight #2</div><div class="insight-text"><strong>Progress visibility drove return behavior.</strong> Patients who could see their improvement over time were dramatically more likely to come back. Seeing progress made the pain feel purposeful.</div></div>
-        <div class="insight-card"><div class="insight-label">Key insight #3</div><div class="insight-text"><strong>Therapist trust was the adoption gateway.</strong> Patients adopted what their therapist recommended. Any strategy that didn't prioritize therapist buy-in first was building on sand.</div></div>
-        <div class="insight-card"><div class="insight-label">Key insight #4</div><div class="insight-text"><strong>Gamification had to earn clinical credibility.</strong> The word "gamification" made clinicians nervous. Our design had to feel medically intentional, not toy-like. Game mechanics had to be invisible inside a clinical experience.</div></div>
-      </div>
-      <div class="phase-card" style="margin-top:2.5rem;">
-        <div class="phase-header"><span class="phase-badge">Discovery · Phase 1</span><div><div class="phase-title">Ethnographic research &amp; product definition</div><div class="phase-objective">Identify engagement gaps, validate the gamification hypothesis, define early KPIs</div></div></div>
-        <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Contextual inquiry across multiple rehab centers — observing patients and therapists in real sessions</li><li>Partnered with clinical advisors to map where the adherence gap was largest and most addressable</li><li>Translated behavioral observations into testable hypotheses before any design work began</li><li>Defined three north-star KPIs: adherence rate, average session length, patient-reported satisfaction</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">What we learned</div><ul class="phase-items"><li>Validated that engagement — not access — was the core blocker to recovery outcomes</li><li>Identified that therapist dashboards were as important as the patient experience for clinical adoption</li><li>Established product-market fit for a gamified approach before building anything</li><li>Confirmed that motion-sensing tech could provide the real-time feedback loop patients were missing</li></ul></div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a9 9 0 1 0 0 18A9 9 0 0 0 12 3z"/>
+              <path d="M12 7v5l3 3"/>
+              <path d="M8 3.5C6 5 4.5 7.5 4.5 10"/>
+              <line x1="8" y1="2" x2="6" y2="4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">No competitor had solved engagement, the category's defining problem</div>
+            <div class="problem-desc">Competitive analysis showed 50 to 65% of patients don't complete home exercise programs. Every existing digital platform treated this as a given. None had built the feedback loop, progress visibility, or behavioral mechanics needed to change it.</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="12" rx="10" ry="6"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15 15 0 0 1 0 20"/>
+              <path d="M12 2a15 15 0 0 0 0 20"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">Therapists were making clinical decisions without adherence data</div>
+            <div class="problem-desc">Clinicians had no visibility into what patients did between appointments. They were managing recovery based on self-report, a gap that no competitive platform had addressed and that represented both a clinical risk and a clear provider pain point.</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+              <path d="M4.9 4.9l2.1 2.1M16.9 16.9l2.1 2.1M19.1 4.9l-2.1 2.1M7.1 16.9l-2.1 2.1"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">The engagement gap was the opening, confirmed by competitive benchmarking</div>
+            <div class="problem-desc">No platform in the space competed on patient engagement. The question was whether gamification mechanics could be deployed with enough clinical rigor to earn therapist trust at the enterprise sales stage.</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="section-block fade-in">
-      <div class="section-eyebrow">03 · The Details — Hard decisions &amp; key tradeoffs</div>
-      <h2 class="section-heading">Three calls that defined the <em>product — and the company</em></h2>
-      <p class="body-text">Building a 0-to-1 product means making decisions with incomplete information, competing stakeholder needs, and real timeline pressure. Here are the three that mattered most.</p>
-
-      <div class="tradeoff-card">
-        <div class="tradeoff-header"><span class="tradeoff-badge">Decision 1</span><span class="tradeoff-title">Therapist dashboard first — or patient experience first?</span></div>
-        <div class="tradeoff-body">
-          <div class="tradeoff-col"><div class="tradeoff-col-title">The tension</div><p>Our instinct was to build the patient-facing experience first — that's where the engagement problem lived. But research kept pointing us back to therapists as the adoption gateway.</p></div>
-          <div class="tradeoff-col"><div class="tradeoff-col-title">What I decided</div><p>Co-develop both in parallel, with the therapist dashboard treated as an equal MVP priority — not a phase 2 feature. Hard sell to engineering, but critical for go-to-market.</p></div>
-          <div class="tradeoff-col"><div class="tradeoff-col-title">The outcome</div><p>The therapist dashboard became our most powerful sales tool. Skeptical therapists became advocates — and advocates became referrals.</p></div>
-        </div>
-        <div class="tradeoff-insight"><strong>The insight:</strong> In clinical markets, the prescriber is the product's first customer. Winning the patient without winning the therapist is a dead end.</div>
-      </div>
-
-      <div class="tradeoff-card">
-        <div class="tradeoff-header"><span class="tradeoff-badge">Decision 2</span><span class="tradeoff-title">Deprioritizing features that patients loved but therapists couldn't validate</span></div>
-        <div class="tradeoff-body">
-          <div class="tradeoff-col"><div class="tradeoff-col-title">The tension</div><p>Early pilot patients loved social features — leaderboards, comparison against other patients. Engagement metrics were significantly higher. But clinical advisors flagged that comparing recovery rates was clinically inappropriate.</p></div>
-          <div class="tradeoff-col"><div class="tradeoff-col-title">What I decided</div><p>Cut social comparison from MVP entirely. Redirected gamification to be self-referential — patients competed only against their own previous performance.</p></div>
-          <div class="tradeoff-col"><div class="tradeoff-col-title">The outcome</div><p>Short-term, engagement metrics dipped slightly. Long-term, this unlocked hospital and senior care partnerships that would have been impossible with social comparison features.</p></div>
-        </div>
-        <div class="tradeoff-insight"><strong>The insight:</strong> In regulated markets, features that patients love but clinicians can't defend become liabilities at the enterprise sales stage.</div>
-      </div>
-
-      <div class="tradeoff-card">
-        <div class="tradeoff-header"><span class="tradeoff-badge">Decision 3</span><span class="tradeoff-title">When to stop iterating and start scaling</span></div>
-        <div class="tradeoff-body">
-          <div class="tradeoff-col"><div class="tradeoff-col-title">The tension</div><p>After year two, we had strong pilot data but a product that still felt rough. The clinical team wanted to keep refining. Sales had three hospital networks ready to sign. Engineering was stretched.</p></div>
-          <div class="tradeoff-col"><div class="tradeoff-col-title">What I decided</div><p>Pushed to scale. The data was sufficient, core flows were solid, and known limitations were cosmetic, not functional. We expanded and fixed in parallel.</p></div>
-          <div class="tradeoff-col"><div class="tradeoff-col-title">The outcome</div><p>Landed all three hospital networks within the quarter. The rough edges were addressed within two sprints. Waiting would have lost the market window entirely.</p></div>
-        </div>
-        <div class="tradeoff-insight"><strong>The insight:</strong> "Good enough to ship" and "good enough to scale" are different thresholds. Knowing which one you're at requires honest calibration, not just gut feel.</div>
+      <div class="pull-quote">
+        <p>The competitive analysis didn't just confirm the problem. It defined the strategy. We weren't entering a crowded market. We were creating a category.</p>
+        <cite>Strategic recommendation presented to Jintronix leadership, Year 1</cite>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">04 · The Product — What shipped and how it performed</div>
-      <h2 class="section-heading">From prototype to <em>standard of care</em></h2>
-      <p class="body-text">The core product used the patient's camera or sensor device to detect movement in real time, evaluate exercise form, and deliver immediate feedback through a gamified interface. Patients saw their score, their streak, their improvement curve. Therapists saw everything.</p>
+      <div class="section-eyebrow">02 · Usability Research and Customer Insights</div>
+      <h2 class="section-heading">Ethnographic research inside rehab centers found things <em>surveys would have missed</em></h2>
+      <p class="body-text">
+        Before any design work started, I planned and conducted ethnographic research across multiple rehabilitation centers, observing real patient behavior and therapist workflows in actual clinical sessions. Not clipboard-and-survey research. Contextual inquiry: watching where patients disengaged, how therapists coached, and where the experience broke down under real conditions.
+      </p>
+      <p class="body-text">
+        I synthesized those behavioral observations into a structured findings report and presented recommendations to Jintronix's clinical advisors and leadership. Each finding was translated into a testable hypothesis before any design or engineering investment was made. The research established three north-star KPIs: adherence rate, average session length, and patient-reported satisfaction. Those governed every subsequent product decision.
+      </p>
+
       <div class="img-block">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/66c2afcf84c0d0d41f99a49e_wires.png" alt="Wireframes" />
-        <div class="img-caption">Early wireframes from the concept validation phase — iterating on the core session flow and feedback mechanics</div>
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/66c2ad735ebc6be23e254616_method.png" alt="Jintronix research and discovery methodology" />
+        <div class="img-caption">Research methodology mapping the behavioral gap between prescription and completion</div>
       </div>
-      <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 2 · Concept Validation</span><div><div class="phase-title">Prototyping, piloting &amp; iterating before dev investment</div><div class="phase-objective">De-risk the build by validating gamification mechanics through real-world pilots</div></div></div>
-        <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">Actions</div><ul class="phase-items"><li>Built clickable prototypes for core session flows</li><li>Ran iterative pilots at partner rehab centers, observing sessions in real time</li><li>Tested gamification mechanics: scoring, streaks, progress curves, milestone rewards</li><li>Used agile cycles to kill features that didn't move adherence</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">What pilots confirmed</div><ul class="phase-items"><li>Gamified sessions increased average time-on-task from 2 min to 18 min in week one of pilot</li><li>Real-time form feedback was the single highest-impact feature</li><li>Progress streaks drove return behavior more than any other mechanic tested</li><li>Therapists reviewed dashboards daily once they had patient-level session data</li></ul></div>
+
+      <div class="insight-grid">
+        <div class="insight-card accent-bg">
+          <div class="insight-label">Finding and Recommendation</div>
+          <div class="insight-text"><strong>Real-time feedback was the missing variable.</strong> Patients who got immediate feedback, even just an audio cue for correct form, stayed engaged much longer. I recommended building real-time motion sensing feedback as the core MVP mechanic, not a phase 2 enhancement.</div>
+        </div>
+        <div class="insight-card accent-bg">
+          <div class="insight-label">Finding and Recommendation</div>
+          <div class="insight-text"><strong>Progress visibility drove return behavior.</strong> Patients who could see improvement over time, session counts, range-of-motion gains, comparison to their own baseline, were far more likely to come back. I recommended personal progress curves as the primary gamification layer.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Finding and Recommendation</div>
+          <div class="insight-text"><strong>Therapist trust was the adoption gate, not patient preference.</strong> Patients used what their therapist recommended. Any go-to-market approach that didn't win the therapist first wasn't going to scale. I presented this to leadership with a recommendation to co-develop the therapist dashboard as an equal MVP priority.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Finding and Recommendation</div>
+          <div class="insight-text"><strong>Gamification had to be clinically invisible.</strong> The word made clinicians uncomfortable. User testing with therapists confirmed that game mechanics embedded inside a clinical-grade interface performed better than consumer-facing game features presented as-is.</div>
         </div>
       </div>
-      <div class="img-block" style="margin-top:2rem;">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/66c2b0040a8f08f370df5191_annotate.png" alt="MVP screens" />
-        <div class="img-caption">Annotated high-fidelity screens — therapist dashboard (left), patient session view (right)</div>
+
+      <div class="phase-card" style="margin-top: 2.5rem;">
+        <div class="phase-header">
+          <span class="phase-badge">Discovery, Phase 1</span>
+          <div>
+            <div class="phase-title">Ethnographic research, competitive analysis, and product definition</div>
+            <div class="phase-objective">Validate the engagement hypothesis, define competitive position, establish north-star KPIs</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Ran competitive analysis across digital rehab platforms, benchmarking engagement mechanics, clinical workflow integration, and provider adoption models</li>
+              <li>Planned and conducted contextual inquiry across multiple rehab centers, observing patients and therapists in real clinical sessions</li>
+              <li>Partnered with clinical advisors to identify where the adherence gap was largest and most addressable</li>
+              <li>Defined three north-star KPIs: adherence rate, average session length, patient-reported satisfaction</li>
+              <li>Presented findings and recommendations to leadership before any design or engineering investment was made</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">What the research confirmed</div>
+            <ul class="phase-items">
+              <li>Engagement, not access or content, was the defining gap across the competitive landscape</li>
+              <li>Therapist dashboard tooling was as important as the patient experience for clinical adoption</li>
+              <li>Product-market fit for a gamified approach was confirmed before any build investment was made</li>
+              <li>Motion-sensing technology could deliver the real-time feedback loop patients were missing</li>
+              <li>Clinical credibility, not feature richness, was the primary enterprise sales gate at every stage</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div style="margin-top:2.5rem;font-size:.78rem;color:var(--ink-faint);letter-spacing:.07em;text-transform:uppercase;margin-bottom:1rem;">How the product evolved over 7 years</div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">03 · Key Recommendations and Product Decisions</div>
+      <h2 class="section-heading">Three recommendations I made to leadership, <em>and the analysis behind each</em></h2>
+      <p class="body-text">
+        Building a 0-to-1 product in a regulated clinical market means making recommendations with incomplete information, competing stakeholder priorities, and real delivery pressure. Each of the following was grounded in research and competitive data, and each materially shaped the product's eventual market position.
+      </p>
+
+      <div class="tradeoff-card">
+        <div class="tradeoff-header">
+          <span class="tradeoff-badge">Recommendation 1</span>
+          <span class="tradeoff-title">Build the therapist dashboard as an equal MVP priority, not a phase 2 feature</span>
+        </div>
+        <div class="tradeoff-body">
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">The analysis</div>
+            <p>Usability research confirmed that patients used what their therapist recommended. Competitive analysis showed no existing platform had invested in therapist-facing tooling. The adoption gateway was the prescriber, not the patient.</p>
+          </div>
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">My recommendation</div>
+            <p>I presented an analysis to engineering and leadership recommending co-development of the therapist dashboard alongside the patient experience, despite the scope increase. I framed the recommendation around go-to-market risk, not development cost.</p>
+          </div>
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">The outcome</div>
+            <p>The therapist dashboard became our most powerful enterprise sales tool. Clinicians with real-time adherence and outcome data became product advocates. Those advocates drove the referral network that took us to 500+ clinical clients without a paid acquisition model.</p>
+          </div>
+        </div>
+        <div class="tradeoff-insight"><strong>The insight:</strong> In clinical markets, the prescriber is the first customer. Winning the patient without winning the therapist is a channel that doesn't scale.</div>
+      </div>
+
+      <div class="tradeoff-card">
+        <div class="tradeoff-header">
+          <span class="tradeoff-badge">Recommendation 2</span>
+          <span class="tradeoff-title">Cut social comparison features despite strong engagement data</span>
+        </div>
+        <div class="tradeoff-body">
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">The analysis</div>
+            <p>Pilot data showed leaderboards and peer benchmarking drove higher engagement. But clinical advisor review flagged that comparing recovery rates across patients with different diagnoses was clinically inappropriate and a liability in enterprise sales conversations.</p>
+          </div>
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">My recommendation</div>
+            <p>Cut social comparison from the MVP. Redirect gamification to self-referential progress: patients competed only against their own prior performance. I presented the enterprise sales risk alongside the engagement data so leadership could weigh both.</p>
+          </div>
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">The outcome</div>
+            <p>Short-term engagement metrics dipped slightly. Long-term, the decision unlocked hospital and senior care facility partnerships that would have been impossible with social comparison in the product. The clinical credibility premium far outweighed the engagement delta.</p>
+          </div>
+        </div>
+        <div class="tradeoff-insight"><strong>The insight:</strong> In regulated markets, features that patients love but clinicians can't defend become enterprise sales liabilities regardless of engagement metrics.</div>
+      </div>
+
+      <div class="tradeoff-card">
+        <div class="tradeoff-header">
+          <span class="tradeoff-badge">Recommendation 3</span>
+          <span class="tradeoff-title">Scale ahead of full readiness. The market window was closing.</span>
+        </div>
+        <div class="tradeoff-body">
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">The analysis</div>
+            <p>After year two, the product had strong pilot data but known rough edges. The clinical team wanted more iteration. Sales had three hospital networks ready to sign. Competitive analysis showed new entrants beginning to surface. Waiting meant losing first-mover position in a market we had defined.</p>
+          </div>
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">My recommendation</div>
+            <p>I recommended scaling, presenting a risk analysis to leadership that distinguished cosmetic limitations from functional ones. I proposed expanding with existing partners while addressing known gaps in concurrent sprints. The limitations were manageable. The market window was not.</p>
+          </div>
+          <div class="tradeoff-col">
+            <div class="tradeoff-col-title">The outcome</div>
+            <p>All three hospital networks signed within the quarter. The cosmetic limitations the clinical team had raised were addressed in two sprints. The first-mover position we protected became a meaningful barrier to entry for later entrants.</p>
+          </div>
+        </div>
+        <div class="tradeoff-insight"><strong>The insight:</strong> "Good enough to ship" and "good enough to scale" are different thresholds. In a nascent market, speed to scale is a strategic asset.</div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">04 · Agile Delivery and Product Evolution</div>
+      <h2 class="section-heading">From prototype to <em>standard of care</em>, seven years of hypothesis-driven delivery</h2>
+      <p class="body-text">
+        Every sprint followed the same framework: define a testable hypothesis, build the minimum viable version, measure against north-star KPIs, and present findings with a recommendation for the next cycle. I ran agile ceremonies across a cross-functional team of designers, engineers, and clinical advisors, making sure research outputs moved into the backlog without delay and no team was waiting on product decisions.
+      </p>
+
+      <div class="img-block">
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/66c2afcf84c0d0d41f99a49e_wires.png" alt="Jintronix wireframes and prototype iterations" />
+        <div class="img-caption">Early wireframes from concept validation, iterating on session flow and real-time feedback mechanics before dev investment</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 2, Concept Validation</span>
+          <div>
+            <div class="phase-title">Prototyping, piloting, and iterating before full engineering investment</div>
+            <div class="phase-objective">De-risk the gamification thesis through real-world clinical pilots</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">Actions</div>
+            <ul class="phase-items">
+              <li>Built clickable prototypes for core session flows and presented for clinical advisor review before any engineering investment</li>
+              <li>Ran iterative usability pilots at partner rehab centers, observing sessions in real time and synthesizing findings for the sprint backlog</li>
+              <li>Tested gamification mechanics as separate hypotheses: scoring, streaks, progress curves, milestone rewards</li>
+              <li>Used agile cycles to kill features that didn't move adherence KPIs and double down on those that did</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">What the pilots confirmed</div>
+            <ul class="phase-items">
+              <li>Gamified sessions increased average session time from 2 minutes to 18 minutes in the first week of pilot, validating the core engagement hypothesis</li>
+              <li>Real-time form feedback was the highest-impact mechanic: patients self-corrected and stayed significantly longer</li>
+              <li>Progress streaks drove return behavior more reliably than any other mechanic tested, informing MVP feature priority</li>
+              <li>Therapists reviewed dashboards daily once patient-level session data was available, validating the co-development recommendation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-block" style="margin-top: 2rem;">
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/66c2b0040a8f08f370df5191_annotate.png" alt="Jintronix annotated MVP screens" />
+        <div class="img-caption">Annotated MVP screens: therapist dashboard left, patient session view right</div>
+      </div>
+
+      <div class="phase-card" style="margin-top:2rem;">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 3, MVP Delivery</span>
+          <div>
+            <div class="phase-title">Building and shipping the platform</div>
+            <div class="phase-objective">Deliver a scalable, clinically credible platform aligned with therapist workflows and validated patient needs</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What shipped</div>
+            <ul class="phase-items">
+              <li>Motion-sensing exercise engine with real-time form detection and scoring</li>
+              <li>Gamified session interface: points, streaks, personal bests, progress curves</li>
+              <li>Therapist dashboard with patient adherence, session length, and range-of-motion tracking</li>
+              <li>Personalized exercise program builder for clinical prescription</li>
+              <li>Session summary and weekly progress reports, patient-facing</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">Launch results vs. baseline KPIs</div>
+            <ul class="phase-items">
+              <li>15x increase in average session time, from 1 to 2 min up to 15 to 30 min, immediately post-launch</li>
+              <li>2x per day average usage rate vs. near-zero engagement on paper programs</li>
+              <li>25% improvement in clinical recovery benchmarks vs. traditional therapy control groups</li>
+              <li>MVP launched on time and within scope across all pilot locations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:2.5rem;font-size:0.78rem;color:var(--ink-faint);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:1rem;">How the product evolved across 7 years</div>
       <div class="timeline-track">
-        <div class="timeline-phase"><div class="tl-badge">Year 1–2</div><div class="tl-title">Discovery &amp; MVP</div><div class="tl-desc">Ethnographic research, validation, MVP build, pilot launch</div></div>
-        <div class="timeline-phase"><div class="tl-badge">Year 3–4</div><div class="tl-title">Iteration &amp; Market Fit</div><div class="tl-desc">Therapist dashboards, personalization engine, first hospital networks</div></div>
-        <div class="timeline-phase"><div class="tl-badge">Year 5–6</div><div class="tl-title">Scale</div><div class="tl-desc">US &amp; Canada expansion, senior care, outpatient adoption</div></div>
-        <div class="timeline-phase"><div class="tl-badge">Year 7</div><div class="tl-title">500+ Clients</div><div class="tl-desc">Standard component of digital rehab across hospital networks</div></div>
+        <div class="timeline-phase">
+          <div class="tl-badge">Year 1 to 2</div>
+          <div class="tl-title">Competitive Analysis, Discovery, and MVP</div>
+          <div class="tl-desc">Market benchmarking, ethnographic research, validation, MVP build, pilot launch</div>
+        </div>
+        <div class="timeline-phase">
+          <div class="tl-badge">Year 3 to 4</div>
+          <div class="tl-title">Iteration and Market Fit</div>
+          <div class="tl-desc">Therapist dashboards, personalization engine, first hospital network partnerships</div>
+        </div>
+        <div class="timeline-phase">
+          <div class="tl-badge">Year 5 to 6</div>
+          <div class="tl-title">Scale</div>
+          <div class="tl-desc">US and Canada expansion, senior care facilities, outpatient center adoption</div>
+        </div>
+        <div class="timeline-phase">
+          <div class="tl-badge">Year 7</div>
+          <div class="tl-title">500+ Clients</div>
+          <div class="tl-desc">Standard component of digital rehab across hospital networks</div>
+        </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">04 · The Product — Impact &amp; results</div>
-      <h2 class="section-heading">From a blank Miro board to the <em>standard of care</em></h2>
-      <p class="body-text">Seven years of product leadership produced a platform that genuinely changed how rehabilitation worked at 500+ clinical sites. Therapists stopped thinking of Jintronix as a tool, and started thinking of it as the way they delivered care.</p>
+      <div class="section-eyebrow">05 · Business Impact and Outcomes</div>
+      <h2 class="section-heading">From a competitive gap to the <em>standard of care</em> for digital rehab</h2>
+      <p class="body-text">
+        Seven years of hypothesis-driven product leadership produced a platform that changed how rehabilitation worked at 500+ clinical sites. Each outcome was measured against the north-star KPIs set during the original competitive analysis and discovery phase, so leadership could connect product decisions to business performance across the full lifecycle.
+      </p>
+
       <div class="results-grid">
-        <div class="result-card dark"><div class="result-num">500+</div><div class="result-label">Clinical clients at scale</div><div class="result-desc">Hospitals, outpatient centers, and senior care facilities across the US and Canada.</div></div>
-        <div class="result-card"><div class="result-num">15×</div><div class="result-label">Increase in patient session time</div><div class="result-desc">From 1–2 minute sessions to 15–30 minutes. Average usage 2× per day vs. near-zero on paper programs.</div></div>
-        <div class="result-card"><div class="result-num">+25%</div><div class="result-label">Clinical outcome improvement</div><div class="result-desc">Patients on Jintronix showed measurably better recovery benchmarks. Data supported peer-reviewed publication.</div></div>
-        <div class="result-card"><div class="result-num">↑</div><div class="result-label">Provider retention &amp; expansion</div><div class="result-desc">Improved outcomes drove clinical provider satisfaction, contributing to high contract renewal rates.</div></div>
+        <div class="result-card dark">
+          <div class="result-num">500+</div>
+          <div class="result-label">Clinical clients at scale</div>
+          <div class="result-desc">Hospitals, outpatient centers, and senior care facilities across the US and Canada, driven by therapist advocacy rather than paid acquisition.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">15x</div>
+          <div class="result-label">Increase in patient session time</div>
+          <div class="result-desc">From 1 to 2 minute sessions up to 15 to 30 minutes. Average 2x per day usage vs. near-zero on paper programs. The core engagement hypothesis validated at scale.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">+25%</div>
+          <div class="result-label">Clinical outcome improvement</div>
+          <div class="result-desc">Patients on Jintronix showed measurably better recovery benchmarks vs. traditional therapy control groups, outcomes that supported peer-reviewed publication and enterprise contract renewal.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Up</div>
+          <div class="result-label">Provider retention and contract expansion</div>
+          <div class="result-desc">Improved patient outcomes drove clinical provider satisfaction and high contract renewal rates, validating that clinical credibility was the primary enterprise retention driver.</div>
+        </div>
+      </div>
+
+      <div class="delivered-grid">
+        <div>
+          <div class="delivered-col-title">Core platform, shipped features</div>
+          <ul class="feature-list">
+            <li>Motion-sensing exercise engine with real-time form feedback</li>
+            <li>Gamified session interface: scoring, streaks, personal bests</li>
+            <li>Therapist dashboard with adherence and outcome tracking</li>
+            <li>Personalized exercise program builder for clinical prescription</li>
+            <li>Patient-facing progress reports and session summaries</li>
+          </ul>
+        </div>
+        <div>
+          <div class="delivered-col-title">KPIs tracked and reported to leadership</div>
+          <ul class="feature-list">
+            <li>Adherence rate, sessions completed vs. prescribed</li>
+            <li>Average session length and daily usage frequency</li>
+            <li>Range-of-motion improvement vs. intake baseline</li>
+            <li>Clinical recovery benchmarks vs. control groups</li>
+            <li>Provider satisfaction and contract renewal rate</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">05 · Retrospect — What went well &amp; what I'd do differently</div>
-      <h2 class="section-heading">Seven years of lessons in <em>building for behavior change</em></h2>
+      <div class="section-eyebrow">06 · Retrospect</div>
+      <h2 class="section-heading">Seven years of lessons in <em>evidence-based digital product leadership</em></h2>
+      <p class="body-text">
+        This was the engagement that shaped how I approach product. The decisions were real, the stakes were clinical, the competitive landscape was evolving, and the tradeoffs had measurable consequences. The habit of grounding every recommendation in research and competitive data, and presenting it to leadership in business terms, started here.
+      </p>
+
       <div class="reflection-grid">
         <div class="reflection-col went-well">
           <div class="reflection-col-title">What went well</div>
           <div class="reflection-items">
-            <div class="reflection-item"><strong>Ethnographic research before any design work</strong>Spending weeks observing real patient behavior gave us insights structured research would have missed.</div>
-            <div class="reflection-item"><strong>Treating the therapist as the first customer</strong>Building therapist tooling as an MVP priority shaped our go-to-market, enterprise sales motion, and clinical credibility.</div>
-            <div class="reflection-item"><strong>Hypothesis-driven development</strong>We never built features we couldn't test. Every decision was framed as an assumption to validate, not a requirement to deliver.</div>
-            <div class="reflection-item"><strong>Knowing when to scale vs. iterate</strong>Making the call to expand ahead of full readiness kept us from losing the market window. It was uncomfortable, but right.</div>
+            <div class="reflection-item">
+              <strong>Competitive analysis before any product investment</strong>
+              Starting with a structured benchmark of the digital rehab landscape gave us a defensible product thesis before we spent a dollar on design or engineering. It also gave leadership a business case, not just a user need.
+            </div>
+            <div class="reflection-item">
+              <strong>Ethnographic research before structured methods</strong>
+              Spending weeks inside real rehab centers gave us behavioral insights that survey research would have completely missed. The core product mechanics came directly from observing where patients disengaged in real sessions.
+            </div>
+            <div class="reflection-item">
+              <strong>Treating the therapist as the first customer</strong>
+              The recommendation to build therapist tooling as an MVP priority shaped go-to-market, enterprise sales, and clinical credibility for the next five years. It was the single most important call I made.
+            </div>
+            <div class="reflection-item">
+              <strong>Hypothesis-driven agile delivery throughout</strong>
+              Every sprint was organized around a testable assumption. That kept the backlog honest, gave leadership clear evidence for roadmap decisions, and prevented the feature accumulation that kills early-stage products.
+            </div>
           </div>
         </div>
         <div class="reflection-col differently">
           <div class="reflection-col-title">What I'd do differently</div>
           <div class="reflection-items">
-            <div class="reflection-item"><strong>Invest in therapist onboarding earlier</strong>Adoption often stalled because therapists weren't confident prescribing it — not because patients disliked the product.</div>
-            <div class="reflection-item"><strong>Prioritize EHR integration from the start</strong>Interoperability became a blocker for larger hospital networks and delayed enterprise expansion by 12–18 months.</div>
-            <div class="reflection-item"><strong>Build a direct patient feedback loop</strong>For the first few years, patient feedback came through clinical intermediaries — a filtered signal that made us slow to catch usability issues.</div>
-            <div class="reflection-item"><strong>Document tradeoff decisions more rigorously</strong>Decisions made in year two were often re-litigated in year five with no record of why they were made.</div>
+            <div class="reflection-item">
+              <strong>Build a structured clinician onboarding program earlier</strong>
+              Adoption stalled repeatedly not because patients disliked the product, but because therapists weren't confident prescribing it. A formal onboarding program in year one would have accelerated enterprise deployment.
+            </div>
+            <div class="reflection-item">
+              <strong>Prioritize EHR integration from the start</strong>
+              Interoperability with electronic health record systems became an enterprise sales blocker for larger hospital networks and delayed expansion by 12 to 18 months. The competitive analysis flagged this risk early. I should have pushed harder to get it on the year-two roadmap.
+            </div>
+            <div class="reflection-item">
+              <strong>Build a direct patient usability feedback loop earlier</strong>
+              For the first few years, patient feedback came through clinical intermediaries. Therapists reported what they heard. That filtered signal meant we were slow to catch usability issues patients experienced directly.
+            </div>
+            <div class="reflection-item">
+              <strong>Document product decisions more rigorously as the team scaled</strong>
+              Decisions made in year two were relitigated in year five with no documented rationale. A living decision log, grounded in the research and competitive analysis that drove each call, would have saved significant rework.
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="case-nav fade-in">
-      <div><div class="case-nav-label">Previous project</div><a class="case-nav-title" href="canyon-ranch.html">← Canyon Ranch</a></div>
-      <div style="text-align:right;"><div class="case-nav-label">Next project</div><a class="case-nav-title" href="sag-aftra.html">SAG-AFTRA →</a></div>
+      <div>
+        <div class="case-nav-label">Previous project</div>
+        <a class="case-nav-title" href="canyon-ranch-case-study.html">← Canyon Ranch</a>
+      </div>
+      <div style="text-align:right;">
+        <div class="case-nav-label">Back to work</div>
+        <a class="case-nav-title" href="index.html">All case studies →</a>
+      </div>
     </div>
 
   </div>
 </div>
 
-<footer><span>© 2025 Chris Pennell</span><span>MBA Candidate · Rice University · 🏳️‍🌈</span></footer>
+<footer>
+  <span>© 2025 Chris Pennell</span>
+  <span>MBA Candidate · Rice University · 🏳️‍🌈</span>
+</footer>
 <script>
-  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:.08});
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 </script>
 </body>

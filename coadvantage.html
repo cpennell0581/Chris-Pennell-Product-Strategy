@@ -7,7 +7,118 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF9F6; --ink: #1A1916; --ink-muted: #6B6A66; --ink-faint: #C2C1BC;
+    --accent: #2D5BE3; --accent-soft: #EBF0FC; --border: rgba(26,25,22,0.1);
+    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif; --max: 860px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem; background: rgba(250,249,246,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+  .case-hero { padding-top: 9rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .case-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .meta-tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; }
+  .meta-divider { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint); }
+  .meta-detail { font-size: 0.8rem; color: var(--ink-faint); }
+  .case-title { font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .case-title em { font-style: italic; color: var(--accent); }
+  .case-subtitle { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 640px; margin-bottom: 3rem; }
+  .role-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-bottom: 3rem; }
+  .role-cell { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .role-cell:last-child { border-right: none; }
+  .role-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.35rem; }
+  .role-val { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
+  .role-sub { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .stat-cell { padding: 1.5rem 1.75rem; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .stat-val { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; margin-bottom: 0.2rem; }
+  .stat-desc { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; }
+  .case-body { padding: 5rem 0; }
+  .section-block { margin-bottom: 5rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .section-block:last-child { border-bottom: none; margin-bottom: 0; }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .section-heading { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 1rem; color: var(--ink-muted); line-height: 1.9; margin-bottom: 1.25rem; }
+  .body-text:last-child { margin-bottom: 0; }
+  .img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .img-block img { width: 100%; display: block; }
+  .img-caption { font-size: 0.78rem; color: var(--ink-faint); padding: 0.75rem 1rem; background: white; border-top: 1px solid var(--border); }
+  .who-card { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 2rem; }
+  .who-col { padding: 1.75rem 2rem; }
+  .who-col:first-child { border-right: 1px solid var(--border); }
+  .who-col-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .who-col p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.85rem; }
+  .who-col p:last-child { margin-bottom: 0; }
+  .who-col p strong { font-weight: 500; color: var(--ink); }
+  .problem-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .problem-item { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; align-items: start; }
+  .problem-icon { width: 3.5rem; display: flex; align-items: flex-start; padding-top: 1px; flex-shrink: 0; }
+  .problem-icon svg { width: 32px; height: 32px; flex-shrink: 0; }
+  .problem-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .problem-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .phase-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .phase-header { display: flex; align-items: baseline; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); flex-wrap: wrap; }
+  .phase-badge { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; flex-shrink: 0; }
+  .phase-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .phase-objective { font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.15rem; }
+  .phase-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .phase-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .phase-col:last-child { border-right: none; }
+  .phase-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .phase-items li { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; padding-left: 1rem; position: relative; }
+  .phase-items li::before { content: '-'; position: absolute; left: 0; color: var(--accent); }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .result-card { padding: 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; }
+  .result-card.dark { background: var(--ink); border-color: var(--ink); }
+  .result-num { font-family: var(--serif); font-size: 2.8rem; color: var(--ink); line-height: 1; margin-bottom: 0.4rem; }
+  .result-card.dark .result-num { color: var(--cream); }
+  .result-label { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
+  .result-card.dark .result-label { color: rgba(250,249,246,0.9); }
+  .result-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; }
+  .result-card.dark .result-desc { color: rgba(250,249,246,0.5); }
+  .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 2rem; }
+  .reflection-col { padding: 2rem; }
+  .reflection-col.went-well { background: white; border-right: 1px solid var(--border); }
+  .reflection-col.differently { background: var(--cream); }
+  .reflection-col-title { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .went-well .reflection-col-title { color: var(--accent); }
+  .differently .reflection-col-title { color: var(--ink-faint); }
+  .reflection-items { display: flex; flex-direction: column; gap: 1rem; }
+  .reflection-item { padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; border: 1px solid var(--border); }
+  .went-well .reflection-item { background: white; }
+  .differently .reflection-item { background: var(--cream); }
+  .reflection-item strong { font-weight: 500; color: var(--ink); display: block; margin-bottom: 0.25rem; }
+  .case-nav { padding: 4rem 0 6rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .case-nav-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .case-nav-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; transition: color 0.2s; display: block; }
+  .case-nav-title:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; font-size: 0.8rem; color: var(--ink-faint); }
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+  @media (max-width: 680px) {
+    nav { padding: 1rem 1.25rem; } .container { padding: 0 1.25rem; } .case-hero { padding-top: 7rem; }
+    .stat-row, .role-strip, .who-card, .results-grid, .reflection-grid { grid-template-columns: 1fr; }
+    .stat-cell, .role-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child, .role-cell:last-child { border-bottom: none; }
+    .who-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-body { grid-template-columns: 1fr; }
+    .phase-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-col:last-child { border-bottom: none; }
+    .case-nav { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
 </head>
 <body>
 <div class="rainbow-line"></div>
@@ -22,23 +133,52 @@
       <span class="meta-tag">Principal PM</span>
       <span class="meta-tag">HR Tech</span>
       <span class="meta-tag">UX Redesign</span>
+      <span class="meta-tag">Agile Delivery</span>
       <span class="meta-divider"></span>
-      <span class="meta-detail">CoAdvantage · 3 months</span>
+      <span class="meta-detail">InfoBeans · CoAdvantage · 3 months</span>
     </div>
-    <h1 class="case-title fade-in" style="transition-delay:.08s">Redesigning CoAdvantage Quantum for <em>250,000 users</em></h1>
-    <p class="case-subtitle fade-in" style="transition-delay:.14s">CoAdvantage needed to scale from 105,000 to 250,000+ users — but their platform was constrained by an outdated UI and confusing user flows. I led product strategy and execution for a complete UX transformation, building a scalable design system and modernized experience along the way.</p>
+    <h1 class="case-title fade-in" style="transition-delay:.08s">
+      Redesigning CoAdvantage Quantum for <em>250,000 users</em>
+    </h1>
+    <p class="case-subtitle fade-in" style="transition-delay:.14s">
+      CoAdvantage needed to scale from 105,000 to 250,000 users. Their platform had the functionality but the UX was generating support calls and slowing adoption. As Principal PM at InfoBeans, I led competitive analysis, usability research, and agile delivery to redesign the core experience and build a scalable design system in 3 months.
+    </p>
     <div class="role-strip fade-in" style="transition-delay:.18s">
-      <div class="role-cell"><div class="role-label">My Role</div><div class="role-val">Principal Product Manager</div><div class="role-sub">Product strategy &amp; execution</div></div>
-      <div class="role-cell"><div class="role-label">Client</div><div class="role-val">CoAdvantage</div><div class="role-sub">HR &amp; payroll platform, SMB segment</div></div>
-      <div class="role-cell"><div class="role-label">Focus</div><div class="role-val">UI/UX Redesign · Design System</div><div class="role-sub">Usability testing · Roadmap</div></div>
+      <div class="role-cell">
+        <div class="role-label">My Role</div>
+        <div class="role-val">Principal Product Manager</div>
+        <div class="role-sub">Strategy, research, and delivery</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Client</div>
+        <div class="role-val">CoAdvantage</div>
+        <div class="role-sub">HR and payroll platform, SMB segment</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Focus</div>
+        <div class="role-val">UI/UX Redesign · Design System</div>
+        <div class="role-sub">Usability research · Roadmap</div>
+      </div>
     </div>
-    <div class="img-block fade-in" style="transition-delay:.20s;margin-bottom:2rem;">
-      <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c4fa024e860a42a2fc40_Group%205.png" alt="CoAdvantage" />
+    <div class="img-block fade-in" style="transition-delay:.20s; margin-bottom:2rem; border:none; background:transparent;">
+      <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c4fa024e860a42a2fc40_Group%205.png" alt="CoAdvantage platform redesign" />
     </div>
     <div class="stat-row fade-in" style="transition-delay:.22s">
-      <div class="stat-cell"><div class="stat-label">Scale target</div><div class="stat-val">250K+</div><div class="stat-desc">Users, up from 105,000 — 2–3× growth</div></div>
-      <div class="stat-cell"><div class="stat-label">Timeline</div><div class="stat-val">3 mo</div><div class="stat-desc">Discovery through validated prototype &amp; design system</div></div>
-      <div class="stat-cell"><div class="stat-label">Impact</div><div class="stat-val">↓ Support</div><div class="stat-desc">Streamlined workflows expected to significantly reduce support call volume</div></div>
+      <div class="stat-cell">
+        <div class="stat-label">Scale target</div>
+        <div class="stat-val">250K+</div>
+        <div class="stat-desc">Users, up from 105,000. Design system built to scale without re-platforming</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Timeline</div>
+        <div class="stat-val">3 mo</div>
+        <div class="stat-desc">Discovery through validated prototype and design system handoff</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Target impact</div>
+        <div class="stat-val">↓ Support</div>
+        <div class="stat-desc">Streamlined workflows positioned to reduce inbound support call volume</div>
+      </div>
     </div>
   </div>
 </div>
@@ -46,116 +186,291 @@
 <div class="case-body">
   <div class="container">
 
-        <div class="section-block fade-in">
-      <div class="section-eyebrow">00 · Context — Who I am &amp; where this sits</div>
-      <h2 class="section-heading">Principal PM owning product strategy for a <em>platform scaling to 250K users</em></h2>
-      <p class="body-text">I'm Chris Pennell — a Product Manager and UX Lead with 10+ years building digital products across healthcare, wellness, and enterprise software, currently completing my MBA at Rice University. At the time of this project I was Principal PM at <strong>InfoBeans</strong>, a product development consultancy.</p>
-      <p class="body-text">I owned product strategy and execution for CoAdvantage's platform redesign — defining the roadmap, prioritizing features, leading cross-functional delivery, and ensuring every design decision was grounded in real user research. The challenge: transform a feature-rich but friction-heavy HR platform without disrupting 105,000 active users.</p>
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">00 · Context and Background</div>
+      <h2 class="section-heading">Principal PM at InfoBeans, <em>embedded with CoAdvantage's product team</em></h2>
+      <p class="body-text">
+        I'm Chris Pennell, a Product Manager and UX Lead with 10+ years building digital products across healthcare, wellness, and enterprise software, currently completing my MBA at Rice University. On this project I was Principal PM at InfoBeans, a product development consultancy, working directly with CoAdvantage's executive and product teams.
+      </p>
+      <p class="body-text">
+        I owned strategy through delivery: competitive analysis, roadmap definition, feature prioritization, usability research, and agile execution across engineering and design. The constraint was real: transform a feature-rich but friction-heavy HR platform without disrupting 105,000 active users, in 3 months.
+      </p>
       <div class="who-card">
         <div class="who-col">
           <div class="who-col-label">My scope</div>
-          <p><strong>I owned strategy through delivery.</strong> Roadmap definition, feature prioritization, cross-functional execution with engineering and design, user research, and stakeholder alignment — end to end in 3 months.</p>
-          <p>My north star: make the platform self-evident enough that a new user can complete their first HR task without calling support.</p>
+          <p><strong>Full lifecycle in 3 months.</strong> Roadmap definition, feature prioritization, cross-functional execution with engineering and design, usability research, and stakeholder alignment from discovery through handoff.</p>
+          <p>The north star: make the platform self-evident enough that a new user can complete their first HR task without calling support.</p>
         </div>
         <div class="who-col">
           <div class="who-col-label">The business context</div>
-          <p>CoAdvantage is an HR and payroll platform serving small and mid-size businesses. With plans to scale from 105,000 to 250,000+ users, the existing UI and navigation patterns would actively work against growth.</p>
-          <p>A 3-month window to redesign, research-validate, and hand off to engineering — with no ability to break what was already working for 105K users.</p>
+          <p>CoAdvantage is an HR and payroll platform serving small and mid-size businesses across the US. With plans to grow from 105,000 to 250,000 users, the existing UI and navigation patterns were going to actively work against that target.</p>
+          <p>Every friction point that existed at 105K would be amplified at 250K. That's what made the UX work a business priority, not just a design project.</p>
         </div>
-      </div>
-    </div>
-
-<div class="section-block fade-in">
-      <div class="section-eyebrow">01 · The Story — Problem &amp; what we set out to do</div>
-      <h2 class="section-heading">Feature-rich but <em>friction-heavy</em> — a platform holding itself back</h2>
-      <p class="body-text">Despite offering a comprehensive HR platform, CoAdvantage Quantum was constrained by an outdated UI and confusing user flows. With plans to grow from 105,000 to 250,000+ users, they needed a complete UX transformation to remain competitive.</p>
-      <div class="problem-list">
-        <div class="problem-item"><div class="problem-icon">🖥</div><div><div class="problem-title">Outdated interface lacked modern aesthetics and responsiveness</div><div class="problem-desc">The UI hadn't kept pace with user expectations or competitive alternatives in the HR tech market.</div></div></div>
-        <div class="problem-item"><div class="problem-icon">🔀</div><div><div class="problem-title">Inefficient navigation led to frustration and increased support needs</div><div class="problem-desc">Users couldn't find key functions without guidance. Every navigation failure became a support call.</div></div></div>
-        <div class="problem-item"><div class="problem-icon">📈</div><div><div class="problem-title">Platform needed to support 2–3× growth without breaking core workflows</div><div class="problem-desc">Scaling without architectural and UX work would amplify every existing problem across a larger user base.</div></div></div>
-        <div class="problem-item"><div class="problem-icon">🏁</div><div><div class="problem-title">Onboarding and task flows required more autonomy for end-users</div><div class="problem-desc">Self-service gaps meant new users were dependent on support during the most critical adoption window.</div></div></div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">02 · Customer &amp; Data Insights — Research, strategy &amp; execution</div>
-      <h2 class="section-heading">Strategic planning → customer-centric design → <em>validated delivery</em></h2>
-      <p class="body-text">I collaborated closely with executive stakeholders, engineering, design, and customer support to identify key business goals and technical constraints. Together we mapped strategic use cases that would drive both UX improvements and growth enablement.</p>
+      <div class="section-eyebrow">01 · Problem and Competitive Landscape</div>
+      <h2 class="section-heading">The platform had the functionality. <em>The UX was holding it back.</em></h2>
+      <p class="body-text">
+        Before defining the roadmap, I conducted a competitive analysis of the HR tech market, benchmarking CoAdvantage Quantum against direct competitors and newer entrants in the SMB segment. The pattern was consistent: the market had moved toward cleaner navigation, better onboarding flows, and self-service-first design. CoAdvantage's functionality was competitive. The experience was not.
+      </p>
+      <p class="body-text">
+        I also analyzed support ticket data and conducted stakeholder interviews with the customer support team to identify where users were getting stuck. Those two inputs together, competitive benchmarking and internal support data, shaped the prioritization framework I presented to executive leadership before any design work began.
+      </p>
+
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+              <line x1="6" y1="8" x2="10" y2="8"/>
+              <line x1="6" y1="11" x2="9" y2="11"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">The interface hadn't kept pace with the competitive market</div>
+            <div class="problem-desc">Competitive analysis showed newer HR platforms had raised user expectations around navigation clarity and visual hierarchy. CoAdvantage's UI was falling behind on both.</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"/>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <polyline points="7 23 3 19 7 15"/>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">Navigation failures were generating support calls</div>
+            <div class="problem-desc">Support ticket analysis showed users couldn't find key functions without assistance. Every navigation failure became an inbound call. At 250K users that cost was going to scale linearly.</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">The architecture wasn't built for 2 to 3x growth</div>
+            <div class="problem-desc">Scaling without UX and design system work would amplify every existing problem across a larger user base. There was no shared component library, no consistent interaction patterns, and no scalable foundation to build on.</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="8.5" cy="7" r="4"/>
+              <polyline points="17 11 19 13 23 9"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">New user onboarding required too much support involvement</div>
+            <div class="problem-desc">Self-service gaps at the onboarding stage meant new users were dependent on the support team during the most critical adoption window. That was expensive and didn't scale.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">02 · Research, Strategy, and Agile Delivery</div>
+      <h2 class="section-heading">Three phases from competitive analysis <em>through validated handoff</em></h2>
+      <p class="body-text">
+        I organized the work into three phases, each with specific research and delivery outputs. Competitive analysis and support data shaped Phase 1 prioritization. Usability research with real users drove Phase 3 refinements. Every sprint recommendation was presented to executive stakeholders with business impact rationale before design changes were made.
+      </p>
 
       <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 1</span><div><div class="phase-title">Strategic Planning &amp; Execution Oversight</div><div class="phase-objective">Define and socialize product vision, prioritize initiatives, drive roadmap</div></div></div>
+        <div class="phase-header">
+          <span class="phase-badge">Phase 1</span>
+          <div>
+            <div class="phase-title">Competitive Analysis, Prioritization, and Roadmap</div>
+            <div class="phase-objective">Define what to build, in what order, and why — grounded in competitive data and internal support ticket analysis</div>
+          </div>
+        </div>
         <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Defined and socialized the product vision and roadmap with executives and department leads</li><li>Prioritized initiatives based on business impact, user value, and technical feasibility</li><li>Drove feature scoping, sprint planning, backlog grooming, and delivery milestones</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">Prioritization framework</div><ul class="phase-items"><li>Business impact: which improvements directly support the 250K+ growth target?</li><li>User value: which friction points generate the most support volume?</li><li>Technical feasibility: what can be delivered in 3 months vs. backlogged?</li><li>Competitive parity: what does the market now expect as table-stakes UX?</li></ul></div>
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Conducted competitive analysis of the HR tech SMB landscape, benchmarking CoAdvantage against direct competitors on navigation, onboarding, and self-service capability</li>
+              <li>Analyzed support ticket patterns to identify the highest-volume friction points driving inbound calls</li>
+              <li>Defined and presented the product roadmap to executive stakeholders with a prioritization framework tied to the 250K growth target</li>
+              <li>Ran sprint planning, backlog grooming, and delivery milestone definition across engineering and design</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">Prioritization framework presented to leadership</div>
+            <ul class="phase-items">
+              <li>Business impact: which improvements directly support the 250K growth target and reduce support cost?</li>
+              <li>User friction: which pain points generate the most ticket volume?</li>
+              <li>Technical feasibility: what ships in 3 months vs. gets backlogged?</li>
+              <li>Competitive parity: where is CoAdvantage visibly behind market expectations?</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 2</span><div><div class="phase-title">Customer-Centric Design Leadership</div><div class="phase-objective">Reimagine the user experience, deliver design system, reduce onboarding friction</div></div></div>
+        <div class="phase-header">
+          <span class="phase-badge">Phase 2</span>
+          <div>
+            <div class="phase-title">UX Redesign and Design System</div>
+            <div class="phase-objective">Redesign core flows and build a shared component library that scales to 250K users without re-platforming</div>
+          </div>
+        </div>
         <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What shipped</div><ul class="phase-items"><li>Customizable homepage dashboard improving daily engagement and task visibility</li><li>Overhauled HR workflow templates reducing onboarding time and user drop-off</li><li>Scalable design system enabling consistent UI/UX patterns across the platform</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">How I led it</div><ul class="phase-items"><li>Led the product definition process with an associate designer to reimagine the UX</li><li>Partnered with engineering to define and implement the design system architecture</li><li>Ensured every design decision connected back to a validated user need or business goal</li></ul></div>
+          <div class="phase-col">
+            <div class="phase-col-title">What shipped</div>
+            <ul class="phase-items">
+              <li>Customizable homepage dashboard improving daily task visibility and reducing navigation-driven support calls</li>
+              <li>Overhauled HR workflow templates cutting onboarding time and new-user drop-off on core tasks</li>
+              <li>Scalable design system with shared component library enabling consistent UI patterns across the platform</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">How I led it</div>
+            <ul class="phase-items">
+              <li>Led product definition with an associate designer, ensuring every design decision connected to a validated user need or a specific business goal from Phase 1</li>
+              <li>Partnered with engineering to define design system architecture before any component work began</li>
+              <li>Presented design direction to executive stakeholders at each sprint review with impact rationale, not just design rationale</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="img-block" style="margin-top:2rem;">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c5178b06260fbdaf9030_Group%204.png" alt="CoAdvantage redesign screens" />
-        <div class="img-caption">Redesigned dashboard and workflow templates — improved discoverability and task completion</div>
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c5178b06260fbdaf9030_Group%204.png" alt="CoAdvantage redesign screens" />
+        <div class="img-caption">Redesigned dashboard and workflow templates, validated through usability testing before engineering handoff</div>
       </div>
 
       <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 3</span><div><div class="phase-title">User Research &amp; Validation</div><div class="phase-objective">Validate designs with real users, apply feedback iteratively before dev investment</div></div></div>
+        <div class="phase-header">
+          <span class="phase-badge">Phase 3</span>
+          <div>
+            <div class="phase-title">Usability Research and Validation</div>
+            <div class="phase-objective">Test with real users, synthesize findings, present recommendations before any development investment is made</div>
+          </div>
+        </div>
         <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Conducted in-depth user interviews to uncover key pain points across user personas</li><li>Led high-fidelity prototyping and iterative usability testing</li><li>Applied structured feedback to continuously refine key flows pre-development</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">What we validated</div><ul class="phase-items"><li>Dashboard customization significantly improved perceived control and daily return rate</li><li>Revised workflow templates reduced time-to-completion on core HR tasks</li><li>Design system patterns were consistently understood across different user personas</li></ul></div>
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Planned and conducted in-depth user interviews across HR admin and employee personas to identify pain points in the redesigned flows</li>
+              <li>Led high-fidelity prototyping and iterative usability testing sessions, synthesizing findings into a prioritized revision list</li>
+              <li>Presented recommendations to executive stakeholders with task completion data and failure mode analysis before any engineering investment was made</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">What the research confirmed</div>
+            <ul class="phase-items">
+              <li>Dashboard customization improved perceived control and daily return behavior across both HR admin and employee personas</li>
+              <li>Revised workflow templates reduced time-to-completion on the three highest-volume HR tasks identified in Phase 1 support data</li>
+              <li>Design system patterns were understood consistently across different user personas, validating the component library before build</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">03 · The Product — What shipped and how it performed</div>
-      <h2 class="section-heading">A growth-ready platform with a <em>competitive new foundation</em></h2>
+      <div class="section-eyebrow">03 · Outcomes and Business Impact</div>
+      <h2 class="section-heading">A growth-ready platform with <em>a validated foundation to build on</em></h2>
+      <p class="body-text">
+        The engagement delivered a validated, research-grounded redesign and a scalable design system, handed off to engineering with full documentation. Each outcome mapped to the business goals and KPIs defined in Phase 1.
+      </p>
       <div class="results-grid">
-        <div class="result-card dark"><div class="result-num">250K+</div><div class="result-label">Users — architecture ready</div><div class="result-desc">Design system and modular UX enable seamless scaling without re-platforming core workflows.</div></div>
-        <div class="result-card"><div class="result-num">↓</div><div class="result-label">Support volume — positioned</div><div class="result-desc">Streamlined workflows and clearer interfaces expected to significantly reduce inbound support calls.</div></div>
-        <div class="result-card"><div class="result-num">↑</div><div class="result-label">Onboarding &amp; task completion</div><div class="result-desc">Reworked flows improved usability and reduced friction across the most common HR tasks.</div></div>
-        <div class="result-card"><div class="result-num">→</div><div class="result-label">Competitive repositioning</div><div class="result-desc">Redesigned product strengthens CoAdvantage's positioning against newer, more polished HR tech rivals.</div></div>
+        <div class="result-card dark">
+          <div class="result-num">250K+</div>
+          <div class="result-label">User scale, architecture ready</div>
+          <div class="result-desc">Design system and modular UX built to support 2 to 3x growth without re-platforming core workflows or breaking existing users.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">↓</div>
+          <div class="result-label">Support volume, positioned</div>
+          <div class="result-desc">Streamlined navigation and clearer task flows positioned to reduce inbound call volume. Usability testing validated task completion improvements on the highest-ticket flows.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">↑</div>
+          <div class="result-label">Onboarding and task completion</div>
+          <div class="result-desc">Reworked workflow templates and a customizable dashboard reduced friction across the most common HR tasks tested in usability sessions.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">✓</div>
+          <div class="result-label">Engineering handoff complete</div>
+          <div class="result-desc">Comprehensive design documentation and a shared component library enabled the engineering team to begin building without additional discovery sessions.</div>
+        </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">04 · Retrospect — What went well &amp; what I'd do differently</div>
-      <h2 class="section-heading">What a 3-month engagement taught me about <em>speed and scope</em></h2>
+      <div class="section-eyebrow">04 · Reflection</div>
+      <h2 class="section-heading">What a 3-month engagement taught me about <em>speed, scope, and research timing</em></h2>
+      <p class="body-text">
+        CoAdvantage was a compressed engagement with real constraints: a large active user base that couldn't be disrupted, a growth target that made the work urgent, and a 3-month window that forced hard prioritization calls from day one.
+      </p>
       <div class="reflection-grid">
         <div class="reflection-col went-well">
           <div class="reflection-col-title">What went well</div>
           <div class="reflection-items">
-            <div class="reflection-item"><strong>Executive alignment enabled fast decisions</strong>Having direct access to executive stakeholders from day one meant prioritization decisions were made quickly and stuck.</div>
-            <div class="reflection-item"><strong>Design system unlocked velocity</strong>Investing early in a shared design system meant the second half of the project moved significantly faster than the first.</div>
-            <div class="reflection-item"><strong>Customer support as a research channel</strong>Support team insights — especially ticket patterns — proved to be one of the richest sources of user pain data available.</div>
+            <div class="reflection-item">
+              <strong>Executive access enabled fast decisions</strong>
+              Direct access to executive stakeholders from day one meant prioritization decisions were made quickly and stuck. No scope re-litigation mid-sprint.
+            </div>
+            <div class="reflection-item">
+              <strong>Design system investment paid off in sprint 2</strong>
+              Spending the first sprint on a shared component library meant the second half of the project moved significantly faster. The upfront cost was worth it.
+            </div>
+            <div class="reflection-item">
+              <strong>Support ticket data was the richest research source</strong>
+              More than interviews, support ticket patterns told us exactly where users were failing and how often. Treating the support team as a primary research channel shaped the prioritization framework.
+            </div>
           </div>
         </div>
         <div class="reflection-col differently">
           <div class="reflection-col-title">What I'd do differently</div>
           <div class="reflection-items">
-            <div class="reflection-item"><strong>Run usability testing earlier in the cycle</strong>With a 3-month timeline, testing happened later than ideal. Earlier testing would have freed up the back half of the project for more iteration.</div>
-            <div class="reflection-item"><strong>Map the full user journey before scoping</strong>A complete journey map upfront would have surfaced some of the workflow dependencies we discovered mid-project earlier in the process.</div>
-            <div class="reflection-item"><strong>Extend the engagement into post-launch monitoring</strong>Without a post-launch phase, validating the impact of the redesign required the client team to set up their own measurement — something I should have built into the plan.</div>
+            <div class="reflection-item">
+              <strong>Run usability testing earlier in the cycle</strong>
+              Testing happened later than ideal given the 3-month window. Running sessions in week three rather than week eight would have freed up the back half for more iteration rather than revision.
+            </div>
+            <div class="reflection-item">
+              <strong>Map the full user journey before scoping features</strong>
+              A complete journey map upfront would have surfaced workflow dependencies we discovered mid-project and likely changed the Phase 1 prioritization on two features.
+            </div>
+            <div class="reflection-item">
+              <strong>Build post-launch measurement into the engagement scope</strong>
+              Without a post-launch phase, validating the redesign's impact on support volume required the client team to set up their own measurement. That should have been scoped as a deliverable from the start.
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="case-nav fade-in">
-      <div><div class="case-nav-label">Previous project</div><a class="case-nav-title" href="sag-aftra.html">← SAG-AFTRA</a></div>
-      <div style="text-align:right;"><div class="case-nav-label">Next project</div><a class="case-nav-title" href="connect2trials.html">Connect2Trials →</a></div>
+      <div>
+        <div class="case-nav-label">Previous project</div>
+        <a class="case-nav-title" href="sag-aftra.html">← SAG-AFTRA</a>
+      </div>
+      <div style="text-align:right;">
+        <div class="case-nav-label">Next project</div>
+        <a class="case-nav-title" href="connect2trials.html">Connect2Trials →</a>
+      </div>
     </div>
+
   </div>
 </div>
 
-<footer><span>© 2025 Chris Pennell</span><span>MBA Candidate · Rice University · 🏳️‍🌈</span></footer>
+<footer>
+  <span>© 2025 Chris Pennell</span>
+  <span>MBA Candidate · Rice University · 🏳️‍🌈</span>
+</footer>
 <script>
-  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:.08});
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), { threshold: .08 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 </script>
 </body>

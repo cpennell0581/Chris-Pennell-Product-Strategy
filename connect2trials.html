@@ -7,12 +7,118 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
 <style>
-  .stakeholder-list{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;}
-  .stakeholder-card{padding:1.25rem 1.5rem;border:1px solid var(--border);border-radius:8px;background:white;}
-  .stakeholder-card-title{font-size:.88rem;font-weight:500;color:var(--ink);margin-bottom:.3rem;}
-  .stakeholder-card-desc{font-size:.82rem;color:var(--ink-muted);line-height:1.6;}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF9F6; --ink: #1A1916; --ink-muted: #6B6A66; --ink-faint: #C2C1BC;
+    --accent: #2D5BE3; --accent-soft: #EBF0FC; --border: rgba(26,25,22,0.1);
+    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif; --max: 860px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem; background: rgba(250,249,246,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+  .case-hero { padding-top: 9rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .case-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .meta-tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; }
+  .meta-divider { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint); }
+  .meta-detail { font-size: 0.8rem; color: var(--ink-faint); }
+  .case-title { font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .case-title em { font-style: italic; color: var(--accent); }
+  .case-subtitle { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 640px; margin-bottom: 3rem; }
+  .role-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-bottom: 3rem; }
+  .role-cell { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .role-cell:last-child { border-right: none; }
+  .role-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.35rem; }
+  .role-val { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
+  .role-sub { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .stat-cell { padding: 1.5rem 1.75rem; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .stat-val { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; margin-bottom: 0.2rem; }
+  .stat-desc { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; }
+  .case-body { padding: 5rem 0; }
+  .section-block { margin-bottom: 5rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .section-block:last-child { border-bottom: none; margin-bottom: 0; }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .section-heading { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 1rem; color: var(--ink-muted); line-height: 1.9; margin-bottom: 1.25rem; }
+  .body-text:last-child { margin-bottom: 0; }
+  .img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .img-block img { width: 100%; display: block; }
+  .img-caption { font-size: 0.78rem; color: var(--ink-faint); padding: 0.75rem 1rem; background: white; border-top: 1px solid var(--border); }
+  .pull-quote { margin: 2.5rem 0; padding: 1.75rem 2rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+  .pull-quote p { font-family: var(--serif); font-size: 1.15rem; line-height: 1.55; color: var(--ink); font-style: italic; }
+  .pull-quote cite { display: block; margin-top: 0.6rem; font-size: 0.78rem; color: var(--ink-muted); font-style: normal; }
+  .who-card { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 2rem; }
+  .who-col { padding: 1.75rem 2rem; }
+  .who-col:first-child { border-right: 1px solid var(--border); }
+  .who-col-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .who-col p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.85rem; }
+  .who-col p:last-child { margin-bottom: 0; }
+  .who-col p strong { font-weight: 500; color: var(--ink); }
+  .problem-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .problem-item { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; align-items: start; }
+  .problem-icon { width: 3.5rem; display: flex; align-items: flex-start; padding-top: 1px; flex-shrink: 0; }
+  .problem-icon svg { width: 32px; height: 32px; flex-shrink: 0; }
+  .problem-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .problem-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .stakeholder-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+  .stakeholder-card { padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; }
+  .stakeholder-card-title { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .stakeholder-card-desc { font-size: 0.82rem; color: var(--ink-muted); line-height: 1.6; }
+  .phase-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .phase-header { display: flex; align-items: baseline; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); flex-wrap: wrap; }
+  .phase-badge { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; flex-shrink: 0; }
+  .phase-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .phase-objective { font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.15rem; }
+  .phase-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .phase-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .phase-col:last-child { border-right: none; }
+  .phase-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .phase-items li { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; padding-left: 1rem; position: relative; }
+  .phase-items li::before { content: '-'; position: absolute; left: 0; color: var(--accent); }
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .insight-card { padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; }
+  .insight-card.accent-bg { background: var(--accent-soft); border-color: rgba(45,91,227,0.2); }
+  .insight-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+  .insight-text { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.65; }
+  .insight-text strong { font-weight: 500; color: var(--ink); }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .result-card { padding: 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; }
+  .result-card.dark { background: var(--ink); border-color: var(--ink); }
+  .result-num { font-family: var(--serif); font-size: 2.8rem; color: var(--ink); line-height: 1; margin-bottom: 0.4rem; }
+  .result-card.dark .result-num { color: var(--cream); }
+  .result-label { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
+  .result-card.dark .result-label { color: rgba(250,249,246,0.9); }
+  .result-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; }
+  .result-card.dark .result-desc { color: rgba(250,249,246,0.5); }
+  .case-nav { padding: 4rem 0 6rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .case-nav-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .case-nav-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; transition: color 0.2s; display: block; }
+  .case-nav-title:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; font-size: 0.8rem; color: var(--ink-faint); }
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+  @media (max-width: 680px) {
+    nav { padding: 1rem 1.25rem; } .container { padding: 0 1.25rem; } .case-hero { padding-top: 7rem; }
+    .stat-row, .role-strip, .who-card, .insight-grid, .results-grid, .stakeholder-list { grid-template-columns: 1fr; }
+    .stat-cell, .role-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child, .role-cell:last-child { border-bottom: none; }
+    .who-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-body { grid-template-columns: 1fr; }
+    .phase-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-col:last-child { border-bottom: none; }
+    .case-nav { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
 </style>
 </head>
 <body>
@@ -28,23 +134,52 @@
       <span class="meta-tag">Product Strategist</span>
       <span class="meta-tag">HealthTech</span>
       <span class="meta-tag">MVP Definition</span>
+      <span class="meta-tag">Agile Delivery</span>
       <span class="meta-divider"></span>
       <span class="meta-detail">Connect2Trials · 8 months</span>
     </div>
-    <h1 class="case-title fade-in" style="transition-delay:.08s">Making clinical trials <em>human</em> — for the patients who need them most</h1>
-    <p class="case-subtitle fade-in" style="transition-delay:.14s">Connect2Trials needed to improve patient recruitment, engagement, and retention in clinical trials by making the process more accessible and emotionally resonant. As Product Strategist, I shaped the MVP vision, aligned stakeholders across sponsors, sites, and CROs, and led the platform through definition, design, and validation.</p>
+    <h1 class="case-title fade-in" style="transition-delay:.08s">
+      Making clinical trials <em>human</em> for the patients who need them most
+    </h1>
+    <p class="case-subtitle fade-in" style="transition-delay:.14s">
+      Clinical trial recruitment has an engagement problem. Patients who qualify often never find out, and those who do face an enrollment process built for the research system rather than for them. As Product Strategist and Fractional Product Owner at Connect2Trials, I shaped the MVP vision, aligned stakeholders across sponsors, sites, and CROs, and led the platform from definition through validated prototype over 8 months.
+    </p>
     <div class="role-strip fade-in" style="transition-delay:.18s">
-      <div class="role-cell"><div class="role-label">My Role</div><div class="role-val">Product Strategist</div><div class="role-sub">Fractional Product Owner · 8 months</div></div>
-      <div class="role-cell"><div class="role-label">Client</div><div class="role-val">Connect2Trials</div><div class="role-sub">Clinical trial recruitment SaaS platform</div></div>
-      <div class="role-cell"><div class="role-label">Focus</div><div class="role-val">MVP Definition · UX Strategy</div><div class="role-sub">Stakeholder alignment · User-centered design</div></div>
+      <div class="role-cell">
+        <div class="role-label">My Role</div>
+        <div class="role-val">Product Strategist</div>
+        <div class="role-sub">Fractional Product Owner · 8 months</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Client</div>
+        <div class="role-val">Connect2Trials</div>
+        <div class="role-sub">Clinical trial recruitment SaaS platform</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Focus</div>
+        <div class="role-val">MVP Definition · UX Strategy</div>
+        <div class="role-sub">Stakeholder alignment · User research</div>
+      </div>
     </div>
-    <div class="img-block fade-in" style="transition-delay:.20s;margin-bottom:2rem;">
-      <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fa9e8dd7217452aa8241_Hero_C2T.png" alt="Connect2Trials" />
+    <div class="img-block fade-in" style="transition-delay:.20s; margin-bottom:2rem;">
+      <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fa9e8dd7217452aa8241_Hero_C2T.png" alt="Connect2Trials platform" />
     </div>
     <div class="stat-row fade-in" style="transition-delay:.22s">
-      <div class="stat-cell"><div class="stat-label">Duration</div><div class="stat-val">8 mo</div><div class="stat-desc">MVP definition through validated high-fidelity prototype</div></div>
-      <div class="stat-cell"><div class="stat-label">Stakeholder groups</div><div class="stat-val">3</div><div class="stat-desc">Patients, Sites &amp; CROs, Sponsors — all considered in design</div></div>
-      <div class="stat-cell"><div class="stat-label">MVP flows delivered</div><div class="stat-val">3</div><div class="stat-desc">Onboarding, Engagement, Community — validated &amp; prototype-ready</div></div>
+      <div class="stat-cell">
+        <div class="stat-label">Engagement duration</div>
+        <div class="stat-val">8 mo</div>
+        <div class="stat-desc">MVP definition through validated high-fidelity prototype</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Stakeholder groups</div>
+        <div class="stat-val">3</div>
+        <div class="stat-desc">Patients, Sites and CROs, Sponsors — all considered in design</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">MVP flows delivered</div>
+        <div class="stat-val">3</div>
+        <div class="stat-desc">Onboarding, Engagement, Community — validated and prototype-ready</div>
+      </div>
     </div>
   </div>
 </div>
@@ -52,132 +187,322 @@
 <div class="case-body">
   <div class="container">
 
-        <div class="section-block fade-in">
-      <div class="section-eyebrow">00 · Context — Who I am &amp; where this sits</div>
-      <h2 class="section-heading">Product Strategist &amp; Fractional PO, <em>shaping a 0-to-1 clinical trial platform</em></h2>
-      <p class="body-text">I'm Chris Pennell — a Product Manager and UX Lead with 10+ years building digital products across healthcare, wellness, and enterprise software, currently completing my MBA at Rice University. On this project I served as <strong>Product Strategist and Fractional Product Owner</strong> for Connect2Trials over an 8-month engagement.</p>
-      <p class="body-text">I was responsible for shaping the MVP vision, aligning stakeholders across patients, clinical sites, CROs, and sponsors, and leading the platform through definition, design, and validation. My work laid the foundation for a scalable, human-centered clinical trial platform.</p>
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">00 · Context and Background</div>
+      <h2 class="section-heading">Product Strategist and Fractional PO, <em>shaping a 0-to-1 clinical trial platform</em></h2>
+      <p class="body-text">
+        I'm Chris Pennell, a Product Manager and UX Lead with 10+ years building digital products across healthcare, wellness, and enterprise software, currently completing my MBA at Rice University. On this project I served as Product Strategist and Fractional Product Owner for Connect2Trials over an 8-month engagement.
+      </p>
+      <p class="body-text">
+        I was responsible for shaping the MVP vision, running usability research with patients and clinical stakeholders, aligning three distinct stakeholder groups with competing priorities, and leading delivery from definition through a validated prototype. Every product decision was grounded in user research and evaluated against a single question: will a patient trust this enough to enroll?
+      </p>
       <div class="who-card">
         <div class="who-col">
           <div class="who-col-label">My scope</div>
-          <p><strong>I owned MVP strategy through validated prototype.</strong> That meant: defining the product vision, aligning external clinical stakeholders, translating strategy into user stories and technical requirements, managing design execution, and running sprint planning.</p>
-          <p>My north star: build a platform patients actually trust enough to join a clinical trial through.</p>
+          <p><strong>I owned MVP strategy through validated prototype.</strong> That meant defining the product vision, running usability research, aligning external clinical stakeholders, translating strategy into user stories and technical requirements, managing design execution, and running sprint planning.</p>
+          <p>The north star: build a platform patients trust enough to join a clinical trial through.</p>
         </div>
         <div class="who-col">
           <div class="who-col-label">The domain context</div>
-          <p>Clinical trial recruitment has a well-documented engagement problem. Patients who qualify for trials often don't know they exist — and those who find one face an enrollment process designed for the research system, not for them.</p>
-          <p>Connect2Trials was built on the premise that better design can improve recruitment, engagement, and retention simultaneously. I was there to prove that out through an MVP.</p>
+          <p>Clinical trial recruitment has a well-documented engagement problem. Patients who qualify for trials often don't know they exist. Those who find one face an enrollment process designed for the research system, with complex language, opaque eligibility criteria, and no ongoing support.</p>
+          <p>Connect2Trials was built on the premise that better design can improve recruitment, engagement, and retention at the same time. My job was to prove that out through an MVP and get it in front of real users.</p>
         </div>
-      </div>
-    </div>
-
-<div class="section-block fade-in">
-      <div class="section-eyebrow">01 · The Story — The opportunity &amp; what we set out to do</div>
-      <h2 class="section-heading">Clinical trial recruitment is broken — <em>patients pay the price</em></h2>
-      <p class="body-text">Connect2Trials is a web-based SaaS platform designed to support patients throughout their clinical trial journey. The company aimed to improve recruitment, engagement, and retention by making trials more accessible and emotionally resonant for patients.</p>
-      <p class="body-text">The problem wasn't a lack of trials — it was a lack of patient-centered design. Enrollment processes were complex, intimidating, and built for the systems of clinical research rather than the humans navigating them.</p>
-      <div class="problem-list">
-        <div class="problem-item"><div class="problem-icon">🔍</div><div><div class="problem-title">Patients couldn't find or understand trials relevant to them</div><div class="problem-desc">Discovery was opaque. Medical language and eligibility criteria created barriers that patients couldn't navigate independently.</div></div></div>
-        <div class="problem-item"><div class="problem-icon">🤝</div><div><div class="problem-title">Engagement dropped off once patients entered the funnel</div><div class="problem-desc">Without trust-building mechanisms or ongoing support, patients disengaged before completing qualification or enrollment.</div></div></div>
-        <div class="problem-item"><div class="problem-icon">🔗</div><div><div class="problem-title">No platform addressed all three stakeholder groups cohesively</div><div class="problem-desc">Sponsors, Sites, and CROs each had distinct workflows. Existing tools served one group at the expense of the others.</div></div></div>
-      </div>
-      <div class="stakeholder-list">
-        <div class="stakeholder-card"><div class="stakeholder-card-title">Patients</div><div class="stakeholder-card-desc">End users navigating clinical trial participation. Primary design priority — trust, literacy, and confidence were essential.</div></div>
-        <div class="stakeholder-card"><div class="stakeholder-card-title">Sites &amp; CROs</div><div class="stakeholder-card-desc">Clinical teams managing recruitment and trial execution. Needed tools that fit into existing workflows without adding friction.</div></div>
-        <div class="stakeholder-card"><div class="stakeholder-card-title">Sponsors</div><div class="stakeholder-card-desc">Pharmaceutical and research sponsors funding and overseeing trials. Needed visibility into recruitment performance and outcomes.</div></div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">02 · Customer &amp; Data Insights — Human-centered research &amp; strategy</div>
+      <div class="section-eyebrow">01 · Problem and Competitive Landscape</div>
+      <h2 class="section-heading">Clinical trial recruitment is built for the research system, <em>not for patients</em></h2>
+      <p class="body-text">
+        Before defining the product, I conducted a competitive analysis of existing clinical trial platforms across patient discovery, enrollment support, engagement mechanics, and multi-stakeholder workflow integration. The landscape was dominated by registry databases and sponsor-facing tools. Nothing addressed the full patient journey from discovery through retention. The patient experience was an afterthought in every product we reviewed.
+      </p>
+      <p class="body-text">
+        I presented this analysis to Connect2Trials' leadership with a recommendation to build the patient trust layer as the primary MVP investment, rather than starting with sponsor or site tooling. Clinical trial platforms that earn patient trust earn everything else. I also identified three distinct stakeholder groups with different needs that any solution had to serve without compromising any of them.
+      </p>
+
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+              <line x1="8" y1="11" x2="14" y2="11"/>
+              <line x1="11" y1="8" x2="11" y2="14"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">Patients couldn't find or understand trials relevant to them</div>
+            <div class="problem-desc">Discovery was opaque. Medical language and eligibility criteria created barriers that patients couldn't navigate without clinical support. Competitive analysis confirmed no existing platform had addressed plain-language trial discovery at scale.</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">Engagement dropped off once patients entered the funnel</div>
+            <div class="problem-desc">Without trust-building mechanisms or ongoing support, patients disengaged before completing qualification or enrollment. Usability research with patients confirmed that anxiety and confusion, not lack of interest, were driving drop-off.</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+              <path d="M7 8h4M7 11h2"/>
+              <rect x="13" y="7" width="5" height="5" rx="1"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">No platform served all three stakeholder groups in one product</div>
+            <div class="problem-desc">Sponsors, Sites, and CROs each had distinct workflows. Existing tools served one group at the expense of the others. A platform that required separate systems for each stakeholder wasn't going to scale.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stakeholder-list">
+        <div class="stakeholder-card">
+          <div class="stakeholder-card-title">Patients</div>
+          <div class="stakeholder-card-desc">End users navigating clinical trial participation. Primary design priority. Trust, health literacy, and confidence in the process were prerequisites for adoption.</div>
+        </div>
+        <div class="stakeholder-card">
+          <div class="stakeholder-card-title">Sites and CROs</div>
+          <div class="stakeholder-card-desc">Clinical teams managing recruitment and trial execution. Needed tools that fit existing workflows without adding administrative burden or requiring new systems training.</div>
+        </div>
+        <div class="stakeholder-card">
+          <div class="stakeholder-card-title">Sponsors</div>
+          <div class="stakeholder-card-desc">Pharmaceutical and research sponsors funding and overseeing trials. Needed visibility into recruitment performance, site activity, and enrollment outcomes in one place.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">02 · Research and Agile Delivery</div>
       <h2 class="section-heading">Four sprint-based phases from <em>MVP definition to validated prototype</em></h2>
-      <p class="body-text">I organized the work into four distinct phases, each spanning two-week sprints, aimed at specific objectives. The project's main priority was to address patient user flows for the MVP and conduct user testing. Patient experience was at the core — but the platform had to serve all three stakeholder groups without compromising any of them.</p>
+      <p class="body-text">
+        I organized the work into four phases, each running across two-week sprints with specific research and delivery objectives. Patient experience was the primary design priority throughout, but the platform had to serve all three stakeholder groups without compromising any of them. Research findings from each phase fed directly into the next sprint's backlog.
+      </p>
 
       <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 1</span><div><div class="phase-title">MVP Strategy &amp; Roadmap Ownership</div><div class="phase-objective">Define MVP vision, structure delivery, align internal and external stakeholders</div></div></div>
+        <div class="phase-header">
+          <span class="phase-badge">Phase 1</span>
+          <div>
+            <div class="phase-title">MVP Strategy and Roadmap</div>
+            <div class="phase-objective">Define MVP vision, structure delivery, align internal and external stakeholders on priorities</div>
+          </div>
+        </div>
         <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Defined the MVP vision and structured delivery into three sprint-based phases</li><li>Prioritized core user flows based on business impact and clinical user needs</li><li>Facilitated alignment across internal teams and external clinical stakeholders</li><li>Translated high-level strategy into user stories, workflows, and technical requirements</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">MVP flows prioritized</div><ul class="phase-items"><li><strong>Patient Onboarding</strong> — simplified registration and qualification to reduce friction and improve conversion</li><li><strong>Engagement</strong> — health literacy tools and transparency in the matching process to build patient confidence</li><li><strong>Community</strong> — trust-building structures to foster peer connections and long-term retention</li></ul></div>
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Defined the MVP vision and structured delivery into three sprint-based phases with clear go/no-go criteria at each stage</li>
+              <li>Prioritized core user flows based on business impact, clinical user needs, and competitive gaps identified in the landscape analysis</li>
+              <li>Facilitated alignment across internal teams and external clinical stakeholders including site coordinators and sponsor representatives</li>
+              <li>Translated high-level strategy into user stories, acceptance criteria, and technical requirements ready for the design sprint</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">MVP flows prioritized</div>
+            <ul class="phase-items">
+              <li><strong>Patient Onboarding</strong> — simplified registration and pre-screening to reduce friction and improve conversion from discovery to enrollment</li>
+              <li><strong>Engagement</strong> — health literacy tools and process transparency to build patient confidence during the matching phase</li>
+              <li><strong>Community</strong> — peer connection and milestone structures to support long-term retention after enrollment</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="img-block" style="margin-top:2rem;">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fcc597cd72e2106a0c66_User%20Stories.png" alt="User stories and requirements" />
-        <div class="img-caption">User stories and requirements framework — mapping patient, site, and sponsor needs</div>
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fcc597cd72e2106a0c66_User%20Stories.png" alt="User stories and requirements" />
+        <div class="img-caption">User stories and requirements framework, mapping patient, site, and sponsor needs across the MVP</div>
       </div>
 
       <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 2</span><div><div class="phase-title">UX Framework &amp; Mid-Fidelity Wireframes</div><div class="phase-objective">Define information architecture and interaction models for all three stakeholder groups</div></div></div>
+        <div class="phase-header">
+          <span class="phase-badge">Phase 2</span>
+          <div>
+            <div class="phase-title">UX Framework and Mid-Fidelity Wireframes</div>
+            <div class="phase-objective">Define information architecture and interaction models for all three stakeholder groups</div>
+          </div>
+        </div>
         <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Led co-design sessions with patients and internal stakeholders to uncover key pain points</li><li>Developed experience maps, interaction frameworks, and user personas</li><li>Used qualitative insights to align platform tone, language, and interaction patterns with patient trust levels</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">Design principles applied</div><ul class="phase-items"><li>Health literacy — every piece of content written for a Grade 8 reading level</li><li>Trust signals — transparency about trial process, timeline, and patient rights throughout</li><li>Progressive disclosure — complex information revealed only when the patient is ready</li></ul></div>
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Led co-design sessions with patients and internal stakeholders to surface pain points that stakeholder interviews alone had missed</li>
+              <li>Developed experience maps, interaction frameworks, and user personas grounded in qualitative research findings</li>
+              <li>Used research outputs to align platform tone, language, and interaction patterns with patient trust levels at each stage of the journey</li>
+              <li>Presented mid-fidelity wireframes to clinical stakeholders with recommendations for revision before moving to high-fidelity</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">Design principles applied</div>
+            <ul class="phase-items">
+              <li><strong>Health literacy</strong> — every piece of content written for a Grade 8 reading level, validated with real patients in usability sessions</li>
+              <li><strong>Trust signals</strong> — transparency about trial process, timeline, and patient rights surfaced throughout, not just at consent</li>
+              <li><strong>Progressive disclosure</strong> — complex information revealed only when the patient had indicated readiness, reducing cognitive load at critical decision points</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="img-block" style="margin-top:2rem;">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fb558667f7340d3efe8f_Process_C2T.png" alt="Process and framework" />
-        <div class="img-caption">Product development framework — four phases from MVP definition through validated prototype</div>
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fb558667f7340d3efe8f_Process_C2T.png" alt="Product development framework" />
+        <div class="img-caption">Product development framework, four phases from MVP definition through validated prototype</div>
       </div>
       <div class="img-block">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fb8054614fc8ab26c205_WireFrames.png" alt="Mid-fidelity wireframes" />
-        <div class="img-caption">Mid-fidelity wireframes — patient onboarding and trial matching flows</div>
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fb8054614fc8ab26c205_WireFrames.png" alt="Mid-fidelity wireframes" />
+        <div class="img-caption">Mid-fidelity wireframes, patient onboarding and trial matching flows</div>
       </div>
 
       <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 3</span><div><div class="phase-title">High-Fidelity Wireframes &amp; Prototypes</div><div class="phase-objective">Produce review-ready prototypes, detail all screens and states for key tasks</div></div></div>
+        <div class="phase-header">
+          <span class="phase-badge">Phase 3</span>
+          <div>
+            <div class="phase-title">High-Fidelity Wireframes and Prototypes</div>
+            <div class="phase-objective">Produce review-ready prototypes covering all screens and states for key patient tasks</div>
+          </div>
+        </div>
         <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Led production of high-fidelity prototypes for review and requirements validation</li><li>Detailed all unique screens and states for key tasks within the application</li><li>Managed design execution and sprint planning alongside a product designer</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">Screens detailed</div><ul class="phase-items"><li>Patient onboarding: registration, eligibility pre-screening, consent flow</li><li>Trial matching: search, filter, comparison, and apply</li><li>Community: peer connection, milestone celebration, support resources</li><li>Sponsor &amp; site dashboards: recruitment tracking, site performance</li></ul></div>
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Led production of high-fidelity prototypes for stakeholder review and requirements validation before any engineering investment was made</li>
+              <li>Detailed all unique screens and states for key tasks within the application, including edge cases identified in Phase 2 usability sessions</li>
+              <li>Managed design execution and sprint planning alongside a product designer, keeping delivery on schedule across both tracks</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">Screens detailed</div>
+            <ul class="phase-items">
+              <li>Patient onboarding: registration, eligibility pre-screening, consent flow</li>
+              <li>Trial matching: search, filter, comparison, and apply</li>
+              <li>Community: peer connection, milestone celebration, support resources</li>
+              <li>Sponsor and site dashboards: recruitment tracking and site performance</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="img-block" style="margin-top:2rem;">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fba92845a4410ad2afdb_Conecept_C2T.png" alt="High-fidelity concept" />
-        <div class="img-caption">High-fidelity prototype — patient matching and community engagement flows</div>
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fba92845a4410ad2afdb_Conecept_C2T.png" alt="High-fidelity concept" />
+        <div class="img-caption">High-fidelity prototype, patient matching and community engagement flows</div>
       </div>
 
       <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 4</span><div><div class="phase-title">Concept &amp; Usability Evaluation</div><div class="phase-objective">Conduct usability evaluations, refine based on structured feedback, validate against goals</div></div></div>
+        <div class="phase-header">
+          <span class="phase-badge">Phase 4</span>
+          <div>
+            <div class="phase-title">Usability Evaluation and Validation</div>
+            <div class="phase-objective">Test with real users, refine based on structured feedback, validate against MVP goals</div>
+          </div>
+        </div>
         <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Conducted usability evaluations and refined design based on structured feedback</li><li>Incorporated direct feedback from Sites, Sponsors, and Patients into the prototype</li><li>Ensured the design aligned with the goal: patient-centric, trustworthy, and engaging</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">What we validated</div><ul class="phase-items"><li>Patient onboarding completion rate significantly improved with simplified pre-screening</li><li>Health literacy tools increased patient confidence in the matching process</li><li>Community features were identified as a key differentiator vs. existing platforms</li></ul></div>
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Planned and conducted usability evaluations with patients, site coordinators, and sponsor representatives across structured test sessions</li>
+              <li>Synthesized findings from all three stakeholder groups into a prioritized revision list with specific recommendations for each flow</li>
+              <li>Presented findings and revision recommendations to Connect2Trials leadership with impact rationale before any design changes were made</li>
+              <li>Managed final prototype revisions to ensure the product aligned with patient trust requirements and sponsor performance needs</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">What the testing confirmed</div>
+            <ul class="phase-items">
+              <li>Patient onboarding completion rate improved significantly with the simplified pre-screening flow validated in Phase 2</li>
+              <li>Health literacy tools increased patient confidence during the matching phase, reducing the anxiety-driven drop-off observed in competitive products</li>
+              <li>Community features were identified by patients as a key differentiator vs. anything currently available</li>
+              <li>Sponsor dashboard met performance visibility requirements without additional development scope</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">03 · The Product — What shipped and how it performed</div>
-      <h2 class="section-heading">A validated MVP that laid the foundation for <em>patient-centered trial engagement</em></h2>
-      <p class="body-text">I delivered a validated, high-fidelity MVP prototype addressing the most critical patient needs. Through a modular design system and phased rollout plan, I accelerated iteration, reduced development risk, and positioned Connect2Trials to improve patient trust, recruitment, and long-term retention.</p>
+      <div class="section-eyebrow">03 · Outcomes and Business Impact</div>
+      <h2 class="section-heading">A validated MVP that gave Connect2Trials <em>a foundation to build on</em></h2>
+      <p class="body-text">
+        The engagement delivered a validated, high-fidelity MVP prototype incorporating feedback from all three stakeholder groups. Through a modular design system and phased rollout plan, I reduced development risk and gave the engineering team a clear path to build against. Each outcome mapped back to the business goals set at the start of the engagement.
+      </p>
+
       <div class="results-grid">
-        <div class="result-card dark"><div class="result-num">✓</div><div class="result-label">Validated MVP prototype delivered</div><div class="result-desc">High-fidelity, prototype-ready — incorporating feedback from all three stakeholder groups.</div></div>
-        <div class="result-card"><div class="result-num">↓</div><div class="result-label">Development risk reduced</div><div class="result-desc">Modular design system and phased rollout plan accelerated iteration and de-risked the build process.</div></div>
-        <div class="result-card"><div class="result-num">↑</div><div class="result-label">Patient trust &amp; confidence</div><div class="result-desc">Health literacy tools and transparency mechanisms directly addressed the core driver of patient drop-off.</div></div>
-        <div class="result-card"><div class="result-num">3</div><div class="result-label">Stakeholder groups aligned</div><div class="result-desc">Patients, Sites &amp; CROs, and Sponsors — all considered and incorporated in the platform's design architecture.</div></div>
+        <div class="result-card dark">
+          <div class="result-num">3</div>
+          <div class="result-label">MVP flows validated with real users</div>
+          <div class="result-desc">Onboarding, Engagement, and Community flows tested with patients, site coordinators, and sponsors. High-fidelity and prototype-ready at handoff.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">3</div>
+          <div class="result-label">Stakeholder groups aligned</div>
+          <div class="result-desc">Patients, Sites and CROs, and Sponsors all incorporated in the design architecture. Competing priorities reconciled through research-grounded recommendations to leadership.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">↓</div>
+          <div class="result-label">Development risk reduced</div>
+          <div class="result-desc">Modular design system and phased rollout plan gave the engineering team a validated build path before any production code was written.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">↑</div>
+          <div class="result-label">Patient trust and confidence</div>
+          <div class="result-desc">Health literacy tools and transparency mechanisms directly addressed the core driver of patient drop-off identified in competitive analysis and usability research.</div>
+        </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">04 · Retrospect — Key learnings &amp; what I'd do differently</div>
+      <div class="section-eyebrow">04 · Reflection</div>
       <h2 class="section-heading">What this taught me about building for <em>trust in healthcare</em></h2>
+      <p class="body-text">
+        Connect2Trials was a different kind of product problem. The technical requirements were manageable. The hard part was that every design decision had a direct bearing on whether a patient would trust the platform enough to enroll in a medical study. That raises the stakes on every UX call in a way that most digital products don't.
+      </p>
+
       <div class="insight-grid">
-        <div class="insight-card accent-bg"><div class="insight-label">Learning 1</div><div class="insight-text"><strong>Human-centered research is essential in healthcare SaaS.</strong> It shaped both tone and functionality of the product. A technically correct solution that patients don't trust is not a solution.</div></div>
-        <div class="insight-card accent-bg"><div class="insight-label">Learning 2</div><div class="insight-text"><strong>A modular, phased MVP approach accelerated iteration.</strong> Breaking the MVP into three tightly scoped flows — rather than building everything at once — de-risked the build and enabled faster learning.</div></div>
-        <div class="insight-card"><div class="insight-label">Learning 3</div><div class="insight-text"><strong>Clinical objectives and user emotion must be aligned.</strong> Success came from connecting what the research system needed with what patients actually felt during the process — not just function.</div></div>
-        <div class="insight-card"><div class="insight-label">Learning 4</div><div class="insight-text"><strong>Aligning business outcomes with user behavior was critical.</strong> Features that looked good on a roadmap but didn't match patient mental models were cut early — and the product was better for it.</div></div>
+        <div class="insight-card accent-bg">
+          <div class="insight-label">Learning 1</div>
+          <div class="insight-text"><strong>Human-centered research is essential in healthcare SaaS.</strong> It shaped both tone and functionality. A technically correct solution that patients don't trust is not a solution. We found this repeatedly in usability sessions: features that looked right on a wireframe created anxiety in real patients until the language was revised.</div>
+        </div>
+        <div class="insight-card accent-bg">
+          <div class="insight-label">Learning 2</div>
+          <div class="insight-text"><strong>A modular, phased MVP approach reduced risk and accelerated learning.</strong> Breaking the MVP into three tightly scoped flows rather than building everything at once meant each phase produced validated findings before the next sprint began. Nothing was built on assumption.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Learning 3</div>
+          <div class="insight-text"><strong>Clinical objectives and patient emotion have to be aligned, not balanced.</strong> The research system's needs and what patients actually feel during enrollment aren't in tension if you design for patient emotion first. When patients feel confident, they complete the process. That serves the clinical objective.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Learning 4</div>
+          <div class="insight-text"><strong>Aligning business outcomes with user behavior required cutting features early.</strong> Several items that looked compelling on the roadmap didn't match patient mental models in testing. Cutting them early, with research backing the recommendation, kept the MVP focused and the timeline intact.</div>
+        </div>
       </div>
     </div>
 
     <div class="case-nav fade-in">
-      <div><div class="case-nav-label">Previous project</div><a class="case-nav-title" href="coadvantage.html">← CoAdvantage</a></div>
-      <div style="text-align:right;"><div class="case-nav-label">Back to all work</div><a class="case-nav-title" href="index.html">Home →</a></div>
+      <div>
+        <div class="case-nav-label">Previous project</div>
+        <a class="case-nav-title" href="coadvantage.html">← CoAdvantage</a>
+      </div>
+      <div style="text-align:right;">
+        <div class="case-nav-label">Back to all work</div>
+        <a class="case-nav-title" href="index.html">Home →</a>
+      </div>
     </div>
+
   </div>
 </div>
 
-<footer><span>© 2025 Chris Pennell</span><span>MBA Candidate · Rice University · 🏳️‍🌈</span></footer>
+<footer>
+  <span>© 2025 Chris Pennell</span>
+  <span>MBA Candidate · Rice University · 🏳️‍🌈</span>
+</footer>
 <script>
-  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:.08});
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), { threshold: .08 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 </script>
 </body>

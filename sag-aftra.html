@@ -7,7 +7,122 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF9F6; --ink: #1A1916; --ink-muted: #6B6A66; --ink-faint: #C2C1BC;
+    --accent: #2D5BE3; --accent-soft: #EBF0FC; --border: rgba(26,25,22,0.1);
+    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif; --max: 860px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem; background: rgba(250,249,246,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+  .case-hero { padding-top: 9rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .case-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .meta-tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; }
+  .meta-divider { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint); }
+  .meta-detail { font-size: 0.8rem; color: var(--ink-faint); }
+  .case-title { font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .case-title em { font-style: italic; color: var(--accent); }
+  .case-subtitle { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 640px; margin-bottom: 3rem; }
+  .role-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-bottom: 3rem; }
+  .role-cell { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .role-cell:last-child { border-right: none; }
+  .role-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.35rem; }
+  .role-val { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
+  .role-sub { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .stat-cell { padding: 1.5rem 1.75rem; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .stat-val { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; margin-bottom: 0.2rem; }
+  .stat-desc { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; }
+  .case-body { padding: 5rem 0; }
+  .section-block { margin-bottom: 5rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .section-block:last-child { border-bottom: none; margin-bottom: 0; }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .section-heading { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 1rem; color: var(--ink-muted); line-height: 1.9; margin-bottom: 1.25rem; }
+  .body-text:last-child { margin-bottom: 0; }
+  .img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .img-block img { width: 100%; display: block; }
+  .img-caption { font-size: 0.78rem; color: var(--ink-faint); padding: 0.75rem 1rem; background: white; border-top: 1px solid var(--border); }
+  .pull-quote { margin: 2.5rem 0; padding: 1.75rem 2rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+  .pull-quote p { font-family: var(--serif); font-size: 1.15rem; line-height: 1.55; color: var(--ink); font-style: italic; }
+  .pull-quote cite { display: block; margin-top: 0.6rem; font-size: 0.78rem; color: var(--ink-muted); font-style: normal; }
+  .who-card { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 2rem; }
+  .who-col { padding: 1.75rem 2rem; }
+  .who-col:first-child { border-right: 1px solid var(--border); }
+  .who-col-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .who-col p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.85rem; }
+  .who-col p:last-child { margin-bottom: 0; }
+  .who-col p strong { font-weight: 500; color: var(--ink); }
+  .problem-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .problem-item { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; align-items: start; }
+  .problem-icon { width: 3.5rem; display: flex; align-items: flex-start; padding-top: 1px; flex-shrink: 0; }
+  .problem-icon svg { width: 32px; height: 32px; flex-shrink: 0; }
+  .problem-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .problem-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .phase-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .phase-header { display: flex; align-items: baseline; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); flex-wrap: wrap; }
+  .phase-badge { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; flex-shrink: 0; }
+  .phase-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .phase-objective { font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.15rem; }
+  .phase-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .phase-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .phase-col:last-child { border-right: none; }
+  .phase-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .phase-items li { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; padding-left: 1rem; position: relative; }
+  .phase-items li::before { content: '-'; position: absolute; left: 0; color: var(--accent); }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .result-card { padding: 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; }
+  .result-card.dark { background: var(--ink); border-color: var(--ink); }
+  .result-num { font-family: var(--serif); font-size: 2.8rem; color: var(--ink); line-height: 1; margin-bottom: 0.4rem; }
+  .result-card.dark .result-num { color: var(--cream); }
+  .result-label { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
+  .result-card.dark .result-label { color: rgba(250,249,246,0.9); }
+  .result-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; }
+  .result-card.dark .result-desc { color: rgba(250,249,246,0.5); }
+  .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 2rem; }
+  .reflection-col { padding: 2rem; }
+  .reflection-col.went-well { background: white; border-right: 1px solid var(--border); }
+  .reflection-col.differently { background: var(--cream); }
+  .reflection-col-title { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .went-well .reflection-col-title { color: var(--accent); }
+  .differently .reflection-col-title { color: var(--ink-faint); }
+  .reflection-items { display: flex; flex-direction: column; gap: 1rem; }
+  .reflection-item { padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; border: 1px solid var(--border); }
+  .went-well .reflection-item { background: white; }
+  .differently .reflection-item { background: var(--cream); }
+  .reflection-item strong { font-weight: 500; color: var(--ink); display: block; margin-bottom: 0.25rem; }
+  .case-nav { padding: 4rem 0 6rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .case-nav-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .case-nav-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; transition: color 0.2s; display: block; }
+  .case-nav-title:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; font-size: 0.8rem; color: var(--ink-faint); }
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+  @media (max-width: 680px) {
+    nav { padding: 1rem 1.25rem; } .container { padding: 0 1.25rem; } .case-hero { padding-top: 7rem; }
+    .stat-row, .role-strip, .results-grid, .reflection-grid { grid-template-columns: 1fr; }
+    .stat-cell, .role-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child, .role-cell:last-child { border-bottom: none; }
+    .who-card { grid-template-columns: 1fr; }
+    .who-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-body { grid-template-columns: 1fr; }
+    .phase-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-col:last-child { border-bottom: none; }
+    .case-nav { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
 </head>
 <body>
 <div class="rainbow-line"></div>
@@ -22,23 +137,52 @@
       <span class="meta-tag">Principal PM</span>
       <span class="meta-tag">Health Plan</span>
       <span class="meta-tag">Enrollment UX</span>
+      <span class="meta-tag">Agile Delivery</span>
       <span class="meta-divider"></span>
       <span class="meta-detail">InfoBeans · SAG-AFTRA · 5 months</span>
     </div>
-    <h1 class="case-title fade-in" style="transition-delay:.08s">Untangling SAG-AFTRA's <em>health plan enrollment</em> — one member at a time</h1>
-    <p class="case-subtitle fade-in" style="transition-delay:.14s">SAG-AFTRA's health plan enrollment process was causing significant confusion for members, leading to high call volumes and operational inefficiencies. I led end-to-end strategy, definition, and execution of a redesigned enrollment experience as Principal PM at InfoBeans.</p>
+    <h1 class="case-title fade-in" style="transition-delay:.08s">
+      Untangling SAG-AFTRA's <em>health plan enrollment</em> for 160,000 members
+    </h1>
+    <p class="case-subtitle fade-in" style="transition-delay:.14s">
+      SAG-AFTRA's health plan enrollment was generating high call volumes and member confusion. The process was built for administrative logic, not for the people using it. As Principal PM at InfoBeans, I led discovery, competitive analysis, and agile delivery across a cross-functional team to redesign the enrollment experience from the ground up.
+    </p>
     <div class="role-strip fade-in" style="transition-delay:.18s">
-      <div class="role-cell"><div class="role-label">My Role</div><div class="role-val">Principal Product Manager</div><div class="role-sub">InfoBeans · Product consultancy</div></div>
-      <div class="role-cell"><div class="role-label">Client</div><div class="role-val">SAG-AFTRA</div><div class="role-sub">Entertainment industry union, health plan</div></div>
-      <div class="role-cell"><div class="role-label">Focus</div><div class="role-val">Enrollment Benefits Manager</div><div class="role-sub">Health Plan · Member-facing platform</div></div>
+      <div class="role-cell">
+        <div class="role-label">My Role</div>
+        <div class="role-val">Principal Product Manager</div>
+        <div class="role-sub">InfoBeans · Product consultancy</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Client</div>
+        <div class="role-val">SAG-AFTRA</div>
+        <div class="role-sub">Entertainment industry union, 160,000+ members</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Focus</div>
+        <div class="role-val">Enrollment Benefits Manager</div>
+        <div class="role-sub">Health plan · Member-facing platform</div>
+      </div>
     </div>
-    <div class="img-block fade-in" style="transition-delay:.20s;margin-bottom:2rem;">
-      <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/653410c3645a5e76466b63e9_SA_Main2.png" alt="SAG-AFTRA" />
+    <div class="img-block fade-in" style="transition-delay:.20s; margin-bottom:2rem; border:none; background:transparent;">
+      <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/653410c3645a5e76466b63e9_SA_Main2.png" alt="SAG-AFTRA enrollment platform" />
     </div>
     <div class="stat-row fade-in" style="transition-delay:.22s">
-      <div class="stat-cell"><div class="stat-label">Duration</div><div class="stat-val">5 mo</div><div class="stat-desc">End-to-end from discovery through validated prototype</div></div>
-      <div class="stat-cell"><div class="stat-label">Stakeholder outcome</div><div class="stat-val">↑</div><div class="stat-desc">Strong stakeholder buy-in on clarity &amp; implementation feasibility</div></div>
-      <div class="stat-cell"><div class="stat-label">Target impact</div><div class="stat-val">↓ Calls</div><div class="stat-desc">Positioned to reduce member confusion &amp; support call volume</div></div>
+      <div class="stat-cell">
+        <div class="stat-label">Duration</div>
+        <div class="stat-val">5 mo</div>
+        <div class="stat-desc">End-to-end from discovery through validated prototype</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Stakeholder outcome</div>
+        <div class="stat-val">Strong</div>
+        <div class="stat-desc">Buy-in on clarity and implementation feasibility across design, engineering, and compliance</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Target impact</div>
+        <div class="stat-val">↓ Calls</div>
+        <div class="stat-desc">Positioned to reduce member confusion and inbound support volume</div>
+      </div>
     </div>
   </div>
 </div>
@@ -46,126 +190,284 @@
 <div class="case-body">
   <div class="container">
 
-        <div class="section-block fade-in">
-      <div class="section-eyebrow">00 · Context — Who I am &amp; where this sits</div>
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">00 · Context and Background</div>
       <h2 class="section-heading">Principal PM at InfoBeans, <em>embedded with SAG-AFTRA's product team</em></h2>
-      <p class="body-text">I'm Chris Pennell — a Product Manager and UX Lead with 10+ years building digital products across healthcare, wellness, and enterprise software, currently completing my MBA at Rice University. At the time of this project I was Principal PM at <strong>InfoBeans</strong>, a product development consultancy, embedded directly with SAG-AFTRA's team.</p>
-      <p class="body-text">I owned end-to-end product delivery: discovery, requirements definition, backlog prioritization, Agile execution, and stakeholder alignment across design, engineering, and compliance. The complexity here wasn't just technical — it was regulatory. Every design decision had to hold up against compliance requirements while still serving real members.</p>
+      <p class="body-text"> On this project I was Principal PM at InfoBeans, a product development consultancy, embedded directly with SAG-AFTRA's team.
+        I owned end-to-end product delivery: discovery, competitive analysis, requirements definition, backlog prioritization, and agile execution through sprint planning, backlog grooming, and daily standups. The challenge wasn't just technical. Every design decision had to hold up against compliance requirements while still working for real members navigating a high-stakes process.
+      </p>
       <div class="who-card">
         <div class="who-col">
           <div class="who-col-label">My scope</div>
-          <p><strong>Principal PM, owning the full lifecycle.</strong> I led discovery, defined product requirements and user stories, prioritized the backlog, and drove Agile execution through sprint planning, backlog grooming, and daily standups.</p>
-          <p>My north star: reduce the call a member has to make because they couldn't figure out enrollment on their own. Every decision flowed from that.</p>
+          <p><strong>Full lifecycle ownership, discovery through validated prototype.</strong> I led requirements definition, wrote user stories, prioritized the backlog, managed design execution, and drove agile delivery across a cross-functional team spanning design, engineering, and compliance.</p>
+          <p>The north star: reduce the call a member has to make because they couldn't figure out enrollment on their own. Every decision flowed from that.</p>
         </div>
         <div class="who-col">
           <div class="who-col-label">The organizational context</div>
-          <p>SAG-AFTRA is the entertainment industry union representing 160,000+ performers. The health plan enrollment process touched every member at a high-stakes moment — transitions in coverage, changes in eligibility, payment deadlines.</p>
-          <p>Getting it wrong didn't just create confusion. It created gaps in coverage. That's what made this product matter.</p>
+          <p>SAG-AFTRA represents 160,000+ performers across film, television, and broadcast. The health plan enrollment process touched every member at a high-stakes moment: transitions in coverage, changes in eligibility, payment deadlines.</p>
+          <p>Getting it wrong didn't just create confusion. It created gaps in coverage. That's what made every UX decision matter.</p>
         </div>
       </div>
     </div>
 
-<div class="section-block fade-in">
-      <div class="section-eyebrow">01 · The Story — Problem &amp; what we set out to do</div>
-      <h2 class="section-heading">A complex enrollment process causing <em>confusion, calls, and cost</em></h2>
-      <p class="body-text">SAG-AFTRA's health plan enrollment process was causing significant confusion for members. The organization needed a modular, scalable solution that could handle diverse eligibility scenarios while improving the user experience and reducing support dependency.</p>
-      <p class="body-text">Key insights from discovery revealed three compounding problems: low task completion due to unclear feedback in the multi-step enrollment process; difficulty understanding plan transitions and coverage eligibility; and manual follow-up for payments and deadlines, straining operations.</p>
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">01 · Problem and Competitive Landscape</div>
+      <h2 class="section-heading">A process built for administration, <em>not for the members navigating it</em></h2>
+      <p class="body-text">
+        Before defining any product requirements, I conducted a competitive analysis of health plan enrollment experiences across union and employer-sponsored platforms. The pattern was consistent: most enrollment products were built around administrative workflows rather than member journeys. Clarity and confidence-building were afterthoughts, and SAG-AFTRA's platform reflected that.
+      </p>
+      <p class="body-text">
+        I presented the competitive findings to SAG-AFTRA's product and compliance leadership alongside a current-state assessment of the enrollment experience, mapping where members were dropping off, where call volume was highest, and which eligibility scenarios were generating the most operational cost. That analysis shaped the product requirements and informed the recommendation to prioritize three specific flows for the MVP.
+      </p>
+
       <div class="problem-list">
-        <div class="problem-item"><div class="problem-icon">🔁</div><div><div class="problem-title">Low task completion — unclear feedback in multi-step enrollment</div><div class="problem-desc">Members abandoned the process mid-flow with no clear indication of what went wrong or what to do next.</div></div></div>
-        <div class="problem-item"><div class="problem-icon">🧩</div><div><div class="problem-title">Difficulty understanding plan transitions &amp; coverage eligibility</div><div class="problem-desc">Members with diverse eligibility scenarios couldn't self-navigate. Every edge case became a call to support.</div></div></div>
-        <div class="problem-item"><div class="problem-icon">📞</div><div><div class="problem-title">Manual follow-up for payments and deadlines straining operations</div><div class="problem-desc">No automated reminders. Staff spent disproportionate time on outreach that should have been self-service.</div></div></div>
-      </div>
-    </div>
-
-    <div class="section-block fade-in">
-      <div class="section-eyebrow">02 · Customer &amp; Data Insights — Discovery, strategy &amp; execution</div>
-      <h2 class="section-heading">Discovery → MVP Strategy → <em>Cross-functional delivery</em></h2>
-      <p class="body-text">I led product discovery by aligning cross-functional stakeholders — design, engineering, compliance — around clear business goals. I conducted stakeholder interviews, technical feasibility assessments, and workflow analysis to define core user problems and business opportunities. Then I translated those insights into a clear product vision and delivery plan.</p>
-
-      <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 1</span><div><div class="phase-title">Product Discovery &amp; Requirements Definition</div><div class="phase-objective">Align stakeholders, surface user problems, define product requirements</div></div></div>
-        <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Led cross-functional discovery aligning design, engineering, and compliance around shared business goals</li><li>Conducted stakeholder interviews and workflow analysis to identify core user problems</li><li>Defined product requirements and user stories, prioritized the backlog</li><li>Ensured alignment with KPIs: call deflection and first-time enrollment success rates</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">Key insights</div><ul class="phase-items"><li>Low task completion due to unclear feedback in multi-step enrollment</li><li>Members struggled to understand plan transitions and coverage eligibility</li><li>Manual follow-up for payments and deadlines was straining operations</li><li>Legal limitations on direct user testing required CX team as surrogate members</li></ul></div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"/>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <polyline points="7 23 3 19 7 15"/>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">Members abandoned mid-flow with no feedback on what went wrong</div>
+            <div class="problem-desc">The multi-step enrollment process gave members no clear indication when something failed or what to do next. Drop-off was high and the cause was invisible without call log analysis.</div>
+          </div>
         </div>
-      </div>
-
-      <div class="img-block" style="margin-top:2rem;">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/65340c813ca73a3760220413_Use%20Cases.png" alt="Use cases and requirements" />
-        <div class="img-caption">Use cases and requirements framework — mapping member scenarios to enrollment flows</div>
-      </div>
-
-      <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 2</span><div><div class="phase-title">MVP Strategy &amp; Roadmap</div><div class="phase-objective">Scope high-impact features, structure agile delivery, align to KPIs</div></div></div>
-        <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I prioritized</div><ul class="phase-items"><li>Step-by-step coverage guidance — most impactful feature for task completion</li><li>Real-time payment visibility — addresses abandonment at the critical payment step</li><li>Automated reminders for deadlines — removes the manual follow-up burden entirely</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">How I structured it</div><ul class="phase-items"><li>Prioritized using MoSCoW framework, balancing stakeholder needs and regulatory constraints</li><li>Structured roadmap in Agile sprints with clearly defined delivery milestones</li><li>Each feature aligned to a KPI: call deflection, enrollment completion, operational cost savings</li></ul></div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">Plan transitions and coverage eligibility were too complex to self-navigate</div>
+            <div class="problem-desc">Members with diverse eligibility scenarios, coverage transitions, and dependent changes couldn't figure out their options without calling support. Every edge case became a ticket.</div>
+          </div>
         </div>
-      </div>
-
-      <div class="img-block" style="margin-top:2rem;">
-        <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6534080197cd72e2107512ea_Screenshot%202023-10-19%20at%207.24.35%20PM.png" alt="MVP prototype screens" />
-        <div class="img-caption">MVP prototype — enrollment flow with step-by-step guidance and real-time payment visibility</div>
-      </div>
-
-      <div class="phase-card">
-        <div class="phase-header"><span class="phase-badge">Phase 3</span><div><div class="phase-title">Cross-Functional Delivery</div><div class="phase-objective">Drive Agile execution, validate flows with CX team, deliver handoff-ready prototype</div></div></div>
-        <div class="phase-body">
-          <div class="phase-col"><div class="phase-col-title">What I did</div><ul class="phase-items"><li>Drove Agile execution through sprint planning, backlog grooming, and daily standups</li><li>Acted as single point of accountability for product delivery, resolving blockers</li><li>Validated user flows and messaging with SAG-AFTRA's CX team as surrogate members</li></ul></div>
-          <div class="phase-col"><div class="phase-col-title">CX validation outcomes</div><ul class="phase-items"><li>Simplified language and visual cues throughout enrollment flow</li><li>Validated key user flows against real member scenarios</li><li>Optimized content hierarchy and tone for diverse member demographics</li><li>Ensured comprehensive design documentation for engineering handoff</li></ul></div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D5BE3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="problem-title">Manual payment follow-up was consuming operational resources</div>
+            <div class="problem-desc">No automated reminders existed for payment deadlines. Staff were spending disproportionate time on outreach that should have been handled by the product itself.</div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">03 · The Product — What shipped and how it performed</div>
-      <h2 class="section-heading">A validated prototype that earned <em>stakeholder trust</em> — and accelerated engineering</h2>
-      <p class="body-text">The redesigned prototype gained strong stakeholder support for its clarity, modular design, and implementation feasibility. Detailed documentation and validated workflows ensured a seamless handoff to engineering.</p>
+      <div class="section-eyebrow">02 · Discovery, Strategy, and Agile Delivery</div>
+      <h2 class="section-heading">Discovery through delivery, <em>with compliance in the room from day one</em></h2>
+      <p class="body-text">
+        I led product discovery by aligning design, engineering, and compliance around shared business goals before any requirements were written. I conducted stakeholder interviews, workflow analysis, and a technical feasibility assessment to define the core user problems and validate which solutions were buildable within regulatory constraints. Research findings were synthesized into a prioritized requirements document and presented to SAG-AFTRA leadership before sprint planning began.
+      </p>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 1</span>
+          <div>
+            <div class="phase-title">Product Discovery and Requirements Definition</div>
+            <div class="phase-objective">Align stakeholders, surface user problems, define and prioritize product requirements</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Led cross-functional discovery sessions with design, engineering, and compliance to align on shared business goals before any requirements were written</li>
+              <li>Conducted stakeholder interviews and call log analysis to identify where members were dropping off and what was driving support volume</li>
+              <li>Ran a technical feasibility assessment to identify which solutions were viable within regulatory and system constraints</li>
+              <li>Defined product requirements and user stories, presented prioritization recommendations to SAG-AFTRA leadership with KPI alignment for each</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">Key findings presented to leadership</div>
+            <ul class="phase-items">
+              <li>Drop-off was concentrated at two points: the eligibility determination step and the payment confirmation screen</li>
+              <li>Members with coverage transitions had no self-service path, making every transition scenario a call</li>
+              <li>Manual payment outreach was a direct consequence of no deadline visibility in the product</li>
+              <li>Legal constraints ruled out direct member usability testing. CX team was identified as the viable surrogate research channel</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-block" style="margin-top:2rem;">
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/65340c813ca73a3760220413_Use%20Cases.png" alt="Use cases and requirements" />
+        <div class="img-caption">Use cases and requirements framework, mapping member scenarios to enrollment flows</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 2</span>
+          <div>
+            <div class="phase-title">MVP Strategy and Roadmap</div>
+            <div class="phase-objective">Scope high-impact features, structure agile delivery, align each feature to a KPI</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What I prioritized and why</div>
+            <ul class="phase-items">
+              <li>Step-by-step coverage guidance: highest-impact feature for task completion based on call log analysis and drop-off data</li>
+              <li>Real-time payment visibility: addressed abandonment at the payment step, the second-highest drop-off point identified in discovery</li>
+              <li>Automated deadline reminders: removes the manual follow-up burden entirely, direct reduction in operational cost</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">How I structured delivery</div>
+            <ul class="phase-items">
+              <li>Prioritized using MoSCoW framework, balancing member impact, regulatory constraints, and technical feasibility</li>
+              <li>Structured roadmap in agile sprints with defined delivery milestones and go/no-go criteria at each phase</li>
+              <li>Each feature mapped to a specific KPI: call deflection rate, enrollment completion rate, or operational cost reduction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-block" style="margin-top:2rem;">
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6534080197cd72e2107512ea_Screenshot%202023-10-19%20at%207.24.35%20PM.png" alt="MVP prototype screens" />
+        <div class="img-caption">MVP prototype showing enrollment flow with step-by-step guidance and real-time payment visibility</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 3</span>
+          <div>
+            <div class="phase-title">Cross-Functional Delivery and Validation</div>
+            <div class="phase-objective">Drive agile execution, validate flows with CX team, deliver handoff-ready prototype</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What I did</div>
+            <ul class="phase-items">
+              <li>Drove agile execution through sprint planning, backlog grooming, and daily standups across design and engineering</li>
+              <li>Acted as single point of accountability for product delivery, resolving blockers and keeping all three teams aligned on priorities</li>
+              <li>Coordinated usability evaluation with SAG-AFTRA's CX team as surrogate members, structured as a formal research protocol with documented findings</li>
+              <li>Synthesized CX team feedback into a prioritized revision list and presented recommendations to leadership before any design changes were made</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">Validation outcomes</div>
+            <ul class="phase-items">
+              <li>Simplified language and visual hierarchy throughout the enrollment flow, validated against real member scenarios by the CX team</li>
+              <li>Coverage transition paths that previously required a support call were resolved within the product for the most common eligibility scenarios</li>
+              <li>Content hierarchy and tone optimized for diverse member demographics across the union's 160,000+ membership</li>
+              <li>Comprehensive design documentation produced for engineering handoff, enabling dev team to start without ambiguity</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">03 · Outcomes and Business Impact</div>
+      <h2 class="section-heading">A validated prototype that earned <em>stakeholder trust</em> and accelerated engineering</h2>
+      <p class="body-text">
+        The redesigned prototype received strong buy-in from SAG-AFTRA's product, compliance, and engineering leadership. The modular design and detailed documentation gave the engineering team a clear build path. Each outcome mapped back to the KPIs defined in Phase 1.
+      </p>
+
       <div class="pull-quote">
         <p>"We have clarity on a complex topic now. Having a well-thought-out and designed prototype makes building this way simpler. Chris's dedication to excellence, keen attention to detail, and collaborative approach were instrumental in our project's success."</p>
-        <cite>— Swati Chakraborty, Director of Product Management, SAG-AFTRA</cite>
+        <cite>Swati Chakraborty, Director of Product Management, SAG-AFTRA</cite>
       </div>
+
       <div class="results-grid">
-        <div class="result-card dark"><div class="result-num">↓</div><div class="result-label">Member confusion &amp; support calls</div><div class="result-desc">Streamlined enrollment flows and clearer guidance positioned to significantly reduce inbound call volume.</div></div>
-        <div class="result-card"><div class="result-num">✓</div><div class="result-label">Engineering handoff accelerated</div><div class="result-desc">Comprehensive design documentation enabled the dev team to begin building immediately without ambiguity.</div></div>
-        <div class="result-card"><div class="result-num">↑</div><div class="result-label">Stakeholder buy-in</div><div class="result-desc">Strong internal support driven by clarity and polish of the prototypes — rare for a 5-month consultancy engagement.</div></div>
-        <div class="result-card"><div class="result-num">→</div><div class="result-label">Next steps defined</div><div class="result-desc">Simplified language, enhanced visual cues, and AI-driven personalized guidance identified as next phase priorities.</div></div>
+        <div class="result-card dark">
+          <div class="result-num">↓</div>
+          <div class="result-label">Member confusion and support call volume</div>
+          <div class="result-desc">Streamlined enrollment flows and clearer guidance positioned to significantly reduce inbound call volume, the primary operational KPI for this engagement.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">✓</div>
+          <div class="result-label">Engineering handoff completed without ambiguity</div>
+          <div class="result-desc">Comprehensive design documentation enabled the dev team to begin building immediately. No discovery sessions required post-handoff.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Strong</div>
+          <div class="result-label">Stakeholder buy-in across all teams</div>
+          <div class="result-desc">Strong internal support driven by clarity and polish of the prototypes, and by the research-grounded rationale behind every design decision.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">3</div>
+          <div class="result-label">Next-phase priorities defined</div>
+          <div class="result-desc">Simplified language, enhanced visual cues, and AI-driven personalized guidance identified and scoped as next phase investment areas with KPI alignment.</div>
+        </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">04 · Retrospect — What went well &amp; what I'd do differently</div>
-      <h2 class="section-heading">Key learnings from a <em>regulated, complex domain</em></h2>
+      <div class="section-eyebrow">04 · Reflection</div>
+      <h2 class="section-heading">Key learnings from a <em>regulated, high-stakes domain</em></h2>
+      <p class="body-text">
+        SAG-AFTRA was one of the more constrained product engagements I've worked on. The regulatory environment limited what we could test and with whom. Working within those limits while still producing a validated, research-grounded product required more creative research design than a standard usability program.
+      </p>
+
       <div class="reflection-grid">
         <div class="reflection-col went-well">
           <div class="reflection-col-title">What went well</div>
           <div class="reflection-items">
-            <div class="reflection-item"><strong>Cross-functional alignment held throughout</strong>Getting design, engineering, and compliance aligned on shared goals at the start meant we didn't re-litigate scope mid-sprint.</div>
-            <div class="reflection-item"><strong>CX team as surrogate users was effective</strong>Despite legal limitations on direct member testing, the CX team's domain knowledge produced high-quality feedback that directly improved the flows.</div>
-            <div class="reflection-item"><strong>Modular design unlocked stakeholder confidence</strong>Structuring the MVP as a modular system — rather than a monolithic redesign — made the implementation feel tractable to all parties.</div>
+            <div class="reflection-item">
+              <strong>Compliance in the room from day one</strong>
+              Getting design, engineering, and compliance aligned on shared goals at the start meant scope disputes didn't surface mid-sprint. Every requirement was written with regulatory feasibility already factored in.
+            </div>
+            <div class="reflection-item">
+              <strong>CX team as surrogate users worked well</strong>
+              Despite legal limitations on direct member testing, the CX team's domain knowledge produced high-quality feedback that improved the flows in ways that surveys wouldn't have caught.
+            </div>
+            <div class="reflection-item">
+              <strong>Modular design gave stakeholders confidence</strong>
+              Structuring the MVP as a modular system rather than a full redesign made the implementation feel tractable. Leadership could see a clear, phased path to build rather than a single large commitment.
+            </div>
           </div>
         </div>
         <div class="reflection-col differently">
           <div class="reflection-col-title">What I'd do differently</div>
           <div class="reflection-items">
-            <div class="reflection-item"><strong>Push harder for real member testing</strong>The legal constraints were real, but a limited, anonymized member testing protocol could have been designed. The CX proxy was good — actual member signal would have been better.</div>
-            <div class="reflection-item"><strong>Map edge-case eligibility scenarios earlier</strong>The diversity of eligibility configurations surfaced late in the project. A comprehensive scenario mapping exercise in week one would have shaped the information architecture from the start.</div>
-            <div class="reflection-item"><strong>Define the AI roadmap in phase one</strong>AI-driven personalization was identified as a future priority — but scoping it earlier would have influenced architectural decisions made in the MVP.</div>
+            <div class="reflection-item">
+              <strong>Design a limited anonymized member testing protocol</strong>
+              The legal constraints on direct member testing were real, but a carefully scoped, anonymized protocol was likely possible. The CX proxy was good. Actual member signal on the highest-risk flows would have been better.
+            </div>
+            <div class="reflection-item">
+              <strong>Map edge-case eligibility scenarios in week one</strong>
+              The range of eligibility configurations surfaced late. A comprehensive scenario mapping exercise at the start would have shaped the information architecture earlier and reduced mid-sprint revision cycles.
+            </div>
+            <div class="reflection-item">
+              <strong>Scope the AI personalization roadmap in phase one</strong>
+              AI-driven guidance was identified as a future priority at the end of the engagement. Scoping it in phase one would have influenced architectural decisions made during the MVP build.
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="case-nav fade-in">
-      <div><div class="case-nav-label">Previous project</div><a class="case-nav-title" href="jintronix.html">← Jintronix</a></div>
-      <div style="text-align:right;"><div class="case-nav-label">Next project</div><a class="case-nav-title" href="coadvantage.html">CoAdvantage →</a></div>
+      <div>
+        <div class="case-nav-label">Previous project</div>
+        <a class="case-nav-title" href="jintronix.html">← Jintronix</a>
+      </div>
+      <div style="text-align:right;">
+        <div class="case-nav-label">Next project</div>
+        <a class="case-nav-title" href="coadvantage.html">CoAdvantage →</a>
+      </div>
     </div>
+
   </div>
 </div>
 
-<footer><span>© 2025 Chris Pennell</span><span>MBA Candidate · Rice University · 🏳️‍🌈</span></footer>
+<footer>
+  <span>© 2025 Chris Pennell</span>
+  <span>MBA Candidate · Rice University · 🏳️‍🌈</span>
+</footer>
 <script>
-  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:.08});
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), { threshold: .08 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 </script>
 </body>

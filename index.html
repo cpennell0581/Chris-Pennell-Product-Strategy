@@ -3,11 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chris Pennell — Product Leader</title>
+<title>Chris Pennell — Product Manager</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF9F6; --ink: #1A1916; --ink-muted: #6B6A66; --ink-faint: #C2C1BC;
+    --accent: #2D5BE3; --accent-soft: #EBF0FC; --border: rgba(26,25,22,0.1);
+    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif;
+    --max: 860px; --wide: 1100px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 2.5rem;
+    background: rgba(250,249,246,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-link { font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover, .nav-link.active { color: var(--ink); }
+  .nav-link-resume { color: var(--accent); font-weight: 500; }
+  .nav-link-resume:hover { color: #2449c0; }
+
+  /* CONTAINERS */
+  .container-wide { max-width: var(--wide); margin: 0 auto; padding: 0 2.5rem; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+
+  /* HERO */
+  .hero { padding-top: 9rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .hero-inner { display: grid; grid-template-columns: 1fr auto; gap: 4rem; align-items: start; }
+  .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .hero-title { font-family: var(--serif); font-size: clamp(3.5rem, 7vw, 5.5rem); line-height: 1; letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-size: 1.1rem; color: var(--ink-muted); line-height: 1.75; max-width: 480px; margin-bottom: 1.75rem; }
+  .hero-subtitle strong { color: var(--ink); font-weight: 500; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .hero-tag { font-size: 0.72rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 5px 14px; border-radius: 100px; }
+  .hero-cta-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--ink); color: var(--cream); font-family: var(--sans); font-size: 0.85rem; font-weight: 500; padding: 0.7rem 1.5rem; border-radius: 6px; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+  .btn-primary:hover { background: #000; transform: translateY(-1px); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 0.4rem; background: transparent; color: var(--ink-muted); font-family: var(--sans); font-size: 0.85rem; font-weight: 500; padding: 0.7rem 1.5rem; border-radius: 6px; border: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* HERO ASIDE */
+  .hero-aside { display: flex; flex-direction: column; gap: 1rem; width: 240px; flex-shrink: 0; }
+  .hero-photo-wrap { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 3/4; }
+  .hero-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-aside-meta { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .aside-cell { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border); }
+  .aside-cell:last-child { border-bottom: none; }
+  .aside-label { font-size: 0.65rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.2rem; }
+  .aside-val { font-size: 0.82rem; font-weight: 500; color: var(--ink); }
+
+  /* STATS BAR */
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin: 3rem 0; }
+  .stats-cell { padding: 1.5rem 1.75rem; border-right: 1px solid var(--border); }
+  .stats-cell:last-child { border-right: none; }
+  .stats-val { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; margin-bottom: 0.3rem; }
+  .stats-label { font-size: 0.75rem; color: var(--ink-muted); line-height: 1.4; }
+
+  /* ABOUT */
+  .about-section { padding: 5rem 0; border-bottom: 1px solid var(--border); }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .section-heading { font-family: var(--serif); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 1rem; color: var(--ink-muted); line-height: 1.9; margin-bottom: 1.25rem; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; }
+  .diff-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 2rem; }
+  .diff-item { padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; }
+  .diff-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .diff-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .goals-card { padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; }
+  .goals-label { font-size: 0.65rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.85rem; }
+  .goals-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .goals-pill { font-size: 0.75rem; color: var(--ink-muted); background: var(--cream); border: 1px solid var(--border); padding: 4px 12px; border-radius: 100px; }
+  .skills-strip { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .skill-cell { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; gap: 1rem; align-items: baseline; }
+  .skill-cell:last-child { border-bottom: none; }
+  .skill-label { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); flex-shrink: 0; width: 80px; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .skill-tag { font-size: 0.72rem; color: var(--ink-muted); background: var(--cream); border: 1px solid var(--border); padding: 3px 10px; border-radius: 100px; }
+
+  /* CASE STUDIES */
+  .work-section { padding: 5rem 0 6rem; }
+  .work-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem; }
+  .work-heading { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.02em; line-height: 1.1; }
+  .work-heading em { font-style: italic; color: var(--accent); }
+  .work-count { font-size: 0.78rem; color: var(--ink-faint); padding-bottom: 0.5rem; }
+
+  /* FEATURED CARDS */
+  .featured-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .case-card { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; text-decoration: none; transition: border-color 0.2s, transform 0.2s; }
+  .case-card:hover { border-color: rgba(45,91,227,0.3); transform: translateY(-2px); }
+  .case-card-img { aspect-ratio: 16/9; overflow: hidden; }
+  .case-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .case-card:hover .case-card-img img { transform: scale(1.03); }
+  .case-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .case-card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.85rem; }
+  .case-tag { font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 3px 10px; border-radius: 100px; }
+  .case-tag-dark { font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--cream); background: var(--ink); padding: 3px 10px; border-radius: 100px; }
+  .case-card-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); margin-bottom: 0.5rem; line-height: 1.2; }
+  .case-card-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.65; flex: 1; margin-bottom: 1.25rem; }
+  .case-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .case-card-meta { font-size: 0.75rem; color: var(--ink-faint); }
+  .case-card-link { font-size: 0.78rem; font-weight: 500; color: var(--accent); display: flex; align-items: center; gap: 0.3rem; }
+  .case-card-link-arrow { font-size: 0.9rem; }
+
+  /* LIST ITEMS - 3 column grid */
+  .list-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .case-list-item { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; text-decoration: none; transition: border-color 0.2s, transform 0.2s; }
+  .case-list-item:hover { border-color: rgba(45,91,227,0.3); transform: translateY(-2px); }
+  .case-list-thumb { width: 100%; aspect-ratio: 3/2; overflow: hidden; background: var(--cream); }
+  .case-list-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .case-list-item:hover .case-list-thumb img { transform: scale(1.03); }
+  .case-list-body { padding: 1.25rem 1.5rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .case-list-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+  .case-list-title { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); margin-bottom: 0.4rem; line-height: 1.2; }
+  .case-list-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+  .case-list-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid var(--border); }
+  .case-list-meta { font-size: 0.72rem; color: var(--ink-faint); }
+  .case-list-link { font-size: 0.75rem; font-weight: 500; color: var(--accent); }
+  .case-list-arrow { display: none; }
+
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: var(--wide); margin: 0 auto; font-size: 0.8rem; color: var(--ink-faint); }
+
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-aside { width: 100%; flex-direction: row; }
+    .hero-photo-wrap { width: 160px; flex-shrink: 0; aspect-ratio: auto; height: 200px; }
+    .hero-aside-meta { flex: 1; }
+    .featured-grid { grid-template-columns: 1fr; }
+    .list-grid { grid-template-columns: 1fr 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .stats-cell:nth-child(2) { border-right: none; }
+    .stats-cell:nth-child(3), .stats-cell:nth-child(4) { border-top: 1px solid var(--border); }
+  }
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .container-wide, .container { padding: 0 1.25rem; }
+    .hero { padding-top: 7rem; }
+    .hero-aside { flex-direction: column; }
+    .hero-photo-wrap { width: 100%; height: 260px; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .stats-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .stats-cell:last-child { border-bottom: none; }
+    .list-grid { grid-template-columns: 1fr; }
+    .work-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
 </head>
 <body>
 
@@ -15,7 +173,7 @@
 <nav>
   <a class="nav-logo" href="index.html">Chris Pennell</a>
   <div class="nav-links">
-    <a class="nav-link active" href="index.html">About Me</a>
+    <a class="nav-link active" href="index.html">About</a>
     <a class="nav-link" href="#work">Case Studies</a>
     <a class="nav-link nav-link-resume" href="https://docs.google.com/document/d/1cb9kyI_10Pj-cdrXWESIzV2-PhuRUPaO/edit" target="_blank">Resume ↗</a>
   </div>
@@ -26,17 +184,17 @@
   <div class="container-wide">
     <div class="hero-inner">
       <div>
-        <div class="hero-eyebrow fade-in">Product Leader · Strategic Thinker</div>
+        <div class="hero-eyebrow fade-in">Product Manager · UX Researcher · Digital Analyst</div>
         <h1 class="hero-title fade-in" style="transition-delay:.07s">Hi, I'm<br><em>Chris.</em></h1>
         <p class="hero-subtitle fade-in" style="transition-delay:.13s">
-          I take bold ideas from <strong>0 to 1</strong> through customer-driven product thinking — building high-impact digital platforms grounded in evidence-based strategy.
+          I research, prioritize, and deliver <strong>consumer-facing digital products</strong> across healthcare, wellness, and financial services. From first hypothesis through scale.
         </p>
         <div class="hero-tags fade-in" style="transition-delay:.17s">
           <span class="hero-tag">Product Management</span>
-          <span class="hero-tag">UX Strategy</span>
-          <span class="hero-tag">0 → 1 Builds</span>
-          <span class="hero-tag">HealthTech</span>
-          <span class="hero-tag">MBA · Rice University</span>
+          <span class="hero-tag">Usability Research</span>
+          <span class="hero-tag">Competitive Analysis</span>
+          <span class="hero-tag">Agile Delivery</span>
+          <span class="hero-tag">0 to 1 Builds</span>
         </div>
         <div class="hero-cta-row fade-in" style="transition-delay:.21s">
           <a class="btn-primary" href="#work">View case studies →</a>
@@ -45,24 +203,46 @@
       </div>
       <div class="hero-aside fade-in" style="transition-delay:.25s">
         <div class="hero-photo-wrap">
-          <img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/667c1d018440798b7e538d53_me%20hike.JPG" alt="Chris Pennell hiking" />
+          <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/667c1d018440798b7e538d53_me%20hike.JPG" alt="Chris Pennell" />
         </div>
         <div class="hero-aside-meta">
-          <div class="aside-cell"><div class="aside-label">Available</div><div class="aside-val">Full-time · Fractional</div></div>
-          <div class="aside-cell"><div class="aside-label">Degree</div><div class="aside-val">Rice University - MBA 2026</div></div>
+          <div class="aside-cell">
+            <div class="aside-label">Available</div>
+            <div class="aside-val">Full-time or Fractional</div>
+          </div>
+          <div class="aside-cell">
+            <div class="aside-label">MBA</div>
+            <div class="aside-val">Rice University, 2026</div>
+          </div>
+          <div class="aside-cell">
+            <div class="aside-label">Experience</div>
+            <div class="aside-val">10+ years</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STATS BAR -->
+<!-- STATS -->
 <div class="container-wide">
   <div class="stats-bar fade-in">
-    <div class="stats-cell"><div class="stats-val">10+</div><div class="stats-label">Years building digital products</div></div>
-    <div class="stats-cell"><div class="stats-val">500+</div><div class="stats-label">Clinical clients at scale (Jintronix)</div></div>
-    <div class="stats-cell"><div class="stats-val">78%</div><div class="stats-label">Guest adoption in 3 weeks (Canyon Ranch)</div></div>
-    <div class="stats-cell"><div class="stats-val">~175</div><div class="stats-label">Research interviews on a single project</div></div>
+    <div class="stats-cell">
+      <div class="stats-val">10+</div>
+      <div class="stats-label">Years delivering consumer-facing digital products</div>
+    </div>
+    <div class="stats-cell">
+      <div class="stats-val">500+</div>
+      <div class="stats-label">Clinical clients at scale, Jintronix</div>
+    </div>
+    <div class="stats-cell">
+      <div class="stats-val">78%</div>
+      <div class="stats-label">Guest adoption in 3 weeks, Canyon Ranch</div>
+    </div>
+    <div class="stats-cell">
+      <div class="stats-val">~175</div>
+      <div class="stats-label">Usability interviews conducted on a single project</div>
+    </div>
   </div>
 </div>
 
@@ -70,31 +250,31 @@
 <section class="about-section" id="about">
   <div class="container-wide">
     <div class="section-eyebrow fade-in">About</div>
-    <h2 class="section-heading fade-in" style="transition-delay:.06s;font-size:clamp(1.6rem,3vw,2.2rem);">
-      I specialize in the <em>full product lifecycle</em> — from customer insight to launch and growth
+    <h2 class="section-heading fade-in" style="transition-delay:.06s; font-size:clamp(1.6rem,3vw,2.2rem);">
+      I specialize in taking digital products from <em>first hypothesis through scale</em>
     </h2>
     <p class="body-text fade-in" style="transition-delay:.1s">
-      I'm a Product Leader and 2026 Rice MBA candidate specializing in the "0-to-1" journey — taking bold ideas and architecting them into high-impact digital platforms. My background spans early-stage startups and enterprise partnerships, where I've led cross-functional teams through product discovery, delivery, and iteration.
+      Product Manager and 2026 Rice MBA candidate. Ten years delivering consumer-facing digital products across healthcare, wellness, and financial services, in both early-stage startups and large enterprise consultancy.
     </p>
     <p class="body-text fade-in" style="transition-delay:.12s">
-      With hands-on experience across healthcare, wellness, and insurance, I bring both strategic clarity and executional focus. At my core, I believe in de-risking innovation, maximizing adoption, and uncovering Blue Ocean growth opportunities through product strategy and customer-driven insights.
+      I work across the full product lifecycle: research, roadmap, delivery, and iteration. In regulated markets, that means every UX call has compliance implications, every sprint has stakeholder visibility, and every research finding needs to come with a recommendation, not just a summary.
     </p>
 
     <div class="about-grid fade-in" style="transition-delay:.14s">
       <div>
-        <div style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1.25rem;">What sets me apart</div>
+        <div style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1.25rem;">What I bring</div>
         <div class="diff-list">
           <div class="diff-item">
-            <div class="diff-title">Product Thinking, End to End</div>
-            <div class="diff-desc">I connect user needs with business goals, ensuring every feature and flow is grounded in measurable value — not assumption.</div>
+            <div class="diff-title">Research that drives roadmap decisions</div>
+            <div class="diff-desc">I plan and run usability research, synthesize findings, and present recommendations to stakeholders with business impact rationale. Every roadmap decision has evidence behind it.</div>
           </div>
           <div class="diff-item">
-            <div class="diff-title">Enterprise-Ready UX Strategy</div>
-            <div class="diff-desc">I help companies optimize workflows, navigate regulatory compliance, and deliver user-first solutions at scale to drive business outcomes.</div>
+            <div class="diff-title">Competitive analysis before product direction</div>
+            <div class="diff-desc">I benchmark digital product landscapes before defining what to build. Competitive analyses I've run have shaped investment cases, go-to-market strategies, and feature prioritization across multiple engagements.</div>
           </div>
           <div class="diff-item">
-            <div class="diff-title">Cross-Functional Leadership</div>
-            <div class="diff-desc">I've led diverse teams through complex product launches, aligning engineers, designers, and stakeholders to execute with clarity and speed.</div>
+            <div class="diff-title">Agile delivery in complex, regulated domains</div>
+            <div class="diff-desc">Healthcare, insurance, entertainment union contexts. Distributed teams, compliance requirements, and competing stakeholder priorities all in the same sprint. I've managed that environment across multiple 0-to-1 builds.</div>
           </div>
         </div>
         <div class="goals-card">
@@ -103,19 +283,52 @@
             <span class="goals-pill">Full-time roles</span>
             <span class="goals-pill">Fractional PM</span>
             <span class="goals-pill">Advisory</span>
-            <span class="goals-pill">AI product innovation</span>
+            <span class="goals-pill">Digital product analysis</span>
           </div>
         </div>
       </div>
       <div>
-        <div style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1.25rem;">Skills &amp; tools</div>
+        <div style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1.25rem;">Skills and tools</div>
         <div class="skills-strip">
-          <div class="skill-cell"><div class="skill-label">Product</div><div class="skill-tags"><span class="skill-tag">Roadmapping</span><span class="skill-tag">Discovery</span><span class="skill-tag">MoSCoW</span><span class="skill-tag">RICE</span><span class="skill-tag">OKRs</span></div></div>
-          <div class="skill-cell"><div class="skill-label">Research</div><div class="skill-tags"><span class="skill-tag">Ethnographic</span><span class="skill-tag">Usability testing</span><span class="skill-tag">Card sorting</span><span class="skill-tag">Hypothesis tracking</span></div></div>
-          <div class="skill-cell"><div class="skill-label">Design &amp; delivery</div><div class="skill-tags"><span class="skill-tag">Figma</span><span class="skill-tag">Mural</span><span class="skill-tag">Agile / Scrum</span><span class="skill-tag">Jira</span></div></div>
-          <div class="skill-cell"><div class="skill-label">Industries</div><div class="skill-tags"><span class="skill-tag">HealthTech</span><span class="skill-tag">Wellness</span><span class="skill-tag">Insurance</span><span class="skill-tag">Enterprise SaaS</span></div></div>
+          <div class="skill-cell">
+            <div class="skill-label">Product</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Roadmapping</span>
+              <span class="skill-tag">Discovery</span>
+              <span class="skill-tag">MoSCoW</span>
+              <span class="skill-tag">RICE</span>
+              <span class="skill-tag">OKRs</span>
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-label">Research</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Ethnographic</span>
+              <span class="skill-tag">Usability testing</span>
+              <span class="skill-tag">Card sorting</span>
+              <span class="skill-tag">Competitive analysis</span>
+              <span class="skill-tag">Hypothesis tracking</span>
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-label">Delivery</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Figma</span>
+              <span class="skill-tag">Mural</span>
+              <span class="skill-tag">Agile / Scrum</span>
+              <span class="skill-tag">Jira</span>
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-label">Industries</div>
+            <div class="skill-tags">
+              <span class="skill-tag">HealthTech</span>
+              <span class="skill-tag">Wellness</span>
+              <span class="skill-tag">Insurance</span>
+              <span class="skill-tag">Enterprise SaaS</span>
+            </div>
+          </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -133,26 +346,38 @@
     </div>
 
     <div class="featured-grid fade-in" style="transition-delay:.06s">
-      <a class="case-card" href="canyon-ranch.html">
-        <div class="case-card-img"><img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6536fba0e312752da040ff3f_hero_CR.png" alt="Canyon Ranch" /></div>
+      <a class="case-card" href="canyon-ranch-case-study.html">
+        <div class="case-card-img">
+          <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6536fba0e312752da040ff3f_hero_CR.png" alt="Canyon Ranch" />
+        </div>
         <div class="case-card-body">
-          <div class="case-card-tags"><span class="case-tag">Principal PM</span><span class="case-tag">Mobile App</span><span class="case-tag-dark">0 → 1</span></div>
+          <div class="case-card-tags">
+            <span class="case-tag">Principal PM</span>
+            <span class="case-tag">Mobile App</span>
+            <span class="case-tag-dark">0 to 1</span>
+          </div>
           <div class="case-card-title">Canyon Ranch</div>
-          <div class="case-card-desc">Taking 40+ years of paper-based wellness scheduling to a native iOS app. 78% guest adoption in 3 weeks and +15% ancillary revenue.</div>
+          <div class="case-card-desc">Competitive analysis, usability research, and agile delivery across a distributed team to take 40 years of paper-based wellness scheduling to a native iOS app. 78% guest adoption in 3 weeks and +15% ancillary revenue.</div>
           <div class="case-card-footer">
-            <span class="case-card-meta">InfoBeans · 5 months</span>
+            <span class="case-card-meta">InfoBeans, 5 months</span>
             <span class="case-card-link">View project <span class="case-card-link-arrow">↗</span></span>
           </div>
         </div>
       </a>
       <a class="case-card" href="jintronix.html">
-        <div class="case-card-img"><img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/5901455f5690d510b63340e0_jintronix_hero.png" alt="Jintronix" /></div>
+        <div class="case-card-img">
+          <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/5901455f5690d510b63340e0_jintronix_hero.png" alt="Jintronix" />
+        </div>
         <div class="case-card-body">
-          <div class="case-card-tags"><span class="case-tag">PM &amp; UX Lead</span><span class="case-tag">HealthTech</span><span class="case-tag-dark">0 → Scale</span></div>
+          <div class="case-card-tags">
+            <span class="case-tag">PM and UX Lead</span>
+            <span class="case-tag">HealthTech</span>
+            <span class="case-tag-dark">0 to Scale</span>
+          </div>
           <div class="case-card-title">Jintronix</div>
-          <div class="case-card-desc">Making rehabilitation feel less like work — a gamified therapy platform adopted by 500+ clinical clients across North America over 7 years.</div>
+          <div class="case-card-desc">Seven years as founding PM. Competitive analysis, ethnographic research, and agile delivery from concept through 500+ clinical clients across North America. 15x increase in patient session time.</div>
           <div class="case-card-footer">
-            <span class="case-card-meta">Founding PM · 7 years</span>
+            <span class="case-card-meta">Founding PM, 7 years</span>
             <span class="case-card-link">View project <span class="case-card-link-arrow">↗</span></span>
           </div>
         </div>
@@ -161,19 +386,55 @@
 
     <div class="list-grid fade-in" style="transition-delay:.1s">
       <a class="case-list-item" href="sag-aftra.html">
-        <div class="case-list-thumb"><img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/65340feb515cf73360d36144_SA_Main.png" alt="SAG-AFTRA" /></div>
-        <div><div class="case-list-title">SAG-AFTRA</div><div class="case-list-desc">Health plan enrollment redesign · Principal PM · 5 months</div></div>
-        <span class="case-list-arrow">↗</span>
+        <div class="case-list-thumb">
+          <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/65340feb515cf73360d36144_SA_Main.png" alt="SAG-AFTRA" />
+        </div>
+        <div class="case-list-body">
+          <div class="case-list-tags">
+            <span class="case-tag">Principal PM</span>
+            <span class="case-tag">Health Plan</span>
+          </div>
+          <div class="case-list-title">SAG-AFTRA</div>
+          <div class="case-list-desc">Health plan enrollment redesign for 160,000 members. Reduced member confusion and support call volume through research-grounded UX.</div>
+          <div class="case-list-footer">
+            <span class="case-list-meta">InfoBeans, 5 months</span>
+            <span class="case-list-link">View project ↗</span>
+          </div>
+        </div>
       </a>
       <a class="case-list-item" href="coadvantage.html">
-        <div class="case-list-thumb"><img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c4fa024e860a42a2fc40_Group%205.png" alt="CoAdvantage" /></div>
-        <div><div class="case-list-title">CoAdvantage</div><div class="case-list-desc">HR platform UX redesign &amp; design system · Principal PM · 3 months</div></div>
-        <span class="case-list-arrow">↗</span>
+        <div class="case-list-thumb">
+          <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c4fa024e860a42a2fc40_Group%205.png" alt="CoAdvantage" />
+        </div>
+        <div class="case-list-body">
+          <div class="case-list-tags">
+            <span class="case-tag">Principal PM</span>
+            <span class="case-tag">Enterprise SaaS</span>
+          </div>
+          <div class="case-list-title">CoAdvantage</div>
+          <div class="case-list-desc">HR platform UX redesign and design system for a national PEO serving 7,000+ businesses across the US.</div>
+          <div class="case-list-footer">
+            <span class="case-list-meta">InfoBeans, 3 months</span>
+            <span class="case-list-link">View project ↗</span>
+          </div>
+        </div>
       </a>
       <a class="case-list-item" href="connect2trials.html">
-        <div class="case-list-thumb"><img referrerpolicy="no-referrer" src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fa9e8dd7217452aa8241_Hero_C2T.png" alt="Connect2Trials" /></div>
-        <div><div class="case-list-title">Connect2Trials</div><div class="case-list-desc">Clinical trial recruitment platform · Product Strategist · 8 months</div></div>
-        <span class="case-list-arrow">↗</span>
+        <div class="case-list-thumb">
+          <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6533fa9e8dd7217452aa8241_Hero_C2T.png" alt="Connect2Trials" />
+        </div>
+        <div class="case-list-body">
+          <div class="case-list-tags">
+            <span class="case-tag">Product Strategist</span>
+            <span class="case-tag">HealthTech</span>
+          </div>
+          <div class="case-list-title">Connect2Trials</div>
+          <div class="case-list-desc">Clinical trial recruitment platform MVP. Aligned sponsors, sites, and CROs around a patient-first enrollment experience.</div>
+          <div class="case-list-footer">
+            <span class="case-list-meta">Fractional PO, 8 months</span>
+            <span class="case-list-link">View project ↗</span>
+          </div>
+        </div>
       </a>
     </div>
   </div>
@@ -185,7 +446,7 @@
 </footer>
 
 <script>
-  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:.07});
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), { threshold: .07 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 </script>
 </body>
