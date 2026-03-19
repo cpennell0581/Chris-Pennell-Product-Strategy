@@ -124,7 +124,7 @@ nav {
 .stat-desc { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; }
 
 /* ── IMAGE BLOCK ── */
-.img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+.img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; }
 .img-block img { width: 100%; display: block; }
 .img-caption { font-size: 0.78rem; color: var(--ink-faint); padding: 0.75rem 1rem; background: white; border-top: 1px solid var(--border); }
 
