@@ -130,10 +130,10 @@
 <div class="case-hero">
   <div class="container">
     <div class="case-meta fade-in">
-      <span class="meta-tag">Principal PM</span>
+      <span class="meta-tag">Experience Strategy</span>
       <span class="meta-tag">HR Tech</span>
       <span class="meta-tag">UX Redesign</span>
-      <span class="meta-tag">Agile Delivery</span>
+      <span class="meta-tag">Design System</span>
       <span class="meta-divider"></span>
       <span class="meta-detail">InfoBeans · CoAdvantage · 3 months</span>
     </div>
@@ -188,20 +188,29 @@
 
     <div class="section-block fade-in">
       <div class="section-eyebrow">00 · Context and Background</div>
-      <h2 class="section-heading">Principal PM at InfoBeans, <em>embedded with CoAdvantage's product team</em></h2>
+      <h2 class="section-heading">105,000 active users, a 250K growth target, <em>and three months to fix the experience</em></h2>
       <p class="body-text">
-        I owned strategy through delivery: competitive analysis, roadmap definition, feature prioritization, usability research, and agile execution across engineering and design. The constraint was real: transform a feature-rich but friction-heavy HR platform without disrupting 105,000 active users, in 3 months.
+        CoAdvantage is an HR and payroll platform serving small and mid-size businesses across the US. The platform worked. The experience did not. Navigation failures were generating support calls, new users couldn't complete basic tasks without help, and the underlying architecture had no shared component library to build on. With a hard target to double the user base, every friction point at 105K was going to get worse at 250K.
       </p>
+      <p class="body-text">
+        I came in as Principal PM through InfoBeans, embedded with CoAdvantage's product team. Three months, discovery through handoff. The north star was simple: make the platform self-evident enough that a new user can complete their first HR task without calling support.
+      </p>
+
+      <div class="img-block" style="margin: 2rem 0;">
+        <img src="images/coadvantage-before.png" alt="The original CoAdQuantum homepage before redesign" />
+        <div class="img-caption">The original CoAdQuantum homepage. No task prioritization, no clear first step. New users needed a 40-slide PDF just to complete onboarding.</div>
+      </div>
+
       <div class="who-card">
         <div class="who-col">
           <div class="who-col-label">My scope</div>
-          <p><strong>Full lifecycle in 3 months.</strong> Roadmap definition, feature prioritization, cross-functional execution with engineering and design, usability research, and stakeholder alignment from discovery through handoff.</p>
-          <p>The north star: make the platform self-evident enough that a new user can complete their first HR task without calling support.</p>
+          <p><strong>Full lifecycle ownership.</strong> Competitive analysis, roadmap definition, feature prioritization, usability research, design system architecture, and agile execution across engineering and design.</p>
+          <p>Every decision had to hold up against one question: does this reduce the support call, or does it not?</p>
         </div>
         <div class="who-col">
-          <div class="who-col-label">The business context</div>
-          <p>CoAdvantage is an HR and payroll platform serving small and mid-size businesses across the US. With plans to grow from 105,000 to 250,000 users, the existing UI and navigation patterns were going to actively work against that target.</p>
-          <p>Every friction point that existed at 105K would be amplified at 250K. That's what made the UX work a business priority, not just a design project.</p>
+          <div class="who-col-label">The constraint</div>
+          <p>105,000 active users who couldn't be disrupted. A 3-month window. An engineering team already stretched. And a product that needed to look and feel like a different platform without actually becoming one.</p>
+          <p>That's what made the design system investment non-negotiable from day one.</p>
         </div>
       </div>
     </div>
@@ -341,8 +350,18 @@
       </div>
 
       <div class="img-block" style="margin-top:2rem;">
-        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c5178b06260fbdaf9030_Group%204.png" alt="CoAdvantage redesign screens" />
-        <div class="img-caption">Redesigned dashboard and workflow templates, validated through usability testing before engineering handoff</div>
+        <img src="images/coadvantage-ia.png" alt="CoAdvantage information architecture sitemap comparing old and redesigned navigation" />
+        <div class="img-caption">IA sitemap comparing the old Employee-Quantum navigation against the redesigned Employee-360 architecture. Yellow highlights show items restructured or removed based on support ticket analysis and usability findings.</div>
+      </div>
+
+      <div class="img-block" style="margin-top:1.5rem;">
+        <img src="images/coadvantage-task-priority.png" alt="Wireframe showing job task priority mapping to dashboard sections" />
+        <div class="img-caption">Annotated wireframe mapping HR Admin job tasks by priority to redesigned dashboard sections. The numbered hierarchy came directly from support ticket volume data, not assumption.</div>
+      </div>
+
+      <div class="img-block" style="margin-top:1.5rem;">
+        <img src="https://cdn.prod.website-files.com/538f543c3674b7a3720d7a68/6531c5178b06260fbdaf9030_Group%204.png" alt="CoAdvantage redesigned dashboard screens" />
+        <div class="img-caption">Redesigned HR Admin dashboard. Task sections numbered by priority, quick actions surfaced at the top, payroll approvals and employee search leading the layout.</div>
       </div>
 
       <div class="phase-card">
@@ -374,38 +393,64 @@
       </div>
     </div>
 
+
     <div class="section-block fade-in">
-      <div class="section-eyebrow">03 · Outcomes and Business Impact</div>
-      <h2 class="section-heading">A growth-ready platform with <em>a validated foundation to build on</em></h2>
+      <div class="section-eyebrow">03 · A Hard Call</div>
+      <h2 class="section-heading">The dashboard redesign almost launched <em>without the most important user</em></h2>
       <p class="body-text">
-        The engagement delivered a validated, research-grounded redesign and a scalable design system, handed off to engineering with full documentation. Each outcome mapped to the business goals and KPIs defined in Phase 1.
+        Early in Phase 2, the redesign work was focused almost entirely on the HR Admin persona. That made sense on paper: HR Admins drove the most support tickets, had the most complex workflows, and were the primary stakeholder pushing for the project. The employee self-service flows were treated as secondary.
       </p>
-      <div class="results-grid">
-        <div class="result-card dark">
-          <div class="result-num">250K+</div>
-          <div class="result-label">User scale, architecture ready</div>
-          <div class="result-desc">Design system and modular UX built to support 2 to 3x growth without re-platforming core workflows or breaking existing users.</div>
+      <p class="body-text">
+        In usability sessions, I kept seeing the same thing: employees were getting lost faster than HR Admins, not slower. The old platform's homepage gave HR Admins a dense but navigable menu. For a first-time employee trying to find their pay stub or set up direct deposit, it was a dead end. They had no way to orient themselves without calling someone.
+      </p>
+      <div class="who-card" style="margin-top:2rem;">
+        <div class="who-col">
+          <div class="who-col-label">The situation</div>
+          <p>The employee self-service dashboard was scoped as a lighter version of the HR Admin redesign. Same information hierarchy, simplified. But usability sessions showed employees weren't struggling with complexity — they were struggling with discoverability. Their top three tasks (pay stubs, direct deposit, W-4) were buried under navigation menus designed for administrators.</p>
         </div>
-        <div class="result-card">
-          <div class="result-num">↓</div>
-          <div class="result-label">Support volume, positioned</div>
-          <div class="result-desc">Streamlined navigation and clearer task flows positioned to reduce inbound call volume. Usability testing validated task completion improvements on the highest-ticket flows.</div>
-        </div>
-        <div class="result-card">
-          <div class="result-num">↑</div>
-          <div class="result-label">Onboarding and task completion</div>
-          <div class="result-desc">Reworked workflow templates and a customizable dashboard reduced friction across the most common HR tasks tested in usability sessions.</div>
-        </div>
-        <div class="result-card">
-          <div class="result-num">✓</div>
-          <div class="result-label">Engineering handoff complete</div>
-          <div class="result-desc">Comprehensive design documentation and a shared component library enabled the engineering team to begin building without additional discovery sessions.</div>
+        <div class="who-col">
+          <div class="who-col-label">My recommendation</div>
+          <p>Redesign the employee homepage around a separate task hierarchy entirely, surfacing the three highest-volume employee tasks directly on the dashboard rather than behind menus. I brought the usability findings and support ticket data for employee-originated calls to the product owner and made the case for absorbing the additional scope in the same sprint.</p>
+          <p>The recommendation held. The employee dashboard shipped with its own task priority structure, distinct from the Admin layout.</p>
         </div>
       </div>
     </div>
 
     <div class="section-block fade-in">
-      <div class="section-eyebrow">04 · Reflection</div>
+      <div class="section-eyebrow">04 · Outcomes and Business Impact</div>
+      <h2 class="section-heading">Three months. Discovery through handoff. <em>Every deliverable validated before engineering touched it.</em></h2>
+      <p class="body-text">
+        This was a design and research engagement, not a launch. No post-launch data exists because the build phase began after the engagement closed. What was delivered was a validated, research-grounded redesign and a scalable design system — handed off with full documentation so engineering could start building without a discovery phase of their own.
+      </p>
+      <p class="body-text">
+        The honest measure of success here is the quality of what went into the handoff, not post-launch metrics we didn't have access to.
+      </p>
+      <div class="results-grid">
+        <div class="result-card dark">
+          <div class="result-num">250K+</div>
+          <div class="result-label">User scale the architecture is built for</div>
+          <div class="result-desc">Design system and modular UX built to support 2 to 3x growth without re-platforming core workflows or disrupting the 105K users already on the platform.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">3</div>
+          <div class="result-label">Distinct user personas, each with their own dashboard hierarchy</div>
+          <div class="result-desc">HR Admin, Client Admin, and Employee flows each got a task-prioritized homepage grounded in support ticket data, not design convention.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">↑</div>
+          <div class="result-label">Task completion in usability testing</div>
+          <div class="result-desc">Revised navigation and workflow templates improved time-to-completion on the three highest-volume HR tasks identified in Phase 1 support data. Validated before any engineering investment.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">✓</div>
+          <div class="result-label">Engineering handoff with no ambiguity</div>
+          <div class="result-desc">Comprehensive design documentation and a shared component library meant the engineering team could begin building immediately. No additional discovery sessions required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">05 · Reflection</div>
       <h2 class="section-heading">What a 3-month engagement taught me about <em>speed, scope, and research timing</em></h2>
       <p class="body-text">
         CoAdvantage was a compressed engagement with real constraints: a large active user base that couldn't be disrupted, a growth target that made the work urgent, and a 3-month window that forced hard prioritization calls from day one.
