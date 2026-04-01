@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>aShareX | Chris Pennell</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #f8f5ee;
+    --paper: rgba(255,255,255,0.78);
+    --ink: #191714;
+    --ink-muted: #65615c;
+    --ink-soft: #a7a198;
+    --accent: #1d4ed8;
+    --accent-soft: rgba(29,78,216,0.1);
+    --gold: #b7791f;
+    --gold-soft: rgba(183,121,31,0.14);
+    --border: rgba(25,23,20,0.1);
+    --shadow: 0 24px 80px rgba(25,23,20,0.10);
+    --serif: "DM Serif Display", Georgia, serif;
+    --sans: "DM Sans", system-ui, sans-serif;
+  }
+  html, body { min-height: 100%; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(29,78,216,0.14), transparent 28%),
+      radial-gradient(circle at top right, rgba(183,121,31,0.12), transparent 22%),
+      linear-gradient(180deg, #fbfaf7 0%, var(--cream) 52%, #f1ede3 100%);
+    -webkit-font-smoothing: antialiased;
+  }
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.4rem;
+    background: rgba(248,245,238,0.78);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-back, .nav-logo {
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .nav-back {
+    font-size: 0.86rem;
+    color: var(--ink-muted);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+  }
+  .deck-shell {
+    width: min(1240px, calc(100vw - 2rem));
+    margin: 0 auto;
+    padding: 7.2rem 0 2rem;
+  }
+  .deck-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .eyebrow {
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .progress-track {
+    width: min(280px, 36vw);
+    height: 6px;
+    background: rgba(25,23,20,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 16.66%;
+    background: linear-gradient(90deg, var(--accent), #4f7cff);
+    border-radius: 999px;
+    transition: width 220ms ease;
+  }
+  .progress-label {
+    font-size: 0.84rem;
+    color: var(--ink-muted);
+    min-width: 4.6rem;
+    text-align: right;
+  }
+  .deck {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(25,23,20,0.08);
+    border-radius: 28px;
+    background: rgba(255,255,255,0.46);
+    box-shadow: var(--shadow);
+  }
+  .slides {
+    display: flex;
+    transition: transform 280ms ease;
+    will-change: transform;
+  }
+  .slide {
+    width: 100%;
+    flex: 0 0 100%;
+    min-height: min(880px, calc(100vh - 11.5rem));
+    padding: clamp(1.4rem, 3vw, 2.6rem);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+  .panel {
+    background: var(--paper);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 24px;
+    padding: clamp(1.35rem, 2.4vw, 2rem);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+  }
+  .panel.dark {
+    background: linear-gradient(180deg, rgba(25,23,20,0.96), rgba(31,28,24,0.94));
+    color: #f8f5ee;
+    border-color: rgba(255,255,255,0.06);
+  }
+  .panel.dark .kicker, .panel.dark .muted, .panel.dark .micro { color: rgba(248,245,238,0.68); }
+  .panel.dark .metric, .panel.dark .title, .panel.dark .quote { color: #fffaf1; }
+  .stack { display: grid; gap: 1rem; }
+  .kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .title {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 5vw, 4.9rem);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+  }
+  .title em, .section-title em { font-style: italic; color: var(--accent); }
+  .subtitle, .body, .muted {
+    color: var(--ink-muted);
+    line-height: 1.72;
+  }
+  .subtitle { font-size: 1.04rem; max-width: 62ch; }
+  .meta-row, .tags, .stat-grid, .split-grid, .card-grid { display: grid; gap: 0.85rem; }
+  .meta-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .meta-card, .stat-card, .mini-card, .quote-card, .decision-card, .metric-row {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.88);
+    padding: 1rem 1.05rem;
+  }
+  .meta-label, .micro {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .meta-value {
+    margin-top: 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    grid-template-columns: none;
+  }
+  .tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 0.42rem 0.7rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .tag.gold {
+    background: var(--gold-soft);
+    color: var(--gold);
+  }
+  .stat-grid, .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metric {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+  }
+  .list {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .list li {
+    padding-left: 1.1rem;
+    position: relative;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  .list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.68rem;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .visual {
+    min-height: 280px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(25,23,20,0.08);
+    background: #efe9dd;
+  }
+  .visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .caption {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .split-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .quote-card {
+    background: linear-gradient(180deg, rgba(29,78,216,0.08), rgba(255,255,255,0.9));
+  }
+  .quote {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .decision-card {
+    background: linear-gradient(180deg, rgba(183,121,31,0.08), rgba(255,255,255,0.94));
+  }
+  .metric-table {
+    display: grid;
+    gap: 0.8rem;
+  }
+  .metric-row {
+    display: grid;
+    grid-template-columns: 190px 90px 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+  .metric-row .result {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    color: var(--accent);
+  }
+  .deck-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.2rem 1.2rem;
+    border-top: 1px solid rgba(25,23,20,0.08);
+    background: rgba(255,255,255,0.52);
+  }
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .control-btn, .home-link {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.88);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 0.78rem 1rem;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  }
+  .control-btn:hover, .home-link:hover { transform: translateY(-1px); border-color: rgba(29,78,216,0.35); }
+  .control-btn[disabled] { opacity: 0.45; cursor: not-allowed; transform: none; }
+  .helper {
+    font-size: 0.84rem;
+    color: var(--ink-muted);
+  }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0 0;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+  @media (max-width: 980px) {
+    .slide { grid-template-columns: 1fr; min-height: auto; }
+    .meta-row, .split-grid, .metric-row, .stat-grid, .card-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    nav { padding: 1rem; }
+    .deck-shell { width: min(100vw - 1rem, 1240px); padding-top: 6.5rem; }
+    .deck-topbar, .deck-controls, footer { flex-direction: column; align-items: flex-start; }
+    .progress-wrap { width: 100%; justify-content: space-between; }
+    .progress-track { width: 100%; }
+    .control-group { width: 100%; justify-content: space-between; }
+    .control-btn, .home-link { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="rainbow-line"></div>
+<nav>
+  <a class="nav-back" href="index.html">← Back to work</a>
+  <a class="nav-logo" href="index.html">Chris Pennell</a>
+</nav>
+
+<main class="deck-shell">
+  <div class="deck-topbar">
+    <div class="eyebrow">Case study deck · use arrows or keyboard</div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="progress-label" id="progressLabel">01 / 06</div>
+    </div>
+  </div>
+
+  <section class="deck">
+    <div class="slides" id="slides">
+      <article class="slide">
+        <div class="panel dark stack">
+          <div class="tags">
+            <span class="tag">Principal PM</span>
+            <span class="tag">Fintech</span>
+            <span class="tag gold">0 to 1</span>
+            <span class="tag">Agile delivery</span>
+          </div>
+          <h1 class="title">Making fine art investment <em>feel accessible</em></h1>
+          <p class="subtitle">aShareX set out to let everyday investors buy fractional shares in museum-quality art. I led research, backlog strategy, and delivery across four live pilot auctions, then pushed through the product decision that mattered most: optional auto-bidding for fractional bidders.</p>
+          <div class="meta-row">
+            <div class="meta-card">
+              <div class="meta-label">Client</div>
+              <div class="meta-value">aShareX via InfoBeans</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-label">Scope</div>
+              <div class="meta-value">Research to sprint delivery</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-label">Year</div>
+              <div class="meta-value">2024</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-label">North star</div>
+              <div class="meta-value">First bid confidence</div>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="visual">
+            <img src="https://cdn.prod.website-files.com/6198fd05946c741db2cccd9c/67b4fef811111fef0ded4a10_asx_fine-arts.png" alt="aShareX fine art investment platform">
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="metric">32</div>
+              <div class="micro">Pilot participants</div>
+              <p class="muted">17 full bidders and 15 fractional bidders across live pilot sessions.</p>
+            </div>
+            <div class="stat-card">
+              <div class="metric">~15%</div>
+              <div class="micro">Engagement lift</div>
+              <p class="muted">Fractional bidder engagement improved after auto-bidding shipped.</p>
+            </div>
+            <div class="stat-card">
+              <div class="metric">64%</div>
+              <div class="micro">Repeat participation</div>
+              <p class="muted">Users stayed active across consecutive lots instead of disappearing after one.</p>
+            </div>
+            <div class="stat-card">
+              <div class="metric">4</div>
+              <div class="micro">Live pilots</div>
+              <p class="muted">Each pilot fed the next sprint with fresh evidence.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="panel stack">
+          <div class="kicker">01 · The problem</div>
+          <h2 class="section-title">The market was exclusive. <em>The product risk was emotional.</em></h2>
+          <p class="body">The mechanics were novel, but the deeper barrier was trust. Users were being asked to make real-money decisions in a category they barely understood, under live-auction pressure, without a familiar mental model to lean on.</p>
+          <ul class="list">
+            <li>Traditional fine art investing was effectively closed to anyone without insider access and large amounts of capital.</li>
+            <li>Fractional bidding sounded exciting in theory, but first-time users worried about making mistakes in front of a moving market.</li>
+            <li>Fast pacing multiplied the anxiety. Fractional bidders had to track bids, lots, and remaining allocation in real time.</li>
+          </ul>
+          <div class="quote-card">
+            <div class="micro">Working hypothesis</div>
+            <p class="quote">If we make the auction feel guided, not intimidating, first-time investors will bid once and return for the next lot.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="visual">
+            <img src="https://cdn.prod.website-files.com/6198fd05946c741db2cccd9c/67b4f5ff2600b7206d1f5607_asx-PreAuction.png" alt="aShareX pre-auction artwork listings">
+          </div>
+          <p class="caption">Pre-auction listing views did more than show the asset. They had to create enough confidence for a user to believe they belonged in the room.</p>
+          <div class="card-grid">
+            <div class="mini-card">
+              <div class="micro">What we got wrong at first</div>
+              <p class="body">We assumed better mechanics would naturally create adoption. The research said otherwise: education and emotional comfort were the real unlocks.</p>
+            </div>
+            <div class="mini-card">
+              <div class="micro">Product frame</div>
+              <p class="body">This was less “build an auction interface” and more “design a trust ramp into a new financial behavior.”</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="panel stack">
+          <div class="kicker">02 · Research loop</div>
+          <h2 class="section-title">Four pilots. <em>One disciplined learning system.</em></h2>
+          <p class="body">I ran the engagement as a repeating loop: live auction, post-session interviews, synthesis, prioritization, sprint planning, ship, repeat. Nothing hit the backlog without a research rationale attached.</p>
+          <div class="split-grid">
+            <div class="mini-card">
+              <div class="micro">Research</div>
+              <p class="body">Post-auction interviews with both full and fractional bidders after each pilot.</p>
+            </div>
+            <div class="mini-card">
+              <div class="micro">Product</div>
+              <p class="body">Synthesis into prioritized recommendations for the founder and engineering lead.</p>
+            </div>
+            <div class="mini-card">
+              <div class="micro">Delivery</div>
+              <p class="body">Sprint planning, backlog grooming, standups, and retros across the InfoBeans team.</p>
+            </div>
+          </div>
+          <ul class="list">
+            <li>63% of fractional bidders wanted a pre-auction simulation before risking real money.</li>
+            <li>85% wanted less manual pressure once the auction started moving fast.</li>
+            <li>The strongest adoption drivers were trust, clarity, and confidence, not feature novelty.</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <div class="visual">
+            <img src="https://cdn.prod.website-files.com/6198fd05946c741db2cccd9c/67b7bf96c38dd7ed81455867_asx_PreBid_Desktop.png" alt="aShareX pre-bid desktop experience">
+          </div>
+          <div class="decision-card">
+            <div class="micro">What shipped from the research</div>
+            <p class="body"><strong>Test Drive an Auction</strong> emerged directly from user requests for practice. It gave people a chance to learn the rhythm before participating live.</p>
+          </div>
+          <div class="visual">
+            <img src="https://cdn.prod.website-files.com/6198fd05946c741db2cccd9c/67b4f5ff2600b7206d1f559c_asx_SC-LiveAnimation.png" alt="aShareX live auction interface">
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="panel dark stack">
+          <div class="kicker">03 · The hardest call</div>
+          <h2 class="section-title">The founder wanted manual bidding. <em>The users wanted relief.</em></h2>
+          <p class="body">This was the make-or-break recommendation. The CEO preferred a purist manual-bidding experience. Pilot data showed that fractional bidders were getting overwhelmed and disengaging.</p>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="metric">85%</div>
+              <div class="micro">Wanted less manual pressure</div>
+              <p class="muted">Users explicitly asked for a way to stay engaged without babysitting every bid.</p>
+            </div>
+            <div class="stat-card">
+              <div class="metric">3.2</div>
+              <div class="micro">Avg. auto-bids</div>
+              <p class="muted">After launch, users actively used auto-bidding as a strategy tool.</p>
+            </div>
+          </div>
+          <div class="quote-card">
+            <div class="micro">Recommendation</div>
+            <p class="quote">Add optional auto-bidding for fractional bidders, not as a replacement for manual control, but as a confidence scaffold.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="decision-card">
+            <div class="micro">Why it worked</div>
+            <p class="body">I framed the feature as expanded choice rather than a philosophical shift. Manual bidding stayed. Auto-bidding simply protected newer investors from pace-driven drop-off.</p>
+          </div>
+          <div class="visual">
+            <img src="https://cdn.prod.website-files.com/6198fd05946c741db2cccd9c/67b4f5ff2600b7206d1f557a_ash-Workshop.png" alt="aShareX stakeholder workshop">
+          </div>
+          <div class="mini-card">
+            <div class="micro">Leadership lesson</div>
+            <p class="body">Research is most valuable when it can survive disagreement with a founder’s instinct. This was one of those moments.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="panel stack">
+          <div class="kicker">04 · Outcomes</div>
+          <h2 class="section-title">The metrics said the experience was <em>actually working</em>.</h2>
+          <p class="body">I defined engagement metrics up front so the pilots could be measured consistently. That gave us a clean way to judge whether people were merely attending the auction or truly participating in it.</p>
+          <div class="metric-table">
+            <div class="metric-row">
+              <div class="micro">Consecutive lot participation</div>
+              <div class="result">64%</div>
+              <div class="body">Users stayed engaged across multiple buckets instead of treating the product like a one-shot curiosity.</div>
+            </div>
+            <div class="metric-row">
+              <div class="micro">Auto-bid usage</div>
+              <div class="result">3.2</div>
+              <div class="body">The feature became an active strategy layer, not a passive fallback.</div>
+            </div>
+            <div class="metric-row">
+              <div class="micro">Limit bid re-up rate</div>
+              <div class="result">42%</div>
+              <div class="body">People increased their limits when outbid, a strong signal of intent and confidence.</div>
+            </div>
+            <div class="metric-row">
+              <div class="micro">Avg. bid speed</div>
+              <div class="result">4.8s</div>
+              <div class="body">Users could react quickly when a new lot opened, without visible hesitation or confusion.</div>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="metric">63%</div>
+              <div class="micro">Validated the practice mode</div>
+              <p class="muted">The research supported “Test Drive an Auction” before engineering had to guess.</p>
+            </div>
+            <div class="stat-card">
+              <div class="metric">~15%</div>
+              <div class="micro">Lift after auto-bidding</div>
+              <p class="muted">The biggest product decision also became the clearest quantitative win.</p>
+            </div>
+            <div class="stat-card">
+              <div class="metric">4</div>
+              <div class="micro">Iterations</div>
+              <p class="muted">Each auction became a sharper test of product-market behavior.</p>
+            </div>
+            <div class="stat-card">
+              <div class="metric">32</div>
+              <div class="micro">Users across segments</div>
+              <p class="muted">The split between full and fractional bidders exposed where separate UX treatment was necessary.</p>
+            </div>
+          </div>
+          <div class="visual">
+            <img src="https://cdn.prod.website-files.com/6198fd05946c741db2cccd9c/67b4f5ff2600b7206d1f55a7_asx-SC_LiveSecondary.png" alt="aShareX live auction secondary view">
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="panel stack">
+          <div class="kicker">05 · Reflection</div>
+          <h2 class="section-title">What this taught me about <em>0-to-1 product leadership</em></h2>
+          <ul class="list">
+            <li>Novel products need behavior design as much as interface design. If users do not feel safe, novelty reads as risk.</li>
+            <li>Metrics matter more when they are defined before the first pilot. Otherwise, every finding becomes a post-hoc argument.</li>
+            <li>Founder alignment gets easier when the recommendation is grounded in clear evidence and framed around user choice.</li>
+          </ul>
+          <div class="card-grid">
+            <div class="mini-card">
+              <div class="micro">What I would do earlier</div>
+              <p class="body">Instrument analytics from pilot one. Some of the most useful behavioral questions were only measurable later in the program.</p>
+            </div>
+            <div class="mini-card">
+              <div class="micro">What I would do faster</div>
+              <p class="body">Ship auto-bidding sooner. The signs were there before we formally made the call.</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel dark stack">
+          <div class="kicker">Why this case belongs in the portfolio</div>
+          <p class="quote">This is the project where product judgment meant protecting the user from a system they technically could have used, but would not have trusted long enough to love.</p>
+          <p class="body">That is the version of product leadership I want to show: research-driven, commercially literate, and willing to challenge preference when the evidence points somewhere better.</p>
+          <div class="control-group">
+            <a class="home-link" href="index.html">Back to portfolio</a>
+            <a class="home-link" href="canyon-ranch.html">Next case study →</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="deck-controls">
+      <div class="control-group">
+        <button class="control-btn" id="prevBtn" type="button">← Previous</button>
+        <button class="control-btn" id="nextBtn" type="button">Next →</button>
+      </div>
+      <div class="helper">Keyboard shortcuts: left and right arrows</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Chris Pennell</span>
+    <span>MBA Candidate · Rice University · LGBTQ+ leader</span>
+  </footer>
+</main>
+
+<script>
+  const slidesEl = document.getElementById("slides");
+  const progressBar = document.getElementById("progressBar");
+  const progressLabel = document.getElementById("progressLabel");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const slideCount = slidesEl.children.length;
+  let currentIndex = 0;
+
+  function renderSlide() {
+    slidesEl.style.transform = `translateX(-${currentIndex * 100}%)`;
+    const progress = ((currentIndex + 1) / slideCount) * 100;
+    progressBar.style.width = `${progress}%`;
+    progressLabel.textContent = `${String(currentIndex + 1).padStart(2, "0")} / ${String(slideCount).padStart(2, "0")}`;
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === slideCount - 1;
+  }
+
+  prevBtn.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex -= 1;
+      renderSlide();
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentIndex < slideCount - 1) {
+      currentIndex += 1;
+      renderSlide();
+    }
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") prevBtn.click();
+    if (event.key === "ArrowRight") nextBtn.click();
+  });
+
+  renderSlide();
+</script>
+</body>
+</html>
