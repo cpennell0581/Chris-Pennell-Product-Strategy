@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trmeric, Chris Pennell</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF9F6; --ink: #1A1916; --ink-muted: #6B6A66; --ink-faint: #C2C1BC;
+    --accent: #F59A23; --accent-soft: #FFF1DF; --border: rgba(26,25,22,0.1);
+    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif; --max: 860px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem; background: rgba(250,249,246,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+  .case-hero { padding-top: 9rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .case-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .meta-tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; }
+  .meta-divider { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint); }
+  .meta-detail { font-size: 0.8rem; color: var(--ink-faint); }
+  .case-title { font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .case-title em { font-style: italic; color: var(--accent); }
+  .case-subtitle { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 660px; margin-bottom: 3rem; }
+  .role-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-bottom: 2rem; }
+  .role-cell { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .role-cell:last-child { border-right: none; }
+  .role-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.35rem; }
+  .role-val { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
+  .role-sub { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .hero-proof { padding: 1.5rem 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; margin-bottom: 2rem; }
+  .hero-proof-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.9rem; }
+  .hero-proof p { font-size: 0.95rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.8rem; }
+  .hero-proof p:last-child { margin-bottom: 0; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .stat-cell { padding: 1.5rem 1.75rem; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .stat-val { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; margin-bottom: 0.2rem; }
+  .stat-desc { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; }
+  .case-body { padding: 5rem 0; }
+  .section-block { margin-bottom: 5rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .section-block:last-child { border-bottom: none; margin-bottom: 0; }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .section-heading { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 1rem; color: var(--ink-muted); line-height: 1.9; margin-bottom: 1.25rem; }
+  .body-text:last-child { margin-bottom: 0; }
+  .img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: white; }
+  .img-block img { width: 100%; display: block; }
+  .img-caption { font-size: 0.78rem; color: var(--ink-faint); padding: 0.75rem 1rem; background: white; border-top: 1px solid var(--border); line-height: 1.6; }
+  .embed-frame { width: 100%; aspect-ratio: 16 / 9; border: 0; display: block; background: #183947; }
+  .asset-callout { margin-top: 1rem; padding: 1.1rem 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: white; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .asset-callout-copy { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.6; max-width: 560px; }
+  .asset-callout-link { display: inline-flex; align-items: center; justify-content: center; padding: 0.8rem 1rem; border-radius: 999px; background: var(--ink); color: var(--cream); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.04em; white-space: nowrap; transition: background 0.2s ease, transform 0.2s ease; }
+  .asset-callout-link:hover { background: var(--accent); color: var(--ink); transform: translateY(-1px); }
+  .who-card { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 2rem; }
+  .who-col { padding: 1.75rem 2rem; }
+  .who-col:first-child { border-right: 1px solid var(--border); }
+  .who-col-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .who-col p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.85rem; }
+  .who-col p:last-child { margin-bottom: 0; }
+  .who-col p strong { font-weight: 500; color: var(--ink); }
+  .finding-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .finding-item { padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; }
+  .finding-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .finding-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .quote-block { margin: 2rem 0; padding: 1.75rem 2rem; background: white; border-radius: 0 10px 10px 0; border: 1px solid var(--border); border-left: 3px solid var(--accent); }
+  .quote-text { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); line-height: 1.6; font-style: italic; margin-bottom: 0.75rem; }
+  .quote-attr { font-size: 0.78rem; color: var(--ink-faint); }
+  .phase-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .phase-header { display: flex; align-items: baseline; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); flex-wrap: wrap; }
+  .phase-badge { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; flex-shrink: 0; }
+  .phase-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .phase-objective { font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.15rem; }
+  .phase-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .phase-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .phase-col:last-child { border-right: none; }
+  .phase-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .phase-items li { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; padding-left: 1rem; position: relative; }
+  .phase-items li::before { content: '-'; position: absolute; left: 0; color: var(--accent); }
+  .rec-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .rec-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); }
+  .rec-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem; }
+  .rec-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .rec-body { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .rec-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .rec-col:last-child { border-right: none; }
+  .rec-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.6rem; }
+  .rec-col p { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.6; }
+  .rec-insight { padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: var(--accent-soft); font-size: 0.83rem; color: #a45f10; font-style: italic; }
+  .timeline-grid { display: grid; grid-template-columns: 90px 1fr; gap: 0; margin-top: 2rem; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .timeline-year { padding: 1.5rem 1rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--cream); display: flex; align-items: flex-start; }
+  .timeline-year:last-of-type { border-bottom: none; }
+  .timeline-content { padding: 1.75rem 2rem; border-bottom: 1px solid var(--border); }
+  .timeline-content:last-child { border-bottom: none; }
+  .timeline-year-label { font-size: 0.78rem; font-weight: 500; color: var(--ink-muted); letter-spacing: 0.03em; line-height: 1.4; }
+  .timeline-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.6rem; }
+  .timeline-desc { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.7; }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .result-card { padding: 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; }
+  .result-card.dark { background: var(--ink); border-color: var(--ink); }
+  .result-num { font-family: var(--serif); font-size: 2.8rem; color: var(--ink); line-height: 1; margin-bottom: 0.4rem; }
+  .result-card.dark .result-num { color: var(--cream); }
+  .result-label { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
+  .result-card.dark .result-label { color: rgba(250,249,246,0.9); }
+  .result-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; }
+  .result-card.dark .result-desc { color: rgba(250,249,246,0.5); }
+  .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 2rem; }
+  .reflection-col { padding: 2rem; }
+  .reflection-col.went-well { background: white; border-right: 1px solid var(--border); }
+  .reflection-col.differently { background: var(--cream); }
+  .reflection-col-title { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .went-well .reflection-col-title { color: var(--accent); }
+  .differently .reflection-col-title { color: var(--ink-faint); }
+  .reflection-items { display: flex; flex-direction: column; gap: 1rem; }
+  .reflection-item { padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; border: 1px solid var(--border); }
+  .went-well .reflection-item { background: white; }
+  .differently .reflection-item { background: var(--cream); }
+  .reflection-item strong { font-weight: 500; color: var(--ink); display: block; margin-bottom: 0.25rem; }
+  .case-nav { padding: 4rem 0 6rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .case-nav-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .case-nav-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; transition: color 0.2s; display: block; }
+  .case-nav-title:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; font-size: 0.8rem; color: var(--ink-faint); }
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+  @media (max-width: 680px) {
+    nav { padding: 1rem 1.25rem; }
+    .container { padding: 0 1.25rem; }
+    .case-hero { padding-top: 7rem; }
+    .stat-row, .role-strip, .who-card, .results-grid, .reflection-grid { grid-template-columns: 1fr; }
+    .stat-cell, .role-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child, .role-cell:last-child { border-bottom: none; }
+    .who-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-body, .rec-body { grid-template-columns: 1fr; }
+    .phase-col, .rec-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-col:last-child, .rec-col:last-child { border-bottom: none; }
+    .timeline-grid { grid-template-columns: 1fr; }
+    .timeline-year { border-right: none; }
+    .case-nav { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="rainbow-line"></div>
+<nav>
+  <a class="nav-back" href="index.html">← Back to work</a>
+  <a class="nav-logo" href="index.html">Chris Pennell</a>
+</nav>
+
+<div class="case-hero">
+  <div class="container">
+    <div class="case-meta fade-in">
+      <span class="meta-tag">Product Strategy</span>
+      <span class="meta-tag">Marketplace UX</span>
+      <span class="meta-tag">Workflow Design</span>
+      <span class="meta-tag">B2B Platform</span>
+      <span class="meta-divider"></span>
+      <span class="meta-detail">Trmeric · 2023 to 2024</span>
+    </div>
+    <h1 class="case-title fade-in" style="transition-delay:.08s">
+      Turning a messy provider search into a product teams could <em>actually work through</em>
+    </h1>
+    <p class="case-subtitle fade-in" style="transition-delay:.14s">
+      Trmeric was trying to help companies define technology work, find the right providers, track delivery, and manage transactions in one place. I was brought in to turn that broad idea into clearer flows, stronger UX structure, and a prototype direction the team could build from.
+    </p>
+    <div class="role-strip fade-in" style="transition-delay:.18s">
+      <div class="role-cell">
+        <div class="role-label">My Role</div>
+        <div class="role-val">UX Strategist / Product Designer</div>
+        <div class="role-sub">Product definition · workflow design · prototype direction</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Engagement</div>
+        <div class="role-val">Sprint-based product design engagement</div>
+        <div class="role-sub">Initial prototype scope in 2023, extended through retainer work in 2024</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Primary Scope</div>
+        <div class="role-val">Discover, provider space, action hub, transact</div>
+        <div class="role-sub">Plus home page refinement and UI system work</div>
+      </div>
+    </div>
+    <div class="hero-proof fade-in" style="transition-delay:.20s">
+      <div class="hero-proof-label">Project goals</div>
+      <p>The work centered on three things: help buyers define what they needed before they chose a provider, make the product easier to navigate across discovery and execution, and create a clearer operating layer for tracking providers, offers, and transactions.</p>
+      <p>This was not just screen polish. The product needed stronger workflow logic, a usable project brief, clearer status handling, and a home for the work once a customer moved beyond the first conversation.</p>
+    </div>
+    <div class="stat-row fade-in" style="transition-delay:.22s">
+      <div class="stat-cell">
+        <div class="stat-label">Business objective</div>
+        <div class="stat-val">Shorter</div>
+        <div class="stat-desc">Make it easier for companies to move from vague need to provider engagement without relying on guesswork or manual coordination</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Product objective</div>
+        <div class="stat-val">Clearer</div>
+        <div class="stat-desc">Turn discovery, provider management, and transact into understandable modules with visible progress, useful summaries, and better next-step logic</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">User objective</div>
+        <div class="stat-val">Less</div>
+        <div class="stat-desc">Reduce uncertainty for both customers and providers by guiding requirements, project brief creation, provider review, and transaction tracking in one system</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="case-body">
+  <div class="container">
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">00 · Context and Background</div>
+      <h2 class="section-heading">The idea was ambitious. <em>The hard part was making the path through it feel clear.</em></h2>
+      <p class="body-text">
+        Trmeric was trying to cover a lot of ground: help a company clarify its needs, generate a project brief, discover providers, manage offers, oversee delivery, and handle transactions. The opportunity was strong, but so was the risk. Without a clear structure, the product could easily become a stack of features instead of a usable operating system for the work.
+      </p>
+      <p class="body-text">
+        The journey map, user stories, and working-session recordings all pointed at the same problem. Buyers often did not know the right way to kick off the work, providers were not always aligned with the actual need, and both sides were left filling in gaps the product should have helped close.
+      </p>
+      <div class="img-block">
+        <iframe class="embed-frame" src="trmeric-journey-map-embed.html" title="Trmeric customer journey map"></iframe>
+        <div class="img-caption">A simplified HTML rebuild of the original journey map. It keeps the full nine-stage structure, but presents it more cleanly inside the case study: identify demand, discover providers, screen, contract, deliver, evaluate, pay, and decide what happens next.</div>
+      </div>
+      <div class="asset-callout">
+        <div class="asset-callout-copy">There is also a more exploratory version if you want to open the map as a standalone portfolio asset.</div>
+        <a class="asset-callout-link" href="trmeric-journey-map.html">Open Full Interactive Version</a>
+      </div>
+      <div class="who-card">
+        <div class="who-col">
+          <div class="who-col-label">What the product needed</div>
+          <p><strong>Better structured discovery.</strong> Users needed help turning a broad problem into a usable project brief and clearer provider criteria.</p>
+          <p><strong>A stronger working surface.</strong> Once discovery was done, customers needed a clearer place to manage providers, offers, projects, and transactions.</p>
+        </div>
+        <div class="who-col">
+          <div class="who-col-label">Why it was tricky</div>
+          <p><strong>The guesswork was on both sides.</strong> Customers were often unsure how to frame the work, and providers were often selling into incomplete requirements.</p>
+          <p><strong>The platform had to do more than matchmake.</strong> It also had to support progress, status, collaboration, and decision-making after the first conversation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">01 · My Role and Scope</div>
+      <h2 class="section-heading">I was there to shape the product, <em>not just decorate it.</em></h2>
+      <p class="body-text">
+        The initial scope was organized as a four-sprint prototype plan. Week one covered Discover and Engage. Week two moved into Build and Retro. Week three focused on Transact and Action Hub. Week four pulled all six modules plus the home screen into one higher-fidelity prototype. Later retainer work extended into provider pages, second-level home-page definition, feature improvements from the working inventory, and a more reusable style and component system.
+      </p>
+      <div class="finding-list">
+        <div class="finding-item">
+          <div class="finding-title">Turned broad product thinking into defined flows</div>
+          <div class="finding-desc">The user-story sheets broke the product into concrete interactions around discovery, project brief generation, provider matching, transaction review, approvals, and payments.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Used research and journey work to shape the backlog</div>
+          <div class="finding-desc">The recordings and journey map show the work repeatedly returning to stakeholder interviews, provider journeys, pain points, and backlog prioritization before pushing deeper into UI.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Helped define the operating layer of the product</div>
+          <div class="finding-desc">The later scope was about more than new screens. It pushed on provider pages shaped like the Action Hub, second-level home-page structure, and a reusable UI foundation the team could keep building from.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">02 · Research and Discovery</div>
+      <h2 class="section-heading">The clearest signal was simple. <em>People needed the product to remove uncertainty, not add to it.</em></h2>
+      <p class="body-text">
+        The recordings and journey map make the same point in different ways. Buyers did not always know how to define the work, how to evaluate providers, or how to tell whether a proposal really fit the problem. The product had to reduce that uncertainty with structure, context, and clearer prompts.
+      </p>
+
+      <div class="quote-block">
+        <div class="quote-text">“For the guy who's using this, consuming this is very difficult to know what's the right way.”</div>
+        <div class="quote-attr">Working session, June 12, 2023</div>
+      </div>
+
+      <div class="finding-list">
+        <div class="finding-item">
+          <div class="finding-title">Priority 1: turn discovery into guided framing</div>
+          <div class="finding-desc">The Discover flow had to help users define requirements, success metrics, constraints, timelines, and provider criteria instead of dropping them into a blank search experience.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Priority 2: make progress and context visible</div>
+          <div class="finding-desc">Users needed to know where they were in the flow, how many steps remained, and what the system was helping them produce along the way.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Priority 3: make expertise feel real</div>
+          <div class="finding-desc">The team kept coming back to the idea that the product could not feel generic. It had to show that it understood the customer's world and could help shape a better path through it.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Priority 4: create a more usable post-discovery home</div>
+          <div class="finding-desc">Once users moved past discovery, they needed a better place to manage provider performance, offers, project health, transactions, and activity history.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">03 · Key Product Decisions</div>
+      <h2 class="section-heading">A few decisions carried most of the weight. <em>Each one made the system easier to understand and easier to use.</em></h2>
+
+      <div class="img-block">
+        <img src="images/trmeric-ia-v13.png" alt="Trmeric information architecture version 1.3" />
+        <div class="img-caption">A later IA iteration from the `Initial Versions` PDF. It shows the product getting clearer about the main stages: demand definition, discovery, screening, contracting, work and delivery, payments, and post-delivery.</div>
+      </div>
+
+      <div class="img-block">
+        <img src="images/trmeric-provider-space-home.png" alt="Trmeric provider space home screen" />
+        <div class="img-caption">Provider Space home view. The product started to look more useful once the work had a clearer operating surface for status, provider comparison, and action-taking.</div>
+      </div>
+
+      <div class="img-block">
+        <img src="images/trmeric-action-hub-customize.png" alt="Trmeric Action Hub customization screen" />
+        <div class="img-caption">Action Hub customization screen. This is one of the missing pieces the archive makes clear: the product was not only about choosing a provider. It was also trying to give teams a configurable working home for projects, updates, and next actions once work was underway.</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-header">
+          <div class="rec-label">Decision 1</div>
+          <div class="rec-title">Make Discover a guided conversation that produces a real brief</div>
+        </div>
+        <div class="rec-body">
+          <div class="rec-col">
+            <div class="rec-col-title">Problem</div>
+            <p>Users were being asked to choose providers before the work was well defined, which made both search and evaluation weaker.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">What I pushed toward</div>
+            <p>A structured discovery flow with contextual prompts, progress cues, upload support, and a generated project brief users could review, edit, and share.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">Why it mattered</div>
+            <p>That shifted the product from “search for vendors” toward “help me define the work well enough to choose the right provider.”</p>
+          </div>
+        </div>
+        <div class="rec-insight">Evidence: the Discover user stories explicitly define the conversational flow, progress bar, project brief generation, editing, and collaboration.</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-header">
+          <div class="rec-label">Decision 2</div>
+          <div class="rec-title">Give the work a clearer operating home after discovery</div>
+        </div>
+        <div class="rec-body">
+          <div class="rec-col">
+            <div class="rec-col-title">Problem</div>
+            <p>Matching users with providers was only part of the job. The product also needed a place to manage what happened after that decision.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">What I pushed toward</div>
+            <p>Provider Space and Action Hub concepts that made room for summaries, project status, provider health, actions, and follow-on decisions.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">Why it mattered</div>
+            <p>Without that layer, the platform would feel useful in the first conversation and thin everywhere after.</p>
+          </div>
+        </div>
+        <div class="rec-insight">Evidence: the 2024 retainer expands into provider pages, home page structure, and reusable UI work, which reinforces that this became a core product layer.</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-header">
+          <div class="rec-label">Decision 3</div>
+          <div class="rec-title">Treat transact as a workflow, not just a list of payments</div>
+        </div>
+        <div class="rec-body">
+          <div class="rec-col">
+            <div class="rec-col-title">Problem</div>
+            <p>Transactions had different states, project types, and approval paths that could get confusing quickly if they were collapsed into a flat table.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">What I pushed toward</div>
+            <p>A structure that showed workflow status, line-item detail, action buttons, dashboards, and different summary logic for time-and-materials versus fixed-price work.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">Why it mattered</div>
+            <p>The payment layer needed to support trust and oversight, not just record that an invoice existed.</p>
+          </div>
+        </div>
+        <div class="rec-insight">Evidence: the Transact story sheet lays out explicit state models, summary views, detail views, approvals, payments, notifications, and exports.</div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">04 · Delivery Pattern</div>
+      <h2 class="section-heading">The work moved in stages. <em>Start with the journeys, then make the interface earn its way into the story.</em></h2>
+
+      <div class="img-block">
+        <img src="images/trmeric-ia-overview.png" alt="Trmeric information architecture overview" />
+        <div class="img-caption">Another useful architecture artifact from the same PDF. It shows how the team was thinking about the system as more than a search tool: entities, contracting, feedback, a knowledge hub, and integrations were all part of the long-term shape.</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 1</span>
+          <div>
+            <div class="phase-title">Define the product path</div>
+            <div class="phase-objective">Break the platform into priority flows and figure out what each module had to do before making the screens more detailed</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What the work needed</div>
+            <ul class="phase-items">
+              <li>Clarify Discover, Engage, Build, Retro, Transact, and Action Hub as distinct parts of the product.</li>
+              <li>Use interviews, journey mapping, and user stories to define what mattered most in each area.</li>
+              <li>Move through the work in a concrete sprint sequence instead of treating the prototype like one undifferentiated design pass.</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">How it played out</div>
+            <ul class="phase-items">
+              <li>The team kept returning to stakeholder interviews, provider journeys, and backlog shaping as part of the design work.</li>
+              <li>There was explicit concern about trust, substance, and making the product feel tailored to the client's world.</li>
+              <li>The sprint plan itself gave the project structure: Discover and Engage first, Build and Retro next, then Transact and Action Hub, then one combined prototype.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 2</span>
+          <div>
+            <div class="phase-title">Turn product structure into screens people could navigate</div>
+            <div class="phase-objective">Translate the module logic into more resolved interface patterns for provider comparison, offers, action management, and transaction review</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What mattered most</div>
+            <ul class="phase-items">
+              <li>Make the system easier to scan with summaries, statuses, and action areas that felt useful at a glance.</li>
+              <li>Balance conversational discovery with more structured management views once work moved forward.</li>
+              <li>Keep the screens simple enough to use without flattening the real operational detail.</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">What the screens show</div>
+            <ul class="phase-items">
+              <li>Provider Space gives the product a stronger monitoring and comparison layer.</li>
+              <li>Offer Space makes the marketplace side more tangible and easier to act on.</li>
+              <li>Action Hub pushes the product closer to an actual working home instead of a one-time matching tool.</li>
+              <li>The later retainer scope shows the system continuing into provider pages, home-page refinement, and component reuse.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-block">
+        <img src="images/trmeric-offer-space.png" alt="Trmeric offer space screen" />
+        <div class="img-caption">Offer Space helped make the marketplace layer more concrete by showing curated offers, industry-relevant options, and a clearer path from interest to action.</div>
+      </div>
+
+      <div class="timeline-grid">
+        <div class="timeline-year"><div class="timeline-year-label">2023</div></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Initial scope framed around six priority flows</div>
+          <div class="timeline-desc">The first proposal broke the product into Discover, Engage, Build, Retro, Transact, and Action Hub, with one-week sprint cycles used to move toward a higher-fidelity prototype.</div>
+        </div>
+        <div class="timeline-year"><div class="timeline-year-label">Late 2023</div></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Discovery, trust, and workflow clarity become central</div>
+          <div class="timeline-desc">The working sessions focus on how customers define the work, how providers are evaluated, how much structure the product should provide, and how to make the experience feel more guided and credible.</div>
+        </div>
+        <div class="timeline-year"><div class="timeline-year-label">2024</div></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Scope extends into provider pages and reusable system work</div>
+          <div class="timeline-desc">The retainer expands the effort into Provider Pages, the second level of the Home Page, and a style guide and component library to support more consistent product growth.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">05 · Outcomes and Strategic Value</div>
+      <h2 class="section-heading">The strongest outcome was direction. <em>The product became much easier to picture as a real working system.</em></h2>
+      <p class="body-text">
+        I do not have a clean business KPI to claim here, and I do not want to fake one. What the project materials do support is a stronger product structure: a better defined discovery flow, a clearer provider-management layer, more explicit transact logic, and a more reusable interface foundation for what came next.
+      </p>
+
+      <div class="results-grid">
+        <div class="result-card dark">
+          <div class="result-num">Clearer</div>
+          <div class="result-label">buyer and provider journey</div>
+          <div class="result-desc">The work gave the product a more understandable path from first problem framing through provider review and project oversight.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Stronger</div>
+          <div class="result-label">product structure</div>
+          <div class="result-desc">The module logic around Discover, Provider Space, Offer Space, Action Hub, and Transact became more concrete and easier to design against.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Less</div>
+          <div class="result-label">guesswork in key flows</div>
+          <div class="result-desc">The user stories and screens moved the product toward guided framing, visible progress, clearer states, and more explicit collaboration around the brief.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Better</div>
+          <div class="result-label">foundation for later work</div>
+          <div class="result-desc">The later retainer scope around provider pages, home-page detail, and component reuse shows the work becoming a foundation rather than a one-off design pass.</div>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        <div class="quote-text">The best Trmeric story is not “we designed a marketplace.” It is “we made it easier for teams to frame the work, evaluate providers, and manage what happened next.”</div>
+        <div class="quote-attr">Project takeaway</div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">06 · Retrospect</div>
+      <h2 class="section-heading">What this project reinforced for me. <em>A product like this lives or dies by how well it reduces ambiguity.</em></h2>
+      <div class="reflection-grid">
+        <div class="reflection-col went-well">
+          <div class="reflection-col-title">What went well</div>
+          <div class="reflection-items">
+            <div class="reflection-item">
+              <strong>Started with the real uncertainty in the work</strong>
+              The strongest part of the project was that it took buyer confusion, provider mismatch, and weak project framing seriously instead of treating them as side issues.
+            </div>
+            <div class="reflection-item">
+              <strong>Tied screens back to workflow logic</strong>
+              The UI work is strongest where it clearly supports a more useful operating model around discovery, provider management, and transact.
+            </div>
+            <div class="reflection-item">
+              <strong>Left behind usable product artifacts</strong>
+              The combination of user stories, journey map, screen files, and later retainer scope makes it possible to understand both the strategy and the interface direction.
+            </div>
+          </div>
+        </div>
+        <div class="reflection-col differently">
+          <div class="reflection-col-title">What I'd do differently</div>
+          <div class="reflection-items">
+            <div class="reflection-item">
+              <strong>Preserve more explicit workflow visuals</strong>
+              The logic is well documented in sheets and recordings, but a tighter set of saved flow diagrams would make the story easier to tell quickly.
+            </div>
+            <div class="reflection-item">
+              <strong>Keep the home-screen story tighter earlier</strong>
+              The later recordings show that Action Hub and home-screen logic were still open questions. I would want that layer locked sooner.
+            </div>
+            <div class="reflection-item">
+              <strong>Make collaboration artifacts easier to scan later</strong>
+              There is a lot of valuable material in the archive, but some of the insight is spread across docs, sheets, and recordings instead of living in one clean decision trail.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="who-card" style="margin-top:2rem;">
+        <div class="who-col">
+          <div class="who-col-label">What I would say about this work now</div>
+          <p>This project is strongest as an example of product strategy inside an emerging B2B platform. The job was to turn a promising but broad concept into a clearer product path with better framing, stronger module logic, and more useful screens.</p>
+        </div>
+        <div class="who-col">
+          <div class="who-col-label">Available source material referenced</div>
+          <p>Project proposal, retainer agreement, user-story sheets, transact workflow formats, role-based journey map, preserved screens, landing-page concepts, and the full Trmeric recording synthesis.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="img-block fade-in">
+      <img src="images/trmeric-landing-option-b.png" alt="Trmeric landing page concept" />
+      <div class="img-caption">Landing page exploration. Useful as supporting evidence for how the product was being framed externally once the core flows became more concrete.</div>
+    </div>
+
+    <div class="case-nav fade-in">
+      <div>
+        <div class="case-nav-label">Previous project</div>
+        <a class="case-nav-title" href="novisto.html">← Novisto</a>
+      </div>
+      <div style="text-align:right;">
+        <div class="case-nav-label">Back to work</div>
+        <a class="case-nav-title" href="index.html">All case studies →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Chris Pennell</span>
+  <span>MBA Candidate · Rice University · 🏳️‍🌈</span>
+</footer>
+<script>
+  const obs = new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); }), { threshold: .08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

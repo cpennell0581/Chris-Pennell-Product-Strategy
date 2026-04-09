@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trmeric Journey Map, Chris Pennell</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #153746;
+    --bg-2: #0f2e3c;
+    --panel: rgba(8, 20, 27, 0.36);
+    --panel-strong: rgba(255, 255, 255, 0.08);
+    --text: #f3efe7;
+    --muted: rgba(243, 239, 231, 0.78);
+    --faint: rgba(243, 239, 231, 0.46);
+    --line: rgba(243, 239, 231, 0.88);
+    --gold: #ffd24c;
+    --gold-soft: #ffe79b;
+    --accent: #7fe0c2;
+    --danger: #ffdd8b;
+    --shadow: 0 24px 80px rgba(3, 8, 12, 0.32);
+    --serif: "DM Serif Display", Georgia, serif;
+    --sans: "DM Sans", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  button, input, textarea, select {
+    font: inherit;
+    color: inherit;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--sans);
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(255, 210, 76, 0.08), transparent 20rem),
+      radial-gradient(circle at 80% 20%, rgba(127, 224, 194, 0.09), transparent 18rem),
+      linear-gradient(180deg, #1d4252 0%, var(--bg) 34%, var(--bg-2) 100%);
+  }
+
+  .shell {
+    width: min(1500px, calc(100vw - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .back {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .back:hover { color: var(--text); }
+
+  .meta {
+    color: var(--faint);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(290px, 360px);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .hero-copy {
+    padding: 12px 0 0;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 210, 76, 0.12);
+    color: var(--gold-soft);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 6vw, 5.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  .intro {
+    max-width: 60ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.02rem;
+    line-height: 1.75;
+  }
+
+  .summary {
+    background: var(--panel);
+    border: 1px solid var(--panel-strong);
+    border-radius: 22px;
+    padding: 22px 22px 18px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+  }
+
+  .summary-label,
+  .notes-label {
+    color: var(--gold-soft);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.76rem;
+    margin-bottom: 12px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .summary-card {
+    border-radius: 16px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .summary-card strong {
+    display: block;
+    font-size: 1.45rem;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .summary-card span {
+    color: var(--muted);
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  .map-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 22px;
+    margin-top: 26px;
+    align-items: start;
+  }
+
+  .journey-board {
+    position: relative;
+    min-height: 980px;
+    border-radius: 28px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 18% 16%, rgba(255, 210, 76, 0.06), transparent 18rem),
+      radial-gradient(circle at 72% 24%, rgba(127, 224, 194, 0.07), transparent 20rem),
+      linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: var(--shadow);
+  }
+
+  .journey-grid {
+    position: relative;
+    min-height: 980px;
+    padding: 34px 34px 54px;
+  }
+
+  .journey-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .journey-svg path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.7;
+    stroke-dasharray: 10 11;
+    animation: flow 22s linear infinite;
+  }
+
+  .journey-svg path.active {
+    stroke: var(--gold);
+    opacity: 0.92;
+    stroke-dasharray: 8 9;
+    filter: drop-shadow(0 0 8px rgba(255, 210, 76, 0.22));
+  }
+
+  @keyframes flow {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -300; }
+  }
+
+  .node {
+    position: absolute;
+    width: 240px;
+    padding: 18px 18px 18px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(19, 49, 63, 0.92), rgba(16, 40, 52, 0.94));
+    box-shadow: 0 18px 34px rgba(5, 11, 16, 0.2);
+    cursor: pointer;
+    transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
+    appearance: none;
+    text-align: left;
+    outline: none;
+  }
+
+  .node:hover,
+  .node.active {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.16);
+    background: linear-gradient(180deg, rgba(22, 56, 72, 0.98), rgba(16, 43, 56, 0.98));
+    box-shadow: 0 24px 42px rgba(1, 4, 7, 0.28);
+  }
+
+  .node-number {
+    color: var(--gold);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .node-title {
+    color: var(--text);
+    font-size: 1.15rem;
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+  }
+
+  .node-subtitle {
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .node-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: var(--gold-soft);
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  .node.phase-need { box-shadow: inset 3px 0 0 #f7cc55, 0 18px 34px rgba(5, 11, 16, 0.2); }
+  .node.phase-match { box-shadow: inset 3px 0 0 #78dfc0, 0 18px 34px rgba(5, 11, 16, 0.2); }
+  .node.phase-work { box-shadow: inset 3px 0 0 #7fa8ff, 0 18px 34px rgba(5, 11, 16, 0.2); }
+  .node.phase-grow { box-shadow: inset 3px 0 0 #f3a4ff, 0 18px 34px rgba(5, 11, 16, 0.2); }
+
+  .node.phase-need:hover, .node.phase-need.active { box-shadow: inset 3px 0 0 #f7cc55, 0 24px 42px rgba(1, 4, 7, 0.28); }
+  .node.phase-match:hover, .node.phase-match.active { box-shadow: inset 3px 0 0 #78dfc0, 0 24px 42px rgba(1, 4, 7, 0.28); }
+  .node.phase-work:hover, .node.phase-work.active { box-shadow: inset 3px 0 0 #7fa8ff, 0 24px 42px rgba(1, 4, 7, 0.28); }
+  .node.phase-grow:hover, .node.phase-grow.active { box-shadow: inset 3px 0 0 #f3a4ff, 0 24px 42px rgba(1, 4, 7, 0.28); }
+
+  .panel {
+    position: sticky;
+    top: 20px;
+    display: grid;
+    gap: 18px;
+  }
+
+  .detail-card,
+  .notes-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-strong);
+    border-radius: 24px;
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow);
+  }
+
+  .detail-phase {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    color: var(--gold-soft);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .detail-title {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .detail-copy {
+    margin: 0 0 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 0.96rem;
+  }
+
+  .detail-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .detail-item {
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .detail-item strong {
+    display: block;
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-bottom: 6px;
+  }
+
+  .detail-item span {
+    color: var(--muted);
+    line-height: 1.55;
+    font-size: 0.92rem;
+  }
+
+  .note-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  .note {
+    padding: 14px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffe89a 0%, #f7d45d 100%);
+    color: #1d1a12;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16);
+    transform: rotate(-1.2deg);
+  }
+
+  .note:nth-child(2n) { transform: rotate(1.4deg); }
+  .note:nth-child(3n) { transform: rotate(-0.5deg); }
+
+  .note strong {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .note p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .legend-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+
+  .footer-note {
+    margin-top: 18px;
+    color: var(--faint);
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  .n1 { left: 48px; top: 152px; }
+  .n2 { left: 96px; top: 632px; }
+  .n3 { left: 468px; top: 486px; }
+  .n4 { left: 678px; top: 212px; }
+  .n5 { left: 820px; top: 710px; }
+  .n6 { left: 1122px; top: 472px; }
+  .n7 { left: 1268px; top: 208px; }
+  .n8 { right: 64px; top: 372px; }
+  .n9 { right: 58px; top: 730px; width: 290px; }
+
+  @media (max-width: 1280px) {
+    .hero,
+    .map-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .journey-board,
+    .journey-grid {
+      min-height: auto;
+    }
+
+    .journey-grid {
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .journey-svg {
+      display: none;
+    }
+
+    .node {
+      position: relative;
+      inset: auto;
+      width: auto;
+      transform: none;
+    }
+
+    .node:hover,
+    .node.active {
+      transform: none;
+    }
+
+    .panel {
+      position: static;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .shell {
+      width: min(100vw - 20px, 1500px);
+      padding-top: 16px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 12vw, 3.6rem);
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <a class="back" href="trmeric.html">← Back to Trmeric case study</a>
+      <div class="meta">Interactive portfolio asset · Trmeric</div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Dynamic Journey Map</div>
+        <h1>Customer Journey Map</h1>
+        <p class="intro">
+          A more dynamic HTML version of the original Trmeric journey map. The core structure stays the same, but the asset is easier to scan, easier to present, and easier to use inside the portfolio. Click any stage to see the user need, the friction in that moment, and why the product had to support it.
+        </p>
+      </div>
+
+      <aside class="summary">
+        <div class="summary-label">What this map shows</div>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <strong>9</strong>
+            <span>connected stages from first demand signal through repeat engagement</span>
+          </div>
+          <div class="summary-card">
+            <strong>4</strong>
+            <span>broader phases: define, match, deliver, and grow trust</span>
+          </div>
+          <div class="summary-card">
+            <strong>1</strong>
+            <span>product idea under the whole thing: reduce guesswork for both sides</span>
+          </div>
+          <div class="summary-card">
+            <strong>Live</strong>
+            <span>interactive detail panel for walkthroughs, reviews, and portfolio use</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="map-layout">
+      <div class="journey-board">
+        <div class="journey-grid">
+          <svg class="journey-svg" viewBox="0 0 1600 980" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M170 250 L170 760 L328 760" />
+            <path d="M520 760 L520 560" />
+            <path d="M650 560 L650 220 L840 220 L840 300" />
+            <path d="M840 480 L840 530 L1090 530 L1090 760" />
+            <path d="M1090 860 L1220 860 L1220 560" />
+            <path d="M1220 420 L1220 240 L1352 240" />
+            <path d="M1450 240 L1550 240 L1550 430" />
+            <path d="M1550 600 L1550 760" />
+            <path class="active" d="M1560 760 L1560 860" />
+          </svg>
+
+          <button class="node phase-need n1 active" data-step="1">
+            <div class="node-number">#1</div>
+            <div class="node-icon">⚑</div>
+            <h2 class="node-title">Identify demand</h2>
+            <p class="node-subtitle">A team realizes there is a business or technology problem worth solving.</p>
+          </button>
+
+          <button class="node phase-need n2" data-step="2">
+            <div class="node-number">#2</div>
+            <div class="node-icon">⌕</div>
+            <h2 class="node-title">Discover providers</h2>
+            <p class="node-subtitle">They start looking for outside help, but often without a crisp brief yet.</p>
+          </button>
+
+          <button class="node phase-match n3" data-step="3">
+            <div class="node-number">#3</div>
+            <div class="node-icon">☉</div>
+            <h2 class="node-title">Screen and select providers</h2>
+            <p class="node-subtitle">The shortlist starts to form, but quality and fit are still hard to compare.</p>
+          </button>
+
+          <button class="node phase-match n4" data-step="4">
+            <div class="node-number">#4</div>
+            <div class="node-icon">✍︎</div>
+            <h2 class="node-title">Contract and engage</h2>
+            <p class="node-subtitle">The relationship moves from interest to commitment and expectations get real.</p>
+          </button>
+
+          <button class="node phase-work n5" data-step="5">
+            <div class="node-number">#5</div>
+            <div class="node-icon">▦</div>
+            <h2 class="node-title">Get the work done</h2>
+            <p class="node-subtitle">The product has to help the team manage activity, progress, and decisions after kickoff.</p>
+          </button>
+
+          <button class="node phase-work n6" data-step="6">
+            <div class="node-number">#6</div>
+            <div class="node-icon">⇅</div>
+            <h2 class="node-title">Evaluate the performance</h2>
+            <p class="node-subtitle">Outcomes, delivery quality, and working fit become visible.</p>
+          </button>
+
+          <button class="node phase-work n7" data-step="7">
+            <div class="node-number">#7</div>
+            <div class="node-icon">⇄</div>
+            <h2 class="node-title">Pay providers</h2>
+            <p class="node-subtitle">Transactions, approvals, and payment states need to be clear and trusted.</p>
+          </button>
+
+          <button class="node phase-grow n8" data-step="8">
+            <div class="node-number">#8</div>
+            <div class="node-icon">⚖</div>
+            <h2 class="node-title">Evaluate provider trust</h2>
+            <p class="node-subtitle">The client decides whether the provider felt credible, useful, and worth working with again.</p>
+          </button>
+
+          <button class="node phase-grow n9" data-step="9">
+            <div class="node-number">#9</div>
+            <div class="node-icon">⋈</div>
+            <h2 class="node-title">Decide further engagements</h2>
+            <p class="node-subtitle">A strong experience creates repeat work, deeper relationships, or a more confident next hire.</p>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <section class="detail-card">
+          <div class="detail-phase" id="detail-phase">Define the need</div>
+          <h2 class="detail-title" id="detail-title">Identify demand</h2>
+          <p class="detail-copy" id="detail-copy"></p>
+          <div class="detail-list">
+            <div class="detail-item">
+              <strong>User need</strong>
+              <span id="detail-need"></span>
+            </div>
+            <div class="detail-item">
+              <strong>Main friction</strong>
+              <span id="detail-friction"></span>
+            </div>
+            <div class="detail-item">
+              <strong>Product implication</strong>
+              <span id="detail-implication"></span>
+            </div>
+          </div>
+          <div class="legend">
+            <span class="legend-chip"><span class="legend-dot" style="background:#f7cc55"></span>Define</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#78dfc0"></span>Match</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#7fa8ff"></span>Deliver</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#f3a4ff"></span>Grow trust</span>
+          </div>
+        </section>
+
+        <aside class="notes-card">
+          <div class="notes-label">Discussion Notes</div>
+          <div class="note-list">
+            <div class="note">
+              <strong>Open question</strong>
+              <p>Where does discovery really start for a customer who knows they need help but does not yet know how to frame the work?</p>
+            </div>
+            <div class="note">
+              <strong>Trust question</strong>
+              <p>If the early flow feels generic, both provider confidence and customer confidence drop fast.</p>
+            </div>
+            <div class="note">
+              <strong>Design implication</strong>
+              <p>The product has to keep being useful after matching. Otherwise it feels thin the moment real work begins.</p>
+            </div>
+          </div>
+          <p class="footer-note">
+            This version is intentionally more presentation-ready than the original board capture. It keeps the same journey logic, then adds motion, hierarchy, and click-through detail for portfolio use.
+          </p>
+        </aside>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const steps = {
+    1: {
+      phase: "Define the need",
+      title: "Identify demand",
+      copy: "The journey begins when a company recognizes there is work to be done, but the shape of that work is still loose. This is where uncertainty starts, and where the product has to create a more usable starting point.",
+      need: "A way to turn a vague business problem into something concrete enough to act on.",
+      friction: "Teams often know they need help before they know the right scope, budget, criteria, or provider profile.",
+      implication: "The product cannot begin with provider search alone. It has to help frame the work first."
+    },
+    2: {
+      phase: "Define the need",
+      title: "Discover providers",
+      copy: "Once the need is visible, people start exploring possible providers. The risk here is premature browsing before the project has been properly defined.",
+      need: "Relevant options and a guided way to understand who might fit.",
+      friction: "Users are often comparing providers before they have a strong brief or a clear evaluation standard.",
+      implication: "Discovery should feel more like guided framing with provider context, not an empty marketplace search."
+    },
+    3: {
+      phase: "Match the work",
+      title: "Screen and select providers",
+      copy: "This is where the product has to reduce guesswork on both sides. Selection quality depends on how well users can compare expertise, relevance, and project fit.",
+      need: "A shortlist that feels grounded in the actual work, not surface-level marketing.",
+      friction: "A weak brief makes provider comparison shallow and creates mismatch later in the journey.",
+      implication: "Selection views need structured criteria, summaries, and signals that help teams compare with confidence."
+    },
+    4: {
+      phase: "Match the work",
+      title: "Contract and engage",
+      copy: "The relationship becomes real here. Expectations, scope, timing, and confidence all need to tighten before work starts.",
+      need: "A clear path from provider choice into mutual understanding and commitment.",
+      friction: "Misaligned expectations at this stage become delivery problems later.",
+      implication: "The platform should support a shared brief, clearer scope communication, and visible next steps into kickoff."
+    },
+    5: {
+      phase: "Deliver the work",
+      title: "Get the work done",
+      copy: "This is where the product stops being a sourcing tool and becomes an operating layer. The team needs a usable home for progress, action, and project context.",
+      need: "A working surface for updates, tasks, provider coordination, and project visibility.",
+      friction: "Without a clear operating layer, the platform feels useful during selection and thin everywhere after.",
+      implication: "Provider Space and Action Hub become central product moves, not side features."
+    },
+    6: {
+      phase: "Deliver the work",
+      title: "Evaluate the performance",
+      copy: "After delivery begins, users need to make sense of how things are going. The product has to make status and quality visible enough for real decisions.",
+      need: "Evidence of progress, quality, and whether the engagement is working.",
+      friction: "Performance becomes hard to judge if the product does not surface meaningful status and context.",
+      implication: "Dashboards and summaries should support oversight, not just archive activity."
+    },
+    7: {
+      phase: "Deliver the work",
+      title: "Pay providers",
+      copy: "Transactions are not just accounting. They are part of how trust gets reinforced or lost through the product.",
+      need: "Clear payment states, approvals, and visibility into what is being paid for.",
+      friction: "A flat payment list collapses important differences between project types, approvals, and obligations.",
+      implication: "Transact should behave like a workflow with states, detail views, and action logic."
+    },
+    8: {
+      phase: "Grow trust",
+      title: "Evaluate provider trust",
+      copy: "By this point the client is not only judging output. They are judging whether this provider feels credible, dependable, and worth working with again.",
+      need: "A way to decide if the provider relationship is actually strong enough to continue.",
+      friction: "Trust is built across the whole journey, not only at the final handoff.",
+      implication: "The product experience has to support confidence from framing through delivery, payment, and review."
+    },
+    9: {
+      phase: "Grow trust",
+      title: "Decide further engagements",
+      copy: "A successful journey should create momentum for the next one. This is the repeat-work moment that shows whether the platform helped create a lasting relationship.",
+      need: "Confidence to re-engage the provider or expand the relationship.",
+      friction: "If the earlier experience felt hard to navigate, teams are less likely to continue in-platform.",
+      implication: "The end of the journey should open the next one, not drop users back into uncertainty."
+    }
+  };
+
+  const nodes = [...document.querySelectorAll(".node")];
+  const detailPhase = document.getElementById("detail-phase");
+  const detailTitle = document.getElementById("detail-title");
+  const detailCopy = document.getElementById("detail-copy");
+  const detailNeed = document.getElementById("detail-need");
+  const detailFriction = document.getElementById("detail-friction");
+  const detailImplication = document.getElementById("detail-implication");
+
+  function activate(step) {
+    const data = steps[step];
+    nodes.forEach((node) => node.classList.toggle("active", node.dataset.step === String(step)));
+    detailPhase.textContent = data.phase;
+    detailTitle.textContent = data.title;
+    detailCopy.textContent = data.copy;
+    detailNeed.textContent = data.need;
+    detailFriction.textContent = data.friction;
+    detailImplication.textContent = data.implication;
+  }
+
+  nodes.forEach((node) => {
+    node.addEventListener("click", () => activate(Number(node.dataset.step)));
+    node.addEventListener("mouseenter", () => activate(Number(node.dataset.step)));
+  });
+
+  activate(1);
+</script>
+</body>
+</html>

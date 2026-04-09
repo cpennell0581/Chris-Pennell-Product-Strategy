@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novisto, Chris Pennell</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF9F6; --ink: #1A1916; --ink-muted: #6B6A66; --ink-faint: #C2C1BC;
+    --accent: #2D5BE3; --accent-soft: #EBF0FC; --border: rgba(26,25,22,0.1);
+    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif; --max: 860px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .rainbow-line { height: 3px; background: linear-gradient(90deg,#FF0018,#FF9A00,#FFFF00,#00C800,#0000FF,#8B00FF); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem; background: rgba(250,249,246,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+  .case-hero { padding-top: 9rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .case-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .meta-tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; }
+  .meta-divider { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint); }
+  .meta-detail { font-size: 0.8rem; color: var(--ink-faint); }
+  .case-title { font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .case-title em { font-style: italic; color: var(--accent); }
+  .case-subtitle { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 660px; margin-bottom: 3rem; }
+  .role-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-bottom: 2rem; }
+  .role-cell { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .role-cell:last-child { border-right: none; }
+  .role-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.35rem; }
+  .role-val { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
+  .role-sub { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .hero-proof { padding: 1.5rem 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; margin-bottom: 2rem; }
+  .hero-proof-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.9rem; }
+  .hero-proof p { font-size: 0.95rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.8rem; }
+  .hero-proof p:last-child { margin-bottom: 0; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .stat-cell { padding: 1.5rem 1.75rem; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .stat-val { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; margin-bottom: 0.2rem; }
+  .stat-desc { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; }
+  .case-body { padding: 5rem 0; }
+  .section-block { margin-bottom: 5rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border); }
+  .section-block:last-child { border-bottom: none; margin-bottom: 0; }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .section-heading { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 1rem; color: var(--ink-muted); line-height: 1.9; margin-bottom: 1.25rem; }
+  .body-text:last-child { margin-bottom: 0; }
+  .img-block { margin: 2rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: white; }
+  .img-block img { width: 100%; display: block; }
+  .img-caption { font-size: 0.78rem; color: var(--ink-faint); padding: 0.75rem 1rem; background: white; border-top: 1px solid var(--border); line-height: 1.6; }
+  .who-card { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 2rem; }
+  .who-col { padding: 1.75rem 2rem; }
+  .who-col:first-child { border-right: 1px solid var(--border); }
+  .who-col-label { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .who-col p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 0.85rem; }
+  .who-col p:last-child { margin-bottom: 0; }
+  .who-col p strong { font-weight: 500; color: var(--ink); }
+  .finding-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .finding-item { padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: white; }
+  .finding-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+  .finding-desc { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.6; }
+  .quote-block { margin: 2rem 0; padding: 1.75rem 2rem; background: white; border-radius: 0 10px 10px 0; border: 1px solid var(--border); border-left: 3px solid var(--accent); }
+  .quote-text { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); line-height: 1.6; font-style: italic; margin-bottom: 0.75rem; }
+  .quote-attr { font-size: 0.78rem; color: var(--ink-faint); }
+  .phase-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .phase-header { display: flex; align-items: baseline; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); flex-wrap: wrap; }
+  .phase-badge { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; flex-shrink: 0; }
+  .phase-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .phase-objective { font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.15rem; }
+  .phase-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .phase-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .phase-col:last-child { border-right: none; }
+  .phase-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .phase-items li { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; padding-left: 1rem; position: relative; }
+  .phase-items li::before { content: '-'; position: absolute; left: 0; color: var(--accent); }
+  .rec-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; margin-top: 1.5rem; }
+  .rec-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--cream); }
+  .rec-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem; }
+  .rec-title { font-size: 1rem; font-weight: 500; color: var(--ink); }
+  .rec-body { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .rec-col { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); }
+  .rec-col:last-child { border-right: none; }
+  .rec-col-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.6rem; }
+  .rec-col p { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.6; }
+  .rec-insight { padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: var(--accent-soft); font-size: 0.83rem; color: var(--accent); font-style: italic; }
+  .timeline-grid { display: grid; grid-template-columns: 90px 1fr; gap: 0; margin-top: 2rem; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+  .timeline-year { padding: 1.5rem 1rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--cream); display: flex; align-items: flex-start; }
+  .timeline-year:last-of-type { border-bottom: none; }
+  .timeline-content { padding: 1.75rem 2rem; border-bottom: 1px solid var(--border); }
+  .timeline-content:last-child { border-bottom: none; }
+  .timeline-year-label { font-size: 0.78rem; font-weight: 500; color: var(--ink-muted); letter-spacing: 0.03em; line-height: 1.4; }
+  .timeline-title { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 0.6rem; }
+  .timeline-desc { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.7; }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .result-card { padding: 1.75rem; border: 1px solid var(--border); border-radius: 10px; background: white; }
+  .result-card.dark { background: var(--ink); border-color: var(--ink); }
+  .result-num { font-family: var(--serif); font-size: 2.8rem; color: var(--ink); line-height: 1; margin-bottom: 0.4rem; }
+  .result-card.dark .result-num { color: var(--cream); }
+  .result-label { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
+  .result-card.dark .result-label { color: rgba(250,249,246,0.9); }
+  .result-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; }
+  .result-card.dark .result-desc { color: rgba(250,249,246,0.5); }
+  .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 2rem; }
+  .reflection-col { padding: 2rem; }
+  .reflection-col.went-well { background: white; border-right: 1px solid var(--border); }
+  .reflection-col.differently { background: var(--cream); }
+  .reflection-col-title { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .went-well .reflection-col-title { color: var(--accent); }
+  .differently .reflection-col-title { color: var(--ink-faint); }
+  .reflection-items { display: flex; flex-direction: column; gap: 1rem; }
+  .reflection-item { padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; border: 1px solid var(--border); }
+  .went-well .reflection-item { background: white; }
+  .differently .reflection-item { background: var(--cream); }
+  .reflection-item strong { font-weight: 500; color: var(--ink); display: block; margin-bottom: 0.25rem; }
+  .case-nav { padding: 4rem 0 6rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .case-nav-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .case-nav-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; transition: color 0.2s; display: block; }
+  .case-nav-title:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; font-size: 0.8rem; color: var(--ink-faint); }
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+  @media (max-width: 680px) {
+    nav { padding: 1rem 1.25rem; }
+    .container { padding: 0 1.25rem; }
+    .case-hero { padding-top: 7rem; }
+    .stat-row, .role-strip, .who-card, .results-grid, .reflection-grid { grid-template-columns: 1fr; }
+    .stat-cell, .role-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child, .role-cell:last-child { border-bottom: none; }
+    .who-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-body, .rec-body { grid-template-columns: 1fr; }
+    .phase-col, .rec-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-col:last-child, .rec-col:last-child { border-bottom: none; }
+    .timeline-grid { grid-template-columns: 1fr; }
+    .timeline-year { border-right: none; }
+    .case-nav { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="rainbow-line"></div>
+<nav>
+  <a class="nav-back" href="index.html">← Back to work</a>
+  <a class="nav-logo" href="index.html">Chris Pennell</a>
+</nav>
+
+<div class="case-hero">
+  <div class="container">
+    <div class="case-meta fade-in">
+      <span class="meta-tag">Product Strategy</span>
+      <span class="meta-tag">Enterprise UX</span>
+      <span class="meta-tag">ESG Data</span>
+      <span class="meta-tag">Workflow Design</span>
+      <span class="meta-divider"></span>
+      <span class="meta-detail">Novisto · 2022 to 2023</span>
+    </div>
+    <h1 class="case-title fade-in" style="transition-delay:.08s">
+      Bringing structure to a dense ESG platform <em>without pretending the work was simple</em>
+    </h1>
+    <p class="case-subtitle fade-in" style="transition-delay:.14s">
+      Novisto needed the product to be easier to navigate, easier to extend, and easier for ESG teams to trust as they collected data, managed requests, benchmarked performance, and prepared reports. I was brought in to help clarify the workflow, reduce noise, and make the system easier to work through.
+    </p>
+    <div class="role-strip fade-in" style="transition-delay:.18s">
+      <div class="role-cell">
+        <div class="role-label">My Role</div>
+        <div class="role-val">UX Strategist</div>
+        <div class="role-sub">Product definition · IA · workflow design · research</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Engagement</div>
+        <div class="role-val">Multi-phase consulting engagement</div>
+        <div class="role-sub">Initial 2022 mandate, extended into 2023 at 3 days per week</div>
+      </div>
+      <div class="role-cell">
+        <div class="role-label">Primary Scope</div>
+        <div class="role-val">Requests, benchmarking, reporting logic</div>
+        <div class="role-sub">Plus broader IA and UX system definition</div>
+      </div>
+    </div>
+    <div class="hero-proof fade-in" style="transition-delay:.20s">
+      <div class="hero-proof-label">Project goals</div>
+      <p>The work was aimed at three things: help users find information and complete tasks faster, make the product easier to extend as new functionality was added, and give people a clearer sense of where they were in the process at any point in time.</p>
+      <p>That meant working on the underlying workflow, information architecture, request logic, and reporting structure rather than treating this like a visual cleanup.</p>
+    </div>
+    <div class="stat-row fade-in" style="transition-delay:.22s">
+      <div class="stat-cell">
+        <div class="stat-label">Business objective</div>
+        <div class="stat-val">Lower</div>
+        <div class="stat-desc">Help teams find information faster, move through data collection with less friction, and reduce the service overhead caused by unclear workflow</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Product objective</div>
+        <div class="stat-val">Clearer</div>
+        <div class="stat-desc">Make the workflow, branching logic, and request structure clear enough that users could tell what state they were in and what came next</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">User objective</div>
+        <div class="stat-val">Less</div>
+        <div class="stat-desc">Reduce noise by showing people the fields, frameworks, and source details that were actually relevant to their reporting context</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="case-body">
+  <div class="container">
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">00 · Context and Background</div>
+      <h2 class="section-heading">The product already had ambition. <em>The experience still made the work harder than it needed to be.</em></h2>
+      <p class="body-text">
+        Novisto was positioned as an all-in-one sustainability management platform. On paper, that meant companies could collect ESG data, improve data quality, benchmark performance, and communicate with internal and external stakeholders in one place. In practice, that also meant a lot of product surface area: metrics, fields, sources, requests, questionnaires, frameworks, standard codes, taxonomies, reports, and exports.
+      </p>
+      <p class="body-text">
+        The 2022 SOW framed the core problem clearly: users did not have enough visibility into where they were in the workflow. The rest of the project materials point in the same direction. People needed the product to make progress, structure, and next steps easier to understand.
+      </p>
+      <div class="who-card">
+        <div class="who-col">
+          <div class="who-col-label">What Novisto needed</div>
+          <p><strong>Clearer workflow visibility.</strong> Users needed to tell what had started, what was in progress, and what was complete without reconstructing the system in their heads.</p>
+          <p><strong>Less noise.</strong> The platform was surfacing metrics and fields that were not always relevant to a given client, framework, or industry.</p>
+        </div>
+        <div class="who-col">
+          <div class="who-col-label">Why the problem was tricky</div>
+          <p><strong>The complexity was real.</strong> This was not a simple “make it cleaner” problem. The product was carrying real business rules, reporting logic, and framework-specific requirements.</p>
+          <p><strong>The interface and the model were tied together.</strong> You could not fix the experience without also making decisions about taxonomy, source handling, benchmark setup, and output logic.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">01 · My Role and Scope</div>
+      <h2 class="section-heading">I was not brought in for a visual refresh. <em>I was there to help define how the product should work.</em></h2>
+      <p class="body-text">
+        The SOW laid out a user-centered design program that started with key alignment points and moved through UX framework work, wireframes, and usability evaluation. In practice, the work sat at the seam between product strategy and UX: clarifying jobs to be done, mapping flows, deciding what belonged where, and making sure the interface matched the real structure of the work.
+      </p>
+      <div class="img-block">
+        <img src="images/novisto-design-sprint.png" alt="Novisto design sprint framework" />
+        <div class="img-caption">From the March 2023 UX process proposal. This was the shape of the work: define the feature goal, turn it into a testable sprint, and use that to decide what moved forward.</div>
+      </div>
+      <div class="finding-list">
+        <div class="finding-item">
+          <div class="finding-title">Defined the structure before polishing screens</div>
+          <div class="finding-desc">The early working sessions focused on use cases, design requirements, navigation, screen zoning, request flows, and how the system should branch based on user intent.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Worked through the product logic with the team in detail</div>
+          <div class="finding-desc">A big part of the job was sorting out status models, source handling, benchmark setup, framework selection, taxonomy, and reporting output so the product could support the work more clearly.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Used research to sharpen decisions</div>
+          <div class="finding-desc">The 2022 SOW planned 2 to 3 rounds of moderated research. The supporting materials include interview guides, requirements docs, and working-session references used to refine the direction over time.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">02 · Research and Discovery</div>
+      <h2 class="section-heading">The product goals pointed in one direction. <em>Make the system easier to follow, easier to trust, and easier to work in.</em></h2>
+      <p class="body-text">
+        The work touched metrics, fields, sources, filtering, requests, questionnaires, framework structure, and status. Underneath all of that was the same product goal: make a complicated system easier to use without flattening the real reporting logic behind it.
+      </p>
+
+      <div class="quote-block">
+        <div class="quote-text">“So I want to know the status at a high level.”</div>
+        <div class="quote-attr">Working session, March 29, 2023</div>
+      </div>
+
+      <div class="finding-list">
+        <div class="finding-item">
+          <div class="finding-title">Priority 1: make progress visible</div>
+          <div class="finding-desc">The product needed a clearer way to show not started, in progress, completed, approved, and accepted across the metric library and request flow, so users could tell where work stood without second-guessing the system.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Priority 2: narrow the view without breaking orientation</div>
+          <div class="finding-desc">Search and filters had to help people focus the work without making counts, progress, or page state harder to understand once the view changed.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Priority 3: make source and calculation logic easier to trust</div>
+          <div class="finding-desc">Users needed to see where values came from, how calculated fields were assembled, and what the source of truth was without digging through the system.</div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-title">Priority 4: show less by default</div>
+          <div class="finding-desc">Clients were seeing fields and metrics that did not apply to their framework, industry, or reporting context. The product needed to do more of that scoping work for them.</div>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        <div class="quote-text">“It’s more helpful to have a label that people understand than an icon.”</div>
+        <div class="quote-attr">Design review, February 8, 2023</div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">03 · Key Product Decisions</div>
+      <h2 class="section-heading">The work kept coming back to a few product decisions. <em>Each one reduced ambiguity somewhere important.</em></h2>
+      <div class="img-block">
+        <img src="images/novisto-success-criteria.png" alt="Novisto success criteria framework" />
+        <div class="img-caption">Also from the proposal deck. The team needed clearer definitions of what would improve the product and how success would be judged, not just a stack of new ideas.</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-header">
+          <div class="rec-label">Decision 1</div>
+          <div class="rec-title">Make workflow state legible across modules</div>
+        </div>
+        <div class="rec-body">
+          <div class="rec-col">
+            <div class="rec-col-title">Problem</div>
+            <p>Users had to interpret too many status states across different parts of the system. The same item could look complete in one place and mean something slightly different in another.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">What I pushed toward</div>
+            <p>A simpler, more consistent status model that made the relationship between metric states and request states easier to understand at a glance.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">Why it mattered</div>
+            <p>Status was not a cosmetic issue. It shaped whether users trusted the workflow and knew what to do next.</p>
+          </div>
+        </div>
+        <div class="rec-insight">Evidence: repeated discussions in February and May around not started, in progress, completed, approved, accepted, and whether color logic stayed consistent across the platform.</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-header">
+          <div class="rec-label">Decision 2</div>
+          <div class="rec-title">Keep context visible when users search or filter</div>
+        </div>
+        <div class="rec-body">
+          <div class="rec-col">
+            <div class="rec-col-title">Problem</div>
+            <p>Filtering could help users narrow the work, but it also risked stripping away the progress and list context they needed to stay oriented.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">What I pushed toward</div>
+            <p>Search and filter behavior that was clear about scope, instead of quietly changing what completion bars or counts appeared to represent.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">Why it mattered</div>
+            <p>Power tools are not helpful if users lose confidence in what they are looking at once the view changes.</p>
+          </div>
+        </div>
+        <div class="rec-insight">Evidence: long January discussions about whether filtered views should alter status context, and how to keep search and filtering from confusing the rest of the screen.</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-header">
+          <div class="rec-label">Decision 3</div>
+          <div class="rec-title">Reduce platform noise by scoping fields to client context</div>
+        </div>
+        <div class="rec-body">
+          <div class="rec-col">
+            <div class="rec-col-title">Problem</div>
+            <p>Clients were exposed to metrics and fields that did not apply to their framework, industry, or reporting situation.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">What I pushed toward</div>
+            <p>Framework and taxonomy logic that let the platform narrow what showed up by default, so users saw the relevant slice of the system instead of the whole machinery.</p>
+          </div>
+          <div class="rec-col">
+            <div class="rec-col-title">Why it mattered</div>
+            <p>Relevance is part of usability. If the platform exposes everything to everyone, users have to do the filtering work themselves.</p>
+          </div>
+        </div>
+        <div class="rec-insight">Evidence: July sessions explicitly call out “metrics and fields which aren’t really relevant for them” and “noise in the platform.”</div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">04 · Delivery Pattern</div>
+      <h2 class="section-heading">The engagement had structure from the start. <em>The work moved from product definition into clearer workflow and interaction design.</em></h2>
+      <div class="img-block">
+        <img src="images/novisto-design-debt.png" alt="Design debt and risk graphic from Novisto proposal" />
+        <div class="img-caption">The proposal made the case for a steady research and design cadence: validate early, keep risk manageable, and avoid piling more product debt onto an already dense system.</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 1</span>
+          <div>
+            <div class="phase-title">Key alignment and requirements</div>
+            <div class="phase-objective">Clarify use cases, design requirements, and the information architecture affecting navigation and workflow</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What the work needed</div>
+            <ul class="phase-items">
+              <li>Stakeholder sessions to gather design requirements and jobs to be done.</li>
+              <li>Use-case and feature-set clarification before getting too deep into screens.</li>
+              <li>Information architecture review to support real workflow patterns.</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">How that played out</div>
+            <ul class="phase-items">
+              <li>Detailed working sessions on how metrics, groups, fields, and source logic should behave.</li>
+              <li>A lot of early time spent getting the underlying model right before polishing presentation.</li>
+              <li>Frequent back-and-forth on edge cases, not just happy-path flows.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-badge">Phase 2</span>
+          <div>
+            <div class="phase-title">UX framework and interaction structure</div>
+            <div class="phase-objective">Translate requirements into layout, zoning, navigation, and interaction patterns that support the work</div>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-col">
+            <div class="phase-col-title">What mattered most</div>
+            <ul class="phase-items">
+              <li>Distinguishing primary workflow activity from secondary CRUD tasks.</li>
+              <li>Keeping status, alerts, and progress information in the right visual layer.</li>
+              <li>Making sure benchmark and request flows branched in sensible ways.</li>
+            </ul>
+          </div>
+          <div class="phase-col">
+            <div class="phase-col-title">How that showed up later</div>
+            <ul class="phase-items">
+              <li>Repeated discussions about request-module states versus metric-library states.</li>
+              <li>Conversations about labels, filters, and source presentation all tied back to the same structural problem.</li>
+              <li>The product team kept using the working sessions to tighten the flow instead of just accepting the first draft.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-grid">
+        <div class="timeline-year"><div class="timeline-year-label">2022</div></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Initial UX and UI enhancement mandate</div>
+          <div class="timeline-desc">The first SOW framed the work around workflow transparency, extensible IA, request-module support, and an experiment-driven design process with planned research rounds.</div>
+        </div>
+        <div class="timeline-year"><div class="timeline-year-label">Early 2023</div></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Deep working sessions on status, filters, and source handling</div>
+          <div class="timeline-desc">The product work focused on how metrics, requests, sources, and benchmark paths should behave under real conditions, especially where the system needed to be clearer about state and context.</div>
+        </div>
+        <div class="timeline-year"><div class="timeline-year-label">Mid 2023</div></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Framework and taxonomy structure becomes central</div>
+          <div class="timeline-desc">Later sessions focus more directly on frameworks, industry taxonomy, standard codes, and limiting the platform to what was relevant for each client.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">05 · Outcomes and Strategic Value</div>
+      <h2 class="section-heading">The strongest outcome was structural. <em>The work gave the product a clearer logic to build on.</em></h2>
+      <p class="body-text">
+        I cannot honestly claim a neat business number here because the project materials do not support that. What they do support is that the work clarified how the product should behave across requests, source handling, benchmark setup, status management, taxonomy, and reporting. That matters in a product like this because it gives the team a clearer foundation to build on instead of re-deciding the same logic every sprint.
+      </p>
+
+      <div class="results-grid">
+        <div class="result-card dark">
+          <div class="result-num">Clearer</div>
+          <div class="result-label">workflow and status model</div>
+          <div class="result-desc">The materials consistently support a more legible product structure for requests, completion states, and next-step visibility.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Clearer</div>
+          <div class="result-label">Product direction</div>
+          <div class="result-desc">The materials line up around a stronger decision framework for request flows, status logic, taxonomy, and output design.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Less</div>
+          <div class="result-label">guesswork in the UI</div>
+          <div class="result-desc">The direction kept moving toward plain labels, visible state, and explicit source handling instead of clever shortcuts.</div>
+        </div>
+        <div class="result-card">
+          <div class="result-num">Better</div>
+          <div class="result-label">fit between model and interface</div>
+          <div class="result-desc">The product direction was shaped around real data rules and reporting needs instead of layering UI on top of unresolved structure.</div>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        <div class="quote-text">The strongest Novisto story is not “we redesigned an ESG platform.” It is “we made a complex product more coherent by aligning workflow, information architecture, and business logic.”</div>
+        <div class="quote-attr">Project takeaway</div>
+      </div>
+    </div>
+
+    <div class="section-block fade-in">
+      <div class="section-eyebrow">06 · Retrospect</div>
+      <h2 class="section-heading">What this project reinforced for me. <em>You cannot separate product logic from user experience in a system like this.</em></h2>
+      <div class="reflection-grid">
+        <div class="reflection-col went-well">
+          <div class="reflection-col-title">What went well</div>
+          <div class="reflection-items">
+            <div class="reflection-item">
+              <strong>Started with structure instead of surface</strong>
+              The strongest thing about the engagement was that it did not begin with screen polish. It began with requirements, jobs to be done, request flows, and information architecture.
+            </div>
+            <div class="reflection-item">
+              <strong>Treated ambiguity as a product problem</strong>
+              The team did not brush off status confusion, source confusion, or framework overload as “just copy issues.” Those were treated as design signals pointing back to the model.
+            </div>
+            <div class="reflection-item">
+              <strong>Worked from a broad project record</strong>
+              Between the SOWs, proposal deck, requirements docs, metric library exports, budgets, and working-session references, there was enough material to reconstruct the real shape of the work.
+            </div>
+          </div>
+        </div>
+        <div class="reflection-col differently">
+          <div class="reflection-col-title">What I'd do differently</div>
+          <div class="reflection-items">
+            <div class="reflection-item">
+              <strong>Keep the artifact trail tighter as the work evolves</strong>
+              The drive had a lot of useful material, but it also had drift. Some files were clearly from other projects, and it took extra work to separate signal from noise.
+            </div>
+            <div class="reflection-item">
+              <strong>Make the decision trail easier to find later</strong>
+              A future team should be able to understand the reasoning from the core artifacts without digging through hours of working sessions.
+            </div>
+            <div class="reflection-item">
+              <strong>Pair strategy artifacts with cleaner visual evidence</strong>
+              The logic is well supported. The next thing I would want for a stronger case study is a tighter set of preserved wireframes or flow diagrams that show the decisions in a faster way.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="who-card" style="margin-top:2rem;">
+        <div class="who-col">
+          <div class="who-col-label">What I would say about this work now</div>
+          <p>This project is strongest as an example of product strategy inside a complex B2B system. The hard part was not making it prettier. The hard part was deciding what needed to be visible, what needed to be hidden, and how much logic the product should ask users to carry themselves.</p>
+        </div>
+        <div class="who-col">
+          <div class="who-col-label">Available source material referenced</div>
+          <p>2022 SOW, 2023 renewal SOW, UX process proposal, user goals and design requirements, research budget, metric library exports, and working-session materials used to support the product story.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-nav fade-in">
+      <div>
+        <div class="case-nav-label">Previous project</div>
+        <a class="case-nav-title" href="coadvantage.html">← CoAdvantage</a>
+      </div>
+      <div style="text-align:right;">
+        <div class="case-nav-label">Back to work</div>
+        <a class="case-nav-title" href="index.html">All case studies →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Chris Pennell</span>
+  <span>MBA Candidate · Rice University · 🏳️‍🌈</span>
+</footer>
+<script>
+  const obs = new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); }), { threshold: .08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

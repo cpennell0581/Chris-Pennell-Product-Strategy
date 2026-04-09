@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trmeric Journey Map Embed</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --panel: #eef2f8;
+    --card: #ffffff;
+    --line: #cbd4e1;
+    --text: #1f2430;
+    --muted: #6b7484;
+    --blue: #4d7cff;
+    --green: #21b57d;
+    --purple: #a45de8;
+    --amber: #f4b63f;
+    --shadow: 0 18px 38px rgba(26, 39, 61, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  .wrap {
+    position: relative;
+    min-height: 860px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.92)),
+      var(--bg);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .topbar {
+    display: grid;
+    grid-template-columns: 180px repeat(4, 1fr);
+    background: rgba(236, 240, 246, 0.98);
+    border-bottom: 1px solid #e2e8f1;
+  }
+
+  .topcell {
+    padding: 18px 16px;
+    border-right: 1px solid #e3e8f0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #313846;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .topcell:last-child { border-right: 0; }
+  .brand {
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 20px;
+    font-size: 0.82rem;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #8eaefc, #ffffff);
+    box-shadow: inset -8px -8px 12px rgba(77, 124, 255, 0.18);
+    flex: 0 0 auto;
+  }
+
+  .left-rail {
+    position: absolute;
+    left: 0;
+    top: 73px;
+    bottom: 0;
+    width: 180px;
+    background: rgba(243, 246, 250, 0.92);
+    border-right: 1px solid #e5eaf2;
+  }
+
+  .rail-row {
+    height: 156px;
+    border-bottom: 1px dashed #e4e9f1;
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rail-row:last-child { border-bottom: 0; }
+
+  .rail-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #e1e6ef;
+    display: grid;
+    place-items: center;
+    color: #6b7484;
+    flex: 0 0 auto;
+  }
+
+  .rail-copy strong {
+    display: block;
+    font-size: 0.92rem;
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+
+  .rail-copy span {
+    display: block;
+    color: var(--blue);
+    font-size: 0.72rem;
+  }
+
+  .canvas {
+    position: absolute;
+    inset: 73px 0 0 180px;
+    background:
+      linear-gradient(to right, transparent calc(25% - 0.5px), #ebf0f6 calc(25% - 0.5px), #ebf0f6 25%, transparent 25%),
+      linear-gradient(to right, transparent calc(50% - 0.5px), #ebf0f6 calc(50% - 0.5px), #ebf0f6 50%, transparent 50%),
+      linear-gradient(to right, transparent calc(75% - 0.5px), #ebf0f6 calc(75% - 0.5px), #ebf0f6 75%, transparent 75%),
+      linear-gradient(to bottom, transparent 155px, #eef2f7 155px, #eef2f7 156px, transparent 156px),
+      linear-gradient(to bottom, transparent 311px, #eef2f7 311px, #eef2f7 312px, transparent 312px),
+      linear-gradient(to bottom, transparent 467px, #eef2f7 467px, #eef2f7 468px, transparent 468px),
+      linear-gradient(to bottom, transparent 623px, #eef2f7 623px, #eef2f7 624px, transparent 624px);
+  }
+
+  .flow {
+    position: absolute;
+    inset: 73px 0 0 180px;
+    width: calc(100% - 180px);
+    height: calc(100% - 73px);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .flow path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 4 6;
+    marker-end: url(#arrowhead);
+  }
+
+  .flow path.solid {
+    stroke-dasharray: none;
+  }
+
+  .map-node {
+    position: absolute;
+    width: 142px;
+    min-height: 108px;
+    padding: 14px 12px 12px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.96);
+    border: 1px solid #e8edf5;
+    box-shadow: var(--shadow);
+    z-index: 2;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  }
+
+  .map-node:hover,
+  .map-node.active {
+    transform: translateY(-2px);
+    border-color: #d5e0f2;
+    box-shadow: 0 20px 42px rgba(26, 39, 61, 0.12);
+  }
+
+  .map-node.start,
+  .map-node.end {
+    width: 122px;
+    min-height: 122px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(45deg);
+  }
+
+  .map-node.start .node-inner,
+  .map-node.end .node-inner {
+    width: 86px;
+    text-align: center;
+    transform: rotate(-45deg);
+  }
+
+  .map-node.end {
+    background: linear-gradient(180deg, #f1fdf6, #ffffff);
+  }
+
+  .map-node.start {
+    background: linear-gradient(180deg, #f1f5ff, #ffffff);
+  }
+
+  .node-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: var(--blue);
+    background: #f4f7fc;
+    margin-bottom: 10px;
+    font-size: 0.94rem;
+  }
+
+  .start .node-icon,
+  .end .node-icon {
+    margin: 0 auto 8px;
+  }
+
+  .node-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 3px;
+  }
+
+  .node-sub {
+    font-size: 0.7rem;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+
+  .chip {
+    position: absolute;
+    z-index: 2;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--purple);
+    color: #fff;
+    font-size: 0.64rem;
+    font-weight: 700;
+    box-shadow: 0 8px 18px rgba(164, 93, 232, 0.16);
+  }
+
+  .dot {
+    position: absolute;
+    z-index: 2;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--line);
+  }
+
+  .detail {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 290px;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.94);
+    border: 1px solid #e9edf4;
+    box-shadow: 0 20px 42px rgba(26, 39, 61, 0.12);
+    z-index: 3;
+    backdrop-filter: blur(10px);
+  }
+
+  .detail-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .detail-title {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .detail-copy {
+    font-size: 0.78rem;
+    line-height: 1.48;
+    color: var(--muted);
+  }
+
+  .p1 { left: 230px; top: 126px; }
+  .p2 { left: 512px; top: 126px; }
+  .p3 { left: 472px; top: 320px; }
+  .p4 { left: 694px; top: 180px; }
+  .p5 { left: 698px; top: 364px; }
+  .p6 { left: 920px; top: 226px; }
+  .p7 { left: 924px; top: 416px; }
+  .p8 { left: 1128px; top: 304px; }
+  .p9 { left: 1128px; top: 534px; }
+
+  .t1 { left: 288px; top: 248px; }
+  .t2 { left: 562px; top: 248px; }
+  .t3 { left: 562px; top: 506px; }
+  .t4 { left: 788px; top: 314px; }
+  .t5 { left: 1018px; top: 314px; }
+  .t6 { left: 1018px; top: 600px; }
+
+  .c1 { left: 274px; top: 284px; }
+  .c2 { left: 556px; top: 284px; }
+  .c3 { left: 780px; top: 350px; }
+  .c4 { left: 1008px; top: 350px; }
+
+  .tag1 { left: 500px; top: 460px; }
+  .tag2 { left: 942px; top: 578px; background: var(--green); }
+
+  @media (max-width: 1320px) {
+    .wrap {
+      min-height: auto;
+      padding: 18px;
+    }
+
+    .topbar,
+    .left-rail,
+    .canvas,
+    .flow,
+    .detail {
+      display: none;
+    }
+
+    .mobile {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .mobile .map-node,
+    .mobile .chip {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+    }
+
+    .mobile .map-node.start,
+    .mobile .map-node.end {
+      transform: none;
+      width: auto;
+      min-height: 108px;
+      padding: 14px 12px 12px;
+      display: block;
+    }
+
+    .mobile .map-node.start .node-inner,
+    .mobile .map-node.end .node-inner {
+      transform: none;
+      width: auto;
+      text-align: left;
+    }
+  }
+
+  @media (min-width: 1321px) {
+    .mobile { display: none; }
+  }
+
+  @media (max-width: 720px) {
+    .mobile { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="topcell brand"><span class="brand-mark"></span>Journey Map</div>
+      <div class="topcell">Define the Work</div>
+      <div class="topcell">Find and Compare</div>
+      <div class="topcell">Contract and Deliver</div>
+      <div class="topcell">Evaluate and Continue</div>
+    </div>
+
+    <div class="left-rail">
+      <div class="rail-row"><div class="rail-icon">↓</div><div class="rail-copy"><strong>Flow Start</strong><span>Demand appears</span></div></div>
+      <div class="rail-row"><div class="rail-icon">↓</div><div class="rail-copy"><strong>Discovery</strong><span>Find providers</span></div></div>
+      <div class="rail-row"><div class="rail-icon">↓</div><div class="rail-copy"><strong>Selection</strong><span>Screen and choose</span></div></div>
+      <div class="rail-row"><div class="rail-icon">↓</div><div class="rail-copy"><strong>Execution</strong><span>Run and review</span></div></div>
+      <div class="rail-row"><div class="rail-icon">✓</div><div class="rail-copy"><strong>Flow End</strong><span>Continue or stop</span></div></div>
+    </div>
+
+    <div class="canvas"></div>
+
+    <svg class="flow" viewBox="0 0 1100 787" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L10,5 L0,10 z" fill="#cbd4e1"></path>
+        </marker>
+      </defs>
+      <path class="solid" d="M111 111 L111 160" />
+      <path class="solid" d="M393 111 L393 160" />
+      <path d="M111 271 L111 374 L284 374 L284 320" />
+      <path d="M393 271 L393 374" />
+      <path d="M423 374 L540 374 L540 214" />
+      <path d="M540 320 L540 418" />
+      <path d="M570 418 L764 418 L764 260" />
+      <path d="M764 368 L764 470" />
+      <path d="M794 470 L968 470 L968 338" />
+      <path d="M968 446 L968 540" />
+    </svg>
+
+    <div class="dot c1"></div>
+    <div class="dot c2"></div>
+    <div class="dot c3"></div>
+    <div class="dot c4"></div>
+
+    <button class="map-node start p1 active" data-title="Identify demand" data-copy="A company realizes there is technology work it needs help with, but the project is still loosely defined.">
+      <div class="node-inner">
+        <div class="node-icon">◎</div>
+        <div class="node-title">Identify demand</div>
+        <div class="node-sub">Early signal</div>
+      </div>
+    </button>
+
+    <button class="map-node start p2" data-title="Discover providers" data-copy="The team starts looking for providers, often before the work is fully framed or the brief is strong enough.">
+      <div class="node-inner">
+        <div class="node-icon">◎</div>
+        <div class="node-title">Discover providers</div>
+        <div class="node-sub">Search begins</div>
+      </div>
+    </button>
+
+    <button class="map-node p3" data-title="Screen and select providers" data-copy="The shortlist starts to form, but quality, fit, and project relevance are still hard to compare without more structure.">
+      <div class="node-icon">⌕</div>
+      <div class="node-title">Screen and select providers</div>
+      <div class="node-sub">Compare the shortlist</div>
+    </button>
+
+    <button class="map-node p4" data-title="Contract and engage" data-copy="The relationship moves from interest to commitment. Scope, expectations, and handoff become real here.">
+      <div class="node-icon">✎</div>
+      <div class="node-title">Contract and engage</div>
+      <div class="node-sub">Scope and commitment</div>
+    </button>
+
+    <button class="map-node p5" data-title="Get the work done" data-copy="The product has to support what happens after selection: coordination, progress, project context, and next actions.">
+      <div class="node-icon">☰</div>
+      <div class="node-title">Get the work done</div>
+      <div class="node-sub">Execution layer</div>
+    </button>
+
+    <button class="map-node p6" data-title="Evaluate the performance" data-copy="Teams need a way to understand whether the provider is actually delivering, and whether the engagement is working.">
+      <div class="node-icon">↕</div>
+      <div class="node-title">Evaluate the performance</div>
+      <div class="node-sub">Status and quality</div>
+    </button>
+
+    <button class="map-node p7" data-title="Pay providers" data-copy="Payment and approval states need to feel visible and trustworthy, not buried in a flat record.">
+      <div class="node-icon">🛡</div>
+      <div class="node-title">Pay providers</div>
+      <div class="node-sub">Approvals and payment</div>
+    </button>
+
+    <button class="map-node p8" data-title="Evaluate provider trust" data-copy="The client decides whether the provider felt credible, useful, and worth working with again.">
+      <div class="node-icon">⚖</div>
+      <div class="node-title">Evaluate provider trust</div>
+      <div class="node-sub">Confidence check</div>
+    </button>
+
+    <button class="map-node end p9" data-title="Decide further engagements" data-copy="A strong experience creates repeat work, deeper relationships, or a more confident next hire.">
+      <div class="node-inner">
+        <div class="node-icon">✓</div>
+        <div class="node-title">Decide further engagements</div>
+        <div class="node-sub">Outcome</div>
+      </div>
+    </button>
+
+    <div class="chip tag1">Project brief</div>
+    <div class="chip tag2">Trust builds here</div>
+
+    <div class="detail">
+      <div class="detail-label">Selected stage</div>
+      <div class="detail-title" id="detail-title">Identify demand</div>
+      <div class="detail-copy" id="detail-copy">A company realizes there is technology work it needs help with, but the project is still loosely defined.</div>
+    </div>
+
+    <div class="mobile">
+      <button class="map-node start active" data-title="Identify demand" data-copy="A company realizes there is technology work it needs help with, but the project is still loosely defined."><div class="node-inner"><div class="node-icon">◎</div><div class="node-title">Identify demand</div><div class="node-sub">Early signal</div></div></button>
+      <button class="map-node start" data-title="Discover providers" data-copy="The team starts looking for providers, often before the work is fully framed or the brief is strong enough."><div class="node-inner"><div class="node-icon">◎</div><div class="node-title">Discover providers</div><div class="node-sub">Search begins</div></div></button>
+      <button class="map-node" data-title="Screen and select providers" data-copy="The shortlist starts to form, but quality, fit, and project relevance are still hard to compare without more structure."><div class="node-icon">⌕</div><div class="node-title">Screen and select providers</div><div class="node-sub">Compare the shortlist</div></button>
+      <button class="map-node" data-title="Contract and engage" data-copy="The relationship moves from interest to commitment. Scope, expectations, and handoff become real here."><div class="node-icon">✎</div><div class="node-title">Contract and engage</div><div class="node-sub">Scope and commitment</div></button>
+      <button class="map-node" data-title="Get the work done" data-copy="The product has to support what happens after selection: coordination, progress, project context, and next actions."><div class="node-icon">☰</div><div class="node-title">Get the work done</div><div class="node-sub">Execution layer</div></button>
+      <button class="map-node" data-title="Evaluate the performance" data-copy="Teams need a way to understand whether the provider is actually delivering, and whether the engagement is working."><div class="node-icon">↕</div><div class="node-title">Evaluate the performance</div><div class="node-sub">Status and quality</div></button>
+      <button class="map-node" data-title="Pay providers" data-copy="Payment and approval states need to feel visible and trustworthy, not buried in a flat record."><div class="node-icon">🛡</div><div class="node-title">Pay providers</div><div class="node-sub">Approvals and payment</div></button>
+      <button class="map-node" data-title="Evaluate provider trust" data-copy="The client decides whether the provider felt credible, useful, and worth working with again."><div class="node-icon">⚖</div><div class="node-title">Evaluate provider trust</div><div class="node-sub">Confidence check</div></button>
+      <button class="map-node end" data-title="Decide further engagements" data-copy="A strong experience creates repeat work, deeper relationships, or a more confident next hire."><div class="node-inner"><div class="node-icon">✓</div><div class="node-title">Decide further engagements</div><div class="node-sub">Outcome</div></div></button>
+    </div>
+  </div>
+
+<script>
+  const nodes = Array.from(document.querySelectorAll('.map-node[data-title]'));
+  const detailTitle = document.getElementById('detail-title');
+  const detailCopy = document.getElementById('detail-copy');
+
+  function activate(node) {
+    nodes.forEach((item) => {
+      item.classList.toggle('active', item.dataset.title === node.dataset.title);
+    });
+    if (detailTitle && detailCopy) {
+      detailTitle.textContent = node.dataset.title;
+      detailCopy.textContent = node.dataset.copy;
+    }
+  }
+
+  nodes.forEach((node) => {
+    node.addEventListener('mouseenter', () => activate(node));
+    node.addEventListener('click', () => activate(node));
+  });
+
+  if (nodes[0]) activate(nodes[0]);
+</script>
+</body>
+</html>
